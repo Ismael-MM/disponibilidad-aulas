@@ -2,59 +2,124 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\AulaStoreRequest;
-use App\Http\Requests\AulaUpdateRequest;
+use App\Http\Requests\CursoStoreRequest;
+use App\Http\Requests\CursoUpdateRequest;
 use App\Models\Aula;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\View\View;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Request;
+use Inertia\Inertia;
 
 class AulaController extends Controller
 {
-    public function index(Request $request): Response
-    {
-        $aulas = Aula::all();
-
-        return view('aula.index', compact('aulas'));
-    }
-
-    public function create(Request $request): Response
-    {
-        return view('aula.create');
-    }
-
-    public function store(AulaStoreRequest $request): Response
-    {
-        $aula = Aula::create($request->validated());
-
-        $request->session()->flash('aula.id', $aula->id);
-
-        return redirect()->route('aula.index');
-    }
-
-    public function show(Request $request, Aula $aula): Response
-    {
-        return view('aula.show', compact('aula'));
-    }
-
-    public function edit(Request $request, Aula $aula): Response
-    {
-        return view('aula.edit', compact('aula'));
-    }
-
-    public function update(AulaUpdateRequest $request, Aula $aula): Response
-    {
-        $aula->update($request->validated());
-
-        $request->session()->flash('aula.id', $aula->id);
-
-        return redirect()->route('aula.index');
-    }
-
-    public function destroy(Request $request, Aula $aula): Response
-    {
-        $aula->delete();
-
-        return redirect()->route('aula.index');
-    }
+    /**
+     * Display a listing of the resource.
+     */
+    
+     public function index()
+     {
+         return Inertia::render('Dashboard/Aulas');
+     }
+ 
+     public function loadItems() 
+     {
+         $itemsPerPage = Request::get('itemsPerPage', 10);
+         $sortBy = json_decode(Request::get('sortBy', '[]'), true);
+         $search = json_decode(Request::get('search', '[]'), true);
+         $deleted = filter_var(Request::get('deleted', 'false'), FILTER_VALIDATE_BOOLEAN);
+ 
+         $query = Aula::query();
+ 
+         if ($deleted) {
+             $query->onlyTrashed();
+         }
+ 
+         if (!empty($search)) {
+             foreach ($search as $key => $value) {
+                 if (!empty($value)) {
+                     $query->where($key, 'LIKE', '%' . $value . '%');
+                 }
+             }
+         }
+ 
+         if (!empty($sortBy)) {
+             foreach ($sortBy as $sort) {
+                 if (isset($sort['key']) && isset($sort['order'])) {
+                     $query->orderBy($sort['key'], $sort['order']);
+                 }
+             }
+         } else {
+             $query->orderBy("id", "desc");
+         }
+ 
+         if ($itemsPerPage == -1) {
+             $itemsPerPage = $query->count();
+         }    
+ 
+         $items = $query->paginate($itemsPerPage);
+ 
+         return [
+             'tableData' => [
+                 'items' => $items->items(),
+                 'itemsLength' => $items->total(),
+                 'itemsPerPage' => $items->perPage(),
+                 'page' => $items->currentPage(),
+                 'sortBy' => $sortBy,
+                 'search' => $search, 
+                 'deleted' => $deleted,
+             ]
+         ];
+     }
+ 
+     public function store()
+     {
+         Aula::create(
+             Request::validate([
+                'nombre' => ['required', 'max:191'],
+             ])
+         );
+ 
+         return Redirect::back()->with('success', 'Suscriptor creado.');
+     }
+ 
+     public function update(Aula $aula)
+     {
+         $aula->update(
+             Request::validate([
+                'nombre' => ['required', 'max:191'],
+             ])
+         );
+ 
+         return Redirect::back()->with('success', 'Suscriptor editado.');
+     }
+ 
+     public function destroy(Aula $aula)
+     {
+         $aula->delete();
+ 
+         return Redirect::back()->with('success', 'Curso movido a la papelera.');
+     }
+ 
+     public function destroyPermanent($id)
+     {
+         $aula = Aula::onlyTrashed()->findOrFail($id);
+         $aula->forceDelete();
+ 
+         return Redirect::back()->with('success', 'Suscriptor eliminado de forma permanente.');
+     }
+ 
+     public function restore($id)
+     {
+         $aula = Aula::onlyTrashed()->findOrFail($id);
+         $aula->restore();
+ 
+         return Redirect::back()->with('success', 'Suscriptor restaurado.');
+     }
+ 
+     public function exportExcel()
+     {
+         $items = Aula::all();
+ 
+         return  [ 'itemsExcel' => $items ];
+     }
+     
 }

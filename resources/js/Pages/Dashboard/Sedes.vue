@@ -1,6 +1,6 @@
 <script setup>
 import { onBeforeMount } from "vue"
-import FormDialog from "@/Components/Cursos/FormDialog.vue"
+import FormDialog from "@/Components/Sede/FormDialog.vue"
 import DestroyDialog from "@/Components/DestroyDialog.vue"
 import RestoreDialog from "@/Components/RestoreDialog.vue"
 import DestroyPermanentDialog from "@/Components/DestroyPermanentDialog.vue"
@@ -36,10 +36,7 @@ const {
 
 const headers = [
   { title: "Id", key: "id", align: "center" },
-  { title: "Titulo", key: "titulo", align: "center" },
-  { title: "Turno", key: "turno", align: "center" },
-  { title: "Horas Totales", key: "horas", align: "center" },
-  { title: "Horas Diarias", key: "horas_diarias", align: "center" },
+  { title: "Nombre", key: "nombre", align: "center" },
   {
     title: "Acciones",
     key: "actions",
@@ -56,7 +53,7 @@ onBeforeMount(() => {
 
 const modifiedRows = {}
 
-endPoint.value = "/dashboard/cursos"
+endPoint.value = "/dashboard/sedes"
 </script>
 
 <template>
@@ -106,7 +103,7 @@ endPoint.value = "/dashboard/cursos"
       <template v-slot:top>
         <v-toolbar :class="{ 'bg-red-lighten-2': tableData.deleted }" flat>
           <v-toolbar-title>
-            Cursos
+            Sedes
             <span v-if="tableData.deleted"> - ELIMINADOS</span>
           </v-toolbar-title>
           <v-divider class="mx-4" inset vertical></v-divider>

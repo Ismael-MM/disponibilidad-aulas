@@ -1,0 +1,140 @@
+<script setup>
+import { useForm } from "@inertiajs/vue3"
+import { computed, watch, ref } from "vue"
+import {
+  ruleRequired,
+  ruleMaxLength,
+} from "@/Utils/rules"
+import { sexoItems } from "@/Utils/arrays"
+
+const props = defineProps(["show", "item", "type", "endPoint"])
+const emit = defineEmits(["closeDialog", "reloadItems"])
+let sedeList = []
+
+const dialogState = computed({
+  get: () => props.show,
+  set: (value) => {
+    emit("closeDialog", value)
+  },
+})
+
+const form = ref(false)
+
+const formData = useForm({
+  nombre: "",
+  sede_id: "",
+})
+
+watch(dialogState, (value) => {
+  if (value) {
+    if (props.type === "edit") {
+      Object.assign(formData, props.item)
+    } else if (props.type === "create") {
+      formData.nombre = ""
+      formData.sede_id = ""
+    }
+  } else {
+    emit("reloadItems")
+  }
+})
+
+const submit = () => {
+  if (props.type === "edit") {
+    formData.put(`${props.endPoint}/${props.item.id}`, {
+      only: ["tableData", "flash", "errors"],
+      onSuccess: () => {
+        dialogState.value = false
+      },
+    })
+  } else if (props.type === "create") {
+    formData.post(props.endPoint, {
+      only: ["tableData", "flash", "errors"],
+      onSuccess: () => {
+        dialogState.value = false
+      },
+    })
+  }
+}
+
+const getSedesList = async () => {
+    await axios
+      .get(`sedes/export-excel`, {
+        
+        page: 50,
+        itemsPerPage: 50,
+      })
+      .then((response) => {
+       sedeList = response.data.itemsExcel
+      })
+}
+getSedesList();
+console.log(sedeList)
+</script>
+
+<template>
+  <v-dialog v-model="dialogState" width="1024">
+    <v-card>
+      <v-card-title>
+        <span class="text-h5"
+          >{{
+            props.type == "create"
+              ? "Crear"
+              : props.type == "edit"
+              ? "Editar"
+              : ""
+          }}
+          Cursos</span
+        >
+      </v-card-title>
+
+      <v-card-text>
+        <v-container>
+          <v-form v-model="form" @submit.prevent="submit">
+            <v-row>
+              <v-col cols="12" sm="6">
+                <v-text-field
+                  label="Nombre*"
+                  :rules="[ruleRequired, (v) => ruleMaxLength(v, 191)]"
+                  v-model="formData.nombre"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6">
+                <v-select
+                  label="Sedes*"
+                  :items="[sedeList.nombre]"
+                  v-model="formData.sede_id"
+                ></v-select>
+              </v-col>
+            </v-row>
+          </v-form>
+        </v-container>
+      </v-card-text>
+
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn
+          color="blue-darken-1"
+          variant="text"
+          @click="dialogState = false"
+        >
+          Cerrar
+        </v-btn>
+        <v-btn
+          color="blue-darken-1"
+          :disabled="!form"
+          variant="text"
+          @click="submit"
+        >
+          Guardar
+        </v-btn>
+        <v-btn
+          color="blue-darken-1"
+          variant="text"
+          @click="getSedesList"
+        >
+          log
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+</template>

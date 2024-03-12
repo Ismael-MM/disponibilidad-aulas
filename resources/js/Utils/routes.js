@@ -18,7 +18,17 @@ export const routesArray = [
   {
     value: "Cursos",
     route: "dashboard.cursos",
-    icon: "mdi-account-group",
+    icon: "mdi-school",
+  },
+  {
+    value: "Sedes",
+    route: "dashboard.sedes",
+    icon: "mdi-home-group",
+  },
+  {
+    value: "Aulas",
+    route: "dashboard.aulas",
+    icon: "mdi-google-classroom",
   },
   {
     value: "Cerrar sesión",

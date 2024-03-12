@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\SuscriptorController;
 use App\Http\Controllers\CursoController;
+use App\Http\Controllers\SedeController;
+use App\Http\Controllers\AulaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,10 +48,26 @@ Route::middleware('auth')->prefix('dashboard')->group(function () {
     Route::delete('/cursos/{curso}/permanent',[CursoController::class, 'destroyPermanent'])->name('dashboard.cursos.destroyPermanent');
     Route::post('/cursos/{curso}/restore',[CursoController::class, 'restore'])->name('dashboard.cursos.restore');
     Route::get('/cursos/export-excel',[CursoController::class, 'exportExcel'])->name('dashboard.cursos.exportExcel');
+
+    Route::get('/sedes',[SedeController::class, 'index'])->name('dashboard.sedes');
+    Route::post('/sedes/load-items',[SedeController::class, 'loadItems'])->name('dashboard.sedes.load-itmes');
+    Route::post('/sedes',[SedeController::class, 'store'])->name('dashboard.sedes.store');
+    Route::put('/sedes/{sede}',[SedeController::class, 'update'])->name('dashboard.sedes.update');
+    Route::delete('/sedes/{sede}',[SedeController::class, 'destroy'])->name('dashboard.sedes.destroy');
+    Route::delete('/sedes/{sede}/permanent',[SedeController::class, 'destroyPermanent'])->name('dashboard.sedes.destroyPermanent');
+    Route::post('/sedes/{sede}/restore',[SedeController::class, 'restore'])->name('dashboard.sedes.restore');
+    Route::get('/sedes/export-excel',[SedeController::class, 'exportExcel'])->name('dashboard.sedes.exportExcel');
+
+    Route::get('/aulas',[AulaController::class, 'index'])->name('dashboard.aulas');
+    Route::post('/aulas/load-items',[AulaController::class, 'loadItems'])->name('dashboard.aulas.load-itmes');
+    Route::post('/aulas',[AulaController::class, 'store'])->name('dashboard.aulas.store');
+    Route::put('/aulas/{aula}',[AulaController::class, 'update'])->name('dashboard.aulas.update');
+    Route::delete('/aulas/{aula}',[AulaController::class, 'destroy'])->name('dashboard.aulas.destroy');
+    Route::delete('/aulas/{aula}/permanent',[AulaController::class, 'destroyPermanent'])->name('dashboard.aulas.destroyPermanent');
+    Route::post('/aulas/{aula}/restore',[AulaController::class, 'restore'])->name('dashboard.aulas.restore');
+    Route::get('/aulas/export-excel',[AulaController::class, 'exportExcel'])->name('dashboard.aulas.exportExcel');
 });
 
 require __DIR__ . '/auth.php';
 
 Route::resource('aula', App\Http\Controllers\AulaController::class);
-
-Route::resource('sede', App\Http\Controllers\SedeController::class);
