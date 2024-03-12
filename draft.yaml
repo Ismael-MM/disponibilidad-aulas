@@ -1,0 +1,30 @@
+models:
+  Curso:
+    titulo: string
+    turno: enum:M,T
+    horas: unsignedSmallInteger
+    horas_diarias: unsignedTinyInteger
+    relationships:
+      belongsToMany: Aula,Sede
+
+  Aula:
+    nombre: string
+    relationships:
+      belongsTo: Sede
+      belongsToMany: Curso
+
+  Sede:
+    nombre: string
+    relationships:
+      belongsToMany: Curso
+      hasMany: Aula
+
+controllers:
+  Curso:
+    resource
+
+  Aula:
+    resource
+
+  Sede:
+    resource

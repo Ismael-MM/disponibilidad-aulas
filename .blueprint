@@ -1,0 +1,44 @@
+created:
+    - app/Http/Controllers/CursoController.php
+    - app/Http/Controllers/AulaController.php
+    - app/Http/Controllers/SedeController.php
+    - database/factories/CursoFactory.php
+    - database/factories/AulaFactory.php
+    - database/factories/SedeFactory.php
+    - database/migrations/2024_03_11_135542_create_cursos_table.php
+    - database/migrations/2024_03_11_135543_create_aulas_table.php
+    - database/migrations/2024_03_11_135544_create_sedes_table.php
+    - database/migrations/2024_03_11_135545_create_aula_curso_table.php
+    - database/migrations/2024_03_11_135546_create_curso_sede_table.php
+    - app/Models/Curso.php
+    - app/Models/Aula.php
+    - app/Models/Sede.php
+    - tests/Feature/Http/Controllers/CursoControllerTest.php
+    - tests/Feature/Http/Controllers/AulaControllerTest.php
+    - tests/Feature/Http/Controllers/SedeControllerTest.php
+    - app/Http/Requests/CursoStoreRequest.php
+    - app/Http/Requests/CursoUpdateRequest.php
+    - app/Http/Requests/AulaStoreRequest.php
+    - app/Http/Requests/AulaUpdateRequest.php
+    - app/Http/Requests/SedeStoreRequest.php
+    - app/Http/Requests/SedeUpdateRequest.php
+    - resources/views/curso/index.blade.php
+    - resources/views/curso/create.blade.php
+    - resources/views/curso/show.blade.php
+    - resources/views/curso/edit.blade.php
+    - resources/views/aula/index.blade.php
+    - resources/views/aula/create.blade.php
+    - resources/views/aula/show.blade.php
+    - resources/views/aula/edit.blade.php
+    - resources/views/sede/index.blade.php
+    - resources/views/sede/create.blade.php
+    - resources/views/sede/show.blade.php
+    - resources/views/sede/edit.blade.php
+updated:
+    - routes/web.php
+models:
+    Suscriptor: {  }
+    User: {  }
+    Curso: { titulo: string, turno: 'enum:M,T', horas: unsignedSmallInteger, horas_diarias: unsignedTinyInteger, relationships: { belongsToMany: 'Aula,Sede' } }
+    Aula: { nombre: string, relationships: { belongsTo: Sede, belongsToMany: Curso } }
+    Sede: { nombre: string, relationships: { belongsToMany: Curso, hasMany: Aula } }
