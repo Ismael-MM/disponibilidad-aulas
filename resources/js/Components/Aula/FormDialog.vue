@@ -132,7 +132,7 @@ console.log(sedeList)
           variant="text"
           @click="getSedesList"
         >
-          log
+          log - test git pull
         </v-btn>
       </v-card-actions>
     </v-card>
