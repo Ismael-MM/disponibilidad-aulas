@@ -39,6 +39,7 @@ const {
 const headers = [
   { title: "Id", key: "id", align: "center" },
   { title: "Titulo", key: "titulo", align: "center" },
+  { title: "Turno", key: "turno", align: "center" },
   { title: "Horas Totales", key: "horas", align: "center" },
   { title: "Horas Diarias", key: "horas_diarias", align: "center" },
   {

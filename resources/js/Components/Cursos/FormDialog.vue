@@ -24,6 +24,7 @@ const form = ref(false)
 
 const formData = useForm({
   titulo: "",
+  turno: "",
   horas: "",
   horas_diarias: "",
 })
@@ -34,6 +35,7 @@ watch(dialogState, (value) => {
       Object.assign(formData, props.item)
     } else if (props.type === "create") {
       formData.titulo = ""
+      formData.turno = ""
       formData.horas = ""
       formData.horas_diarias = ""
     }
@@ -86,6 +88,13 @@ const submit = () => {
                   label="Titulo*"
                   :rules="[ruleRequired, (v) => ruleMaxLength(v, 191)]"
                   v-model="formData.titulo"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6">
+                <v-text-field
+                  label="Turno*"
+                  :rules="[ruleRequired, (v) => ruleMaxLength(v, 191)]"
+                  v-model="formData.turno"
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6">

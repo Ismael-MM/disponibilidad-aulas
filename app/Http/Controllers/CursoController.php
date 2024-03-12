@@ -7,6 +7,7 @@ use App\Http\Requests\CursoUpdateRequest;
 use App\Models\Curso;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
 class CursoController extends Controller
@@ -75,6 +76,7 @@ class CursoController extends Controller
          Curso::create(
              Request::validate([
                  'titulo' => ['required', 'max:191'],
+                 'turno' => ['required', Rule::in(['M','T'])],
                  'horas' => ['required'],
                  'horas_diarias' => ['required'],
              ])
@@ -88,6 +90,7 @@ class CursoController extends Controller
          $curso->update(
              Request::validate([
                 'titulo' => ['required', 'max:191'],
+                'turno' => ['required', Rule::in(['M','T'])],
                 'horas' => ['required'],
                 'horas_diarias' => ['required'],
              ])
