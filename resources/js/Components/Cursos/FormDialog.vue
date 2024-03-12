@@ -4,9 +4,8 @@ import { computed, watch, ref } from "vue"
 import {
   ruleRequired,
   ruleMaxLength,
-  ruleTelephone,
-  ruleEmail,
-  ruleDNI,
+  ruleLessThan,
+  ruleGreaterThan,
 } from "@/Utils/rules"
 import { sexoItems } from "@/Utils/arrays"
 
@@ -91,23 +90,25 @@ const submit = () => {
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6">
-                <v-text-field
+                <v-select
                   label="Turno*"
-                  :rules="[ruleRequired, (v) => ruleMaxLength(v, 191)]"
+                  :items="['M','T']"
                   v-model="formData.turno"
-                ></v-text-field>
+                ></v-select>
               </v-col>
               <v-col cols="12" sm="6">
                 <v-text-field
                   label="Horas Totales*"
-                  :rules="[ruleRequired, (v) => ruleMaxLength(v, 191)]"
+                  :rules="[ruleRequired, (v) => ruleLessThan(v, 3001)]"
+                  type="number"
                   v-model="formData.horas"
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6">
                 <v-text-field
                   label="Horas Diarias*"
-                  
+                  :rules="[ruleRequired, (v) => ruleLessThan(v,11)]"
+                  type="number"
                   v-model="formData.horas_diarias"
                 ></v-text-field>
               </v-col>
