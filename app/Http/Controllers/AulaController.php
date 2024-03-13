@@ -75,6 +75,7 @@ class AulaController extends Controller
          Aula::create(
              Request::validate([
                 'nombre' => ['required', 'max:191'],
+                'sede_id' => ['required', 'max:191'],
              ])
          );
  
@@ -86,6 +87,7 @@ class AulaController extends Controller
          $aula->update(
              Request::validate([
                 'nombre' => ['required', 'max:191'],
+                'sede_id' => ['required', 'max:191'],
              ])
          );
  

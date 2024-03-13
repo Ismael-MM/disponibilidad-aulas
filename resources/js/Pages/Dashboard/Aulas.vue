@@ -37,6 +37,7 @@ const {
 const headers = [
   { title: "Id", key: "id", align: "center" },
   { title: "Nombre", key: "nombre", align: "center" },
+  { title: "Sede", key: "sede_id", align: "center" },
   {
     title: "Acciones",
     key: "actions",

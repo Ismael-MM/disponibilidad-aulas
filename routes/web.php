@@ -18,6 +18,10 @@ use App\Http\Controllers\AulaController;
 |
 */
 
+Route::any('/', function () {
+    return redirect()->route('login');
+})->name('landing.index');
+
 Route::middleware('auth')->prefix('dashboard')->group(function () {
 
     //Routes must have the following structure to work with the dialogs:

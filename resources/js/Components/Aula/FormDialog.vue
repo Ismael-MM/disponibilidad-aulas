@@ -1,6 +1,7 @@
 <script setup>
 import { useForm } from "@inertiajs/vue3"
 import { computed, watch, ref } from "vue"
+import { useToast } from "vue-toastification"
 import {
   ruleRequired,
   ruleMaxLength,
@@ -9,8 +10,9 @@ import { sexoItems } from "@/Utils/arrays"
 
 const props = defineProps(["show", "item", "type", "endPoint"])
 const emit = defineEmits(["closeDialog", "reloadItems"])
-let sedeList = []
 
+
+const loading = ref(false)
 const dialogState = computed({
   get: () => props.show,
   set: (value) => {
@@ -18,8 +20,8 @@ const dialogState = computed({
   },
 })
 
+const sedeList = ref([])
 const form = ref(false)
-
 const formData = useForm({
   nombre: "",
   sede_id: "",
@@ -27,6 +29,9 @@ const formData = useForm({
 
 watch(dialogState, (value) => {
   if (value) {
+    loading.value = true
+    getSedesList()
+    
     if (props.type === "edit") {
       Object.assign(formData, props.item)
     } else if (props.type === "create") {
@@ -57,18 +62,22 @@ const submit = () => {
 }
 
 const getSedesList = async () => {
-    await axios
-      .get(`sedes/export-excel`, {
-        
-        page: 50,
-        itemsPerPage: 50,
-      })
+  sedeList.value = []
+     await axios
+      .get(route('dashboard.sedes.exportExcel'))
       .then((response) => {
-       sedeList = response.data.itemsExcel
+        const sede = response.data.itemsExcel
+        sedeList.value = sede
+        loading.value = false
       })
+      .catch(() => {
+      dialogState.value = false
+      loading.value = false
+      useToast().error(
+        "Se ha producido un error al cargar los elementos del formulario. Intentalo de nuevo. Si el error persiste contacta con el administrador."
+      )
+    })
 }
-getSedesList();
-console.log(sedeList)
 </script>
 
 <template>
@@ -99,11 +108,13 @@ console.log(sedeList)
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6">
-                <v-select
+                <v-autocomplete
                   label="Sedes*"
-                  :items="[sedeList.nombre]"
+                  :items="[...sedeList]"
+                  item-title="nombre"
+                  item-value="id"
                   v-model="formData.sede_id"
-                ></v-select>
+                ></v-autocomplete>
               </v-col>
             </v-row>
           </v-form>
@@ -126,13 +137,6 @@ console.log(sedeList)
           @click="submit"
         >
           Guardar
-        </v-btn>
-        <v-btn
-          color="blue-darken-1"
-          variant="text"
-          @click="getSedesList"
-        >
-          log - test git pull
         </v-btn>
       </v-card-actions>
     </v-card>
