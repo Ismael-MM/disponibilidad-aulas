@@ -79,7 +79,7 @@ class AulaController extends Controller
              ])
          );
  
-         return Redirect::back()->with('success', 'Suscriptor creado.');
+         return Redirect::back()->with('success', 'Aula creado.');
      }
  
      public function update(Aula $aula)
@@ -91,14 +91,14 @@ class AulaController extends Controller
              ])
          );
  
-         return Redirect::back()->with('success', 'Suscriptor editado.');
+         return Redirect::back()->with('success', 'Aula editado.');
      }
  
      public function destroy(Aula $aula)
      {
          $aula->delete();
  
-         return Redirect::back()->with('success', 'Curso movido a la papelera.');
+         return Redirect::back()->with('success', 'Aula movido a la papelera.');
      }
  
      public function destroyPermanent($id)
@@ -106,7 +106,7 @@ class AulaController extends Controller
          $aula = Aula::onlyTrashed()->findOrFail($id);
          $aula->forceDelete();
  
-         return Redirect::back()->with('success', 'Suscriptor eliminado de forma permanente.');
+         return Redirect::back()->with('success', 'Aula eliminado de forma permanente.');
      }
  
      public function restore($id)
@@ -114,7 +114,7 @@ class AulaController extends Controller
          $aula = Aula::onlyTrashed()->findOrFail($id);
          $aula->restore();
  
-         return Redirect::back()->with('success', 'Suscriptor restaurado.');
+         return Redirect::back()->with('success', 'Aula restaurado.');
      }
  
      public function exportExcel()

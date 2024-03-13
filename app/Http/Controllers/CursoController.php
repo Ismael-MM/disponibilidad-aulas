@@ -83,7 +83,7 @@ class CursoController extends Controller
              ])
          );
  
-         return Redirect::back()->with('success', 'Suscriptor creado.');
+         return Redirect::back()->with('success', 'Curso creado.');
      }
  
      public function update(Curso $curso)
@@ -97,7 +97,7 @@ class CursoController extends Controller
              ])
          );
  
-         return Redirect::back()->with('success', 'Suscriptor editado.');
+         return Redirect::back()->with('success', 'Curso editado.');
      }
  
      public function destroy(Curso $curso)
@@ -112,7 +112,7 @@ class CursoController extends Controller
          $curso = Curso::onlyTrashed()->findOrFail($id);
          $curso->forceDelete();
  
-         return Redirect::back()->with('success', 'Suscriptor eliminado de forma permanente.');
+         return Redirect::back()->with('success', 'Curso eliminado de forma permanente.');
      }
  
      public function restore($id)
@@ -120,7 +120,7 @@ class CursoController extends Controller
          $curso = Curso::onlyTrashed()->findOrFail($id);
          $curso->restore();
  
-         return Redirect::back()->with('success', 'Suscriptor restaurado.');
+         return Redirect::back()->with('success', 'Curso restaurado.');
      }
  
      public function exportExcel()
