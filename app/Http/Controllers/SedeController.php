@@ -90,7 +90,7 @@ class SedeController extends Controller
              ])
          );
  
-         return Redirect::back()->with('success', 'Aula editada.');
+         return Redirect::back()->with('success', 'Sede editada.');
      }
  
      public function destroy(Sede $sede)
