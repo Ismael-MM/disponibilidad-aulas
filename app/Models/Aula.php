@@ -18,6 +18,8 @@ class Aula extends Model
      *
      * @var array
      */
+    protected $table = 'aulas';
+
     protected $fillable = [
         'nombre',
         'sede_id',

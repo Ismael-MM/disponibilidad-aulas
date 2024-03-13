@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CursoStoreRequest;
 use App\Http\Requests\CursoUpdateRequest;
 use App\Models\Aula;
+use App\Http\Resources\AulasResource;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
 use Inertia\Inertia;
@@ -36,7 +37,12 @@ class AulaController extends Controller
          if (!empty($search)) {
              foreach ($search as $key => $value) {
                  if (!empty($value)) {
-                     $query->where($key, 'LIKE', '%' . $value . '%');
+                    if ($key == 'sede') {
+                        $query->whereHas('sede', function ($query) use ($value) {
+                            return $query->where('nombre', 'LIKE', '%' . $value . '%');});
+                    }else{
+                        $query->where($key, 'LIKE', '%' . $value . '%');
+                    }
                  }
              }
          }
@@ -55,7 +61,7 @@ class AulaController extends Controller
              $itemsPerPage = $query->count();
          }    
  
-         $items = $query->with('sede')->paginate($itemsPerPage);
+         $items = AulasResource::collection($query->paginate($itemsPerPage));
  
          return [
              'tableData' => [

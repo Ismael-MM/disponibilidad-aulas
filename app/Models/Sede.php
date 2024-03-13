@@ -13,6 +13,8 @@ class Sede extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $table = 'sedes';
+
     /**
      * The attributes that are mass assignable.
      *
