@@ -42,6 +42,6 @@ class Aula extends Model
 
     public function cursos(): BelongsToMany
     {
-        return $this->belongsToMany(Curso::class);
+        return $this->belongsToMany(Curso::class)->using(AulaCurso::class);
     }
 }

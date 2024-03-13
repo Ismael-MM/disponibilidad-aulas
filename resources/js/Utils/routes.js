@@ -31,9 +31,14 @@ export const routesArray = [
     icon: "mdi-google-classroom",
   },
   {
+    value: "Aula-Cursos",
+    route: "dashboard.aulascursos",
+    icon: "mdi-school",
+  },
+  {
     value: "Calendario",
     route: "dashboard.calendario",
-    icon: "mdi-google-classroom",
+    icon: "mdi-calendar-clock",
   },
   {
     value: "Cerrar sesión",

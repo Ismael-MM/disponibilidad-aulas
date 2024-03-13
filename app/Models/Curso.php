@@ -39,7 +39,7 @@ class Curso extends Model
 
     public function aulas(): BelongsToMany
     {
-        return $this->belongsToMany(Aula::class);
+        return $this->belongsToMany(Aula::class)->using(AulaCurso::class);
     }
 
     public function sedes(): BelongsToMany

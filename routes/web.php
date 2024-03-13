@@ -7,6 +7,7 @@ use App\Http\Controllers\CursoController;
 use App\Http\Controllers\SedeController;
 use App\Http\Controllers\AulaController;
 use App\Http\Controllers\CalendarioController;
+use App\Http\Controllers\AulaCursoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -71,6 +72,15 @@ Route::middleware('auth')->prefix('dashboard')->group(function () {
     Route::delete('/aulas/{aula}/permanent',[AulaController::class, 'destroyPermanent'])->name('dashboard.aulas.destroyPermanent');
     Route::post('/aulas/{aula}/restore',[AulaController::class, 'restore'])->name('dashboard.aulas.restore');
     Route::get('/aulas/export-excel',[AulaController::class, 'exportExcel'])->name('dashboard.aulas.exportExcel');
+
+    Route::get('/aulascursos',[AulaCursoController::class, 'index'])->name('dashboard.aulascursos');
+    Route::post('/aulascursos/load-items',[AulaCursoController::class, 'loadItems'])->name('dashboard.aulascursos.load-itmes');
+    Route::post('/aulascursos',[AulaCursoController::class, 'store'])->name('dashboard.aulascursos.store');
+    Route::put('/aulascursos/{aulacursos}',[AulaCursoController::class, 'update'])->name('dashboard.aulascursos.update');
+    Route::delete('/aulascursos/{aulacursos}',[AulaCursoController::class, 'destroy'])->name('dashboard.aulascursos.destroy');
+    Route::delete('/aulascursos/{aulacursos}/permanent',[AulaCursoController::class, 'destroyPermanent'])->name('dashboard.aulascursos.destroyPermanent');
+    Route::post('/aulascursos/{aulacursos}/restore',[AulaCursoController::class, 'restore'])->name('dashboard.aulascursos.restore');
+    Route::get('/aulascursos/export-excel',[AulaCursoController::class, 'exportExcel'])->name('dashboard.aulascursos.exportExcel');
 
     Route::get('/calendario',[CalendarioController::class, 'index'])->name('dashboard.calendario');
 });
