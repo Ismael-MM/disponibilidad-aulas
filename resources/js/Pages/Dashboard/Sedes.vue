@@ -104,7 +104,7 @@ endPoint.value = "/dashboard/sedes"
         <v-toolbar :class="{ 'bg-red-lighten-2': tableData.deleted }" flat>
           <v-toolbar-title>
             Sedes
-            <span v-if="tableData.deleted"> - ELIMINADOS</span>
+            <span v-if="tableData.deleted"> - ELIMINADAS</span>
           </v-toolbar-title>
           <v-divider class="mx-4" inset vertical></v-divider>
           <div v-if="!tableData.deleted">
