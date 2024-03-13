@@ -79,7 +79,7 @@ class SedeController extends Controller
              ])
          );
  
-         return Redirect::back()->with('success', 'Sede creado.');
+         return Redirect::back()->with('success', 'Sede creada.');
      }
  
      public function update(Sede $sede)
@@ -90,14 +90,14 @@ class SedeController extends Controller
              ])
          );
  
-         return Redirect::back()->with('success', 'Aula editado.');
+         return Redirect::back()->with('success', 'Aula editada.');
      }
  
      public function destroy(Sede $sede)
      {
          $sede->delete();
  
-         return Redirect::back()->with('success', 'Sede movido a la papelera.');
+         return Redirect::back()->with('success', 'Sede movida a la papelera.');
      }
  
      public function destroyPermanent($id)
@@ -105,7 +105,7 @@ class SedeController extends Controller
          $sede = Sede::onlyTrashed()->findOrFail($id);
          $sede->forceDelete();
  
-         return Redirect::back()->with('success', 'Sede eliminado de forma permanente.');
+         return Redirect::back()->with('success', 'Sede eliminada de forma permanente.');
      }
  
      public function restore($id)
