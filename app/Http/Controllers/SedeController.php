@@ -113,7 +113,7 @@ class SedeController extends Controller
          $sede = Sede::onlyTrashed()->findOrFail($id);
          $sede->restore();
  
-         return Redirect::back()->with('success', 'Sede restaurado.');
+         return Redirect::back()->with('success', 'Sede restaurada.');
      }
  
      public function exportExcel()
