@@ -12,6 +12,17 @@ import { sexoItems } from "@/Utils/arrays"
 const props = defineProps(["show", "item", "type", "endPoint"])
 const emit = defineEmits(["closeDialog", "reloadItems"])
 
+const turnos = [
+  {
+  id:"M",
+  texto: "Mañana"
+  },
+  {
+    id:"T",
+    texto:"Tarde"
+  }
+]
+
 const dialogState = computed({
   get: () => props.show,
   set: (value) => {
@@ -90,11 +101,14 @@ const submit = () => {
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6">
-                <v-select
+                <v-autocomplete
                   label="Turno*"
-                  :items="['M','T']"
+                  :rules="[ruleRequired]"
+                  :items="[...turnos]"
+                  item-title="texto"
+                  item-value="id"
                   v-model="formData.turno"
-                ></v-select>
+                ></v-autocomplete>
               </v-col>
               <v-col cols="12" sm="6">
                 <v-text-field

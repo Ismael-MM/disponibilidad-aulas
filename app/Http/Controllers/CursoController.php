@@ -6,6 +6,7 @@ use App\Http\Requests\CursoStoreRequest;
 use App\Http\Requests\CursoUpdateRequest;
 use App\Models\Curso;
 use Illuminate\Support\Facades\Redirect;
+use App\Http\Resources\CursosResource;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
@@ -56,7 +57,7 @@ class CursoController extends Controller
              $itemsPerPage = $query->count();
          }    
  
-         $items = $query->paginate($itemsPerPage);
+         $items = CursosResource::collection($query->paginate($itemsPerPage));
  
          return [
              'tableData' => [
