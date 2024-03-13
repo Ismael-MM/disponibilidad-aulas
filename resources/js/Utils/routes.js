@@ -31,6 +31,11 @@ export const routesArray = [
     icon: "mdi-google-classroom",
   },
   {
+    value: "Calendario",
+    route: "dashboard.calendario",
+    icon: "mdi-google-classroom",
+  },
+  {
     value: "Cerrar sesión",
     icon: "mdi-logout-variant",
     route: "logout",

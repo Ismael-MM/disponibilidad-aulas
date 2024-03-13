@@ -17,6 +17,9 @@
     "vue": "^3.2.41"
   },
   "dependencies": {
+    "@fullcalendar/core": "^6.1.11",
+    "@fullcalendar/daygrid": "^6.1.11",
+    "@fullcalendar/vue3": "^6.1.11",
     "lodash.debounce": "^4.0.8",
     "vite-plugin-vuetify": "^1.0.2",
     "vue-toastification": "^2.0.0-rc.5",

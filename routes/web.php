@@ -6,6 +6,7 @@ use App\Http\Controllers\SuscriptorController;
 use App\Http\Controllers\CursoController;
 use App\Http\Controllers\SedeController;
 use App\Http\Controllers\AulaController;
+use App\Http\Controllers\CalendarioController;
 
 /*
 |--------------------------------------------------------------------------
@@ -70,8 +71,9 @@ Route::middleware('auth')->prefix('dashboard')->group(function () {
     Route::delete('/aulas/{aula}/permanent',[AulaController::class, 'destroyPermanent'])->name('dashboard.aulas.destroyPermanent');
     Route::post('/aulas/{aula}/restore',[AulaController::class, 'restore'])->name('dashboard.aulas.restore');
     Route::get('/aulas/export-excel',[AulaController::class, 'exportExcel'])->name('dashboard.aulas.exportExcel');
+
+    Route::get('/calendario',[CalendarioController::class, 'index'])->name('dashboard.calendario');
 });
 
 require __DIR__ . '/auth.php';
 
-Route::resource('aula', App\Http\Controllers\AulaController::class);
