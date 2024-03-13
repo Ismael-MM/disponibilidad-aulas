@@ -55,7 +55,7 @@ class AulaController extends Controller
              $itemsPerPage = $query->count();
          }    
  
-         $items = $query->paginate($itemsPerPage);
+         $items = $query->with('sede')->paginate($itemsPerPage);
  
          return [
              'tableData' => [
