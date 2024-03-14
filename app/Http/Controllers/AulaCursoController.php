@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AulaCurso;
+use App\Http\Resources\AulasCursosResource;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
 use Inertia\Inertia;
@@ -11,7 +12,7 @@ class AulaCursoController extends Controller
 {
     public function index()
     {
-        return Inertia::render('Dashboard/AulasCursos');
+        return Inertia::render('Dashboard/ReservarAula');
     }
 
     public function loadItems() 
@@ -30,7 +31,15 @@ class AulaCursoController extends Controller
         if (!empty($search)) {
             foreach ($search as $key => $value) {
                 if (!empty($value)) {
-                    $query->where($key, 'LIKE', '%' . $value . '%');
+                    if ($key == 'aula_id') {
+                        $query->whereHas('aula', function ($query) use ($value) {
+                            return $query->where('nombre', 'LIKE', '%' . $value . '%');});
+                    }else if ($key == 'curso_id') {
+                        $query->whereHas('curso', function ($query) use ($value) {
+                            return $query->where('titulo', 'LIKE', '%' . $value . '%');});
+                    }else{
+                        $query->where($key, 'LIKE', '%' . $value . '%');
+                    }
                 }
             }
         }
@@ -49,7 +58,7 @@ class AulaCursoController extends Controller
             $itemsPerPage = $query->count();
         }    
 
-        $items = $query->paginate($itemsPerPage);
+        $items = AulasCursosResource::collection($query->paginate($itemsPerPage));
 
         return [
             'tableData' => [
@@ -68,44 +77,51 @@ class AulaCursoController extends Controller
     {
         AulaCurso::create(
             Request::validate([
-                'nombre' => ['required', 'max:191'],
+                'aula_id' => ['required', 'exists:aulas,id'],
+                'curso_id' => ['required', 'exists:cursos,id'],
+                'fecha_inicio' => ['required', 'date'],
+                'fecha_fin' => ['required', 'date'],
             ])
         );
 
-        return Redirect::back()->with('success', 'AulaCurso creado.');
+        return Redirect::back()->with('success', 'Aula reservada.');
     }
 
-    public function update(AulaCurso $aulacurso)
+    public function update(AulaCurso $reservas)
     {
-        $aulacurso->update(
+        $reservas->update(
             Request::validate([
+                'aula_id' => ['required', 'exists:aulas,id'],
+                'curso_id' => ['required', 'exists:cursos,id'],
+                'fecha_inicio' => ['required', 'date'],
+                'fecha_fin' => ['required', 'date'],
             ])
         );
 
-        return Redirect::back()->with('success', 'AulaCurso editado.');
+        return Redirect::back()->with('success', 'Reserva editada.');
     }
 
-    public function destroy(AulaCurso $aulacurso)
+    public function destroy(AulaCurso $reservas)
     {
-        $aulacurso->delete();
+        $reservas->delete();
 
-        return Redirect::back()->with('success', 'AulaCurso movido a la papelera.');
+        return Redirect::back()->with('success', 'Reserva movida a la papelera.');
     }
 
     public function destroyPermanent($id)
     {
-        $aulacurso = AulaCurso::onlyTrashed()->findOrFail($id);
-        $aulacurso->forceDelete();
+        $reservas = AulaCurso::onlyTrashed()->findOrFail($id);
+        $reservas->forceDelete();
 
-        return Redirect::back()->with('success', 'AulaCurso eliminado de forma permanente.');
+        return Redirect::back()->with('success', 'Reserva eliminada de forma permanente.');
     }
 
     public function restore($id)
     {
-        $aulacurso = AulaCurso::onlyTrashed()->findOrFail($id);
-        $aulacurso->restore();
+        $reservas = AulaCurso::onlyTrashed()->findOrFail($id);
+        $reservas->restore();
 
-        return Redirect::back()->with('success', 'AulaCurso restaurado.');
+        return Redirect::back()->with('success', 'Reserva restaurada.');
     }
 
     public function exportExcel()

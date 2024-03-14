@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('curso_sede', function (Blueprint $table) {
             $table->foreignId('curso_id');
             $table->foreignId('sede_id');
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 

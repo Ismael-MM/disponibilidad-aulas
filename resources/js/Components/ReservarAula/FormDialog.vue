@@ -20,23 +20,29 @@ const dialogState = computed({
   },
 })
 
-const sedeList = ref([])
+const cursosList = ref([])
+const aulasList = ref([])
 const form = ref(false)
 const formData = useForm({
-  nombre: "",
-  sede_id: "",
+  aula_id: "",
+  curso_id: "",
+  fecha_inicio: "",
+  fecha_fin: "",
 })
 
 watch(dialogState, (value) => {
   if (value) {
     loading.value = true
-    getSedesList()
+    getCursosList()
+    getAulasList()
     
     if (props.type === "edit") {
       Object.assign(formData, props.item)
     } else if (props.type === "create") {
-      formData.nombre = ""
-      formData.sede_id = ""
+      formData.aula_id = ""
+      formData.curso_id = ""
+      formData.fecha_fin = ""
+      formData.fecha_inicio = ""
     }
   } else {
     emit("reloadItems")
@@ -61,13 +67,31 @@ const submit = () => {
   }
 }
 
-const getSedesList = async () => {
-  sedeList.value = []
+const getCursosList = async () => {
+  cursosList.value = []
      await axios
-      .get(route('dashboard.sedes.exportExcel'))
+      .get(route('dashboard.cursos.exportExcel'))
       .then((response) => {
-        const sede = response.data.itemsExcel
-        sedeList.value = sede
+        const curso = response.data.itemsExcel
+        cursosList.value = curso
+        loading.value = false
+      })
+      .catch(() => {
+      dialogState.value = false
+      loading.value = false
+      useToast().error(
+        "Se ha producido un error al cargar los elementos del formulario. Intentalo de nuevo. Si el error persiste contacta con el administrador."
+      )
+    })
+}
+
+const getAulasList = async () => {
+  aulasList.value = []
+     await axios
+      .get(route('dashboard.aulas.exportExcel'))
+      .then((response) => {
+        const aula = response.data.itemsExcel
+        aulasList.value = aula
         loading.value = false
       })
       .catch(() => {
@@ -101,20 +125,40 @@ const getSedesList = async () => {
           <v-form v-model="form" @submit.prevent="submit">
             <v-row>
               <v-col cols="12" sm="6">
-                <v-text-field
-                  label="Nombre*"
-                  :rules="[ruleRequired, (v) => ruleMaxLength(v, 191)]"
-                  v-model="formData.nombre"
-                ></v-text-field>
+                <v-autocomplete
+                  label="Aula*"
+                  :rules="[ruleRequired]"
+                  :items="[...aulasList]"
+                  item-title="nombre"
+                  item-value="id"
+                  v-model="formData.aula_id"
+                ></v-autocomplete>
               </v-col>
               <v-col cols="12" sm="6">
                 <v-autocomplete
-                  label="Sedes*"
-                  :items="[...sedeList]"
-                  item-title="nombre"
+                  label="Curso*"
+                  :rules="[ruleRequired]"
+                  :items="[...cursosList]"
+                  item-title="titulo"
                   item-value="id"
-                  v-model="formData.sede_id"
+                  v-model="formData.curso_id"
                 ></v-autocomplete>
+              </v-col>
+              <v-col cols="12" sm="6">
+                <v-text-field
+                  label="Fecha de inicio*"
+                  :rules="[ruleRequired]"
+                  type="date"
+                  v-model="formData.fecha_inicio"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6">
+                <v-text-field
+                  label="Fecha de fin*"
+                  :rules="[ruleRequired]"
+                  type="date"
+                  v-model="formData.fecha_fin"
+                ></v-text-field>
               </v-col>
             </v-row>
           </v-form>
@@ -137,6 +181,13 @@ const getSedesList = async () => {
           @click="submit"
         >
           Guardar
+        </v-btn>
+        <v-btn
+          color="blue-darken-1"
+          variant="text"
+          @click="console.log(formData)"
+        >
+          log
         </v-btn>
       </v-card-actions>
     </v-card>

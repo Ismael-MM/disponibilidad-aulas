@@ -31,8 +31,8 @@ export const routesArray = [
     icon: "mdi-google-classroom",
   },
   {
-    value: "Aula-Cursos",
-    route: "dashboard.aulascursos",
+    value: "Reservar aula",
+    route: "dashboard.reservar",
     icon: "mdi-school",
   },
   {

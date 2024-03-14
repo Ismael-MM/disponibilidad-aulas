@@ -1,6 +1,6 @@
 <script setup>
 import { onBeforeMount } from "vue"
-import FormDialog from "@/Components/aulascursos/FormDialog.vue"
+import FormDialog from "@/Components/ReservarAula/FormDialog.vue"
 import DestroyDialog from "@/Components/DestroyDialog.vue"
 import RestoreDialog from "@/Components/RestoreDialog.vue"
 import DestroyPermanentDialog from "@/Components/DestroyPermanentDialog.vue"
@@ -36,9 +36,9 @@ const {
 
 const headers = [
   { title: "Id", key: "id", align: "center" },
-  { title: "Curso", key: "titulo", align: "center" },
-  { title: "Aula", key: "turno", align: "center" },
-  { title: "Fecha inicio", key: "fecha_final", align: "center" },
+  { title: "Curso", key: "curso_id", align: "center" },
+  { title: "Aula", key: "aula_id", align: "center" },
+  { title: "Fecha inicio", key: "fecha_inicio", align: "center" },
   { title: "Fecha fin", key: "fecha_fin", align: "center" },
   {
     title: "Acciones",
@@ -56,7 +56,7 @@ onBeforeMount(() => {
 
 const modifiedRows = {}
 
-endPoint.value = "/dashboard/aulascursos"
+endPoint.value = "/dashboard/reservar"
 </script>
 
 <template>
@@ -106,13 +106,14 @@ endPoint.value = "/dashboard/aulascursos"
       <template v-slot:top>
         <v-toolbar :class="{ 'bg-red-lighten-2': tableData.deleted }" flat>
           <v-toolbar-title>
-            Cursos
-            <span v-if="tableData.deleted"> - ELIMINADOS</span>
+            Reserva de aulas
+            <span v-if="tableData.deleted"> - ELIMINADAS</span>
           </v-toolbar-title>
           <v-divider class="mx-4" inset vertical></v-divider>
           <div v-if="!tableData.deleted">
             <v-btn icon="mdi-refresh" @click="resetTable"> </v-btn>
             <v-btn icon="mdi-file-plus-outline" @click="openDialog('create')"> </v-btn>
+            <v-btn icon="mdi-math-log" @click="console.log(tableData)"> </v-btn>
             <v-btn
               icon="mdi-file-excel-outline"
               @click="exportToExcel(endPoint, headers, modifiedRows)"

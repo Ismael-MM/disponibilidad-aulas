@@ -73,14 +73,14 @@ Route::middleware('auth')->prefix('dashboard')->group(function () {
     Route::post('/aulas/{aula}/restore',[AulaController::class, 'restore'])->name('dashboard.aulas.restore');
     Route::get('/aulas/export-excel',[AulaController::class, 'exportExcel'])->name('dashboard.aulas.exportExcel');
 
-    Route::get('/aulascursos',[AulaCursoController::class, 'index'])->name('dashboard.aulascursos');
-    Route::post('/aulascursos/load-items',[AulaCursoController::class, 'loadItems'])->name('dashboard.aulascursos.load-itmes');
-    Route::post('/aulascursos',[AulaCursoController::class, 'store'])->name('dashboard.aulascursos.store');
-    Route::put('/aulascursos/{aulacursos}',[AulaCursoController::class, 'update'])->name('dashboard.aulascursos.update');
-    Route::delete('/aulascursos/{aulacursos}',[AulaCursoController::class, 'destroy'])->name('dashboard.aulascursos.destroy');
-    Route::delete('/aulascursos/{aulacursos}/permanent',[AulaCursoController::class, 'destroyPermanent'])->name('dashboard.aulascursos.destroyPermanent');
-    Route::post('/aulascursos/{aulacursos}/restore',[AulaCursoController::class, 'restore'])->name('dashboard.aulascursos.restore');
-    Route::get('/aulascursos/export-excel',[AulaCursoController::class, 'exportExcel'])->name('dashboard.aulascursos.exportExcel');
+    Route::get('/reservar',[AulaCursoController::class, 'index'])->name('dashboard.reservar');
+    Route::post('/reservar/load-items',[AulaCursoController::class, 'loadItems'])->name('dashboard.reservar.load-itmes');
+    Route::post('/reservar',[AulaCursoController::class, 'store'])->name('dashboard.reservar.store');
+    Route::put('/reservar/{reservas}',[AulaCursoController::class, 'update'])->name('dashboard.reservar.update');
+    Route::delete('/reservar/{reservas}',[AulaCursoController::class, 'destroy'])->name('dashboard.reservar.destroy');
+    Route::delete('/reservar/{reservas}/permanent',[AulaCursoController::class, 'destroyPermanent'])->name('dashboard.reservar.destroyPermanent');
+    Route::post('/reservar/{reservas}/restore',[AulaCursoController::class, 'restore'])->name('dashboard.reservar.restore');
+    Route::get('/reservar/export-excel',[AulaCursoController::class, 'exportExcel'])->name('dashboard.reservar.exportExcel');
 
     Route::get('/calendario',[CalendarioController::class, 'index'])->name('dashboard.calendario');
 });
