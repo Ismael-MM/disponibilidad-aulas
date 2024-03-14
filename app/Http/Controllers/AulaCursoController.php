@@ -58,7 +58,16 @@ class AulaCursoController extends Controller
         if (!empty($sortBy)) {
             foreach ($sortBy as $sort) {
                 if (isset($sort['key']) && isset($sort['order'])) {
-                    $query->orderBy($sort['key'], $sort['order']);
+                    $order = $sort['order'];
+                    if ($sort['key'] == "sede") {
+                        $query->whereHas('aula.sede', function ($query) use ($order) {
+                            $query->orderBy("nombre", $order);});
+                    }else if ($sort['key'] == "turno") {
+                        $query->whereHas('curso', function ($query) use ($order) {
+                            $query->orderBy("turno", $order);});
+                    }else{
+                        $query->orderBy($sort['key'], $sort['order']);
+                    }
                 }
             }
         } else {
