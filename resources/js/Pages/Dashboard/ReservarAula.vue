@@ -39,6 +39,7 @@ const headers = [
   { title: "Curso", key: "curso_id", align: "center" },
   { title: "Aula", key: "aula_id", align: "center" },
   { title: "Sede", key: "sede", align: "center" },
+  { title: "Turno", key: "turno", align: "center" },
   { title: "Fecha inicio", key: "fecha_inicio", align: "center" },
   { title: "Fecha fin", key: "fecha_fin", align: "center" },
   {

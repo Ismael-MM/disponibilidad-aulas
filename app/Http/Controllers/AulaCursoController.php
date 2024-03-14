@@ -40,6 +40,14 @@ class AulaCursoController extends Controller
                     }else if ($key == 'sede') {
                         $query->whereHas('aula.sede', function ($query) use ($value) {
                             return $query->where('nombre', 'LIKE', '%' . $value . '%');});
+                    }else if ($key == 'turno') {
+                        $query->whereHas('curso', function ($query) use ($value) {
+                            if (preg_match('/^(M|m)/i', $value)) {
+                                $value = "M";
+                            }else if (preg_match('/^(T|t)/', $value)) {
+                                $value = "T";
+                            }
+                            return $query->where('turno', 'LIKE', '%' . $value . '%');});
                     }else{
                         $query->where($key, 'LIKE', '%' . $value . '%');
                     }
