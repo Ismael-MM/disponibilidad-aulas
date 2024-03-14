@@ -54,6 +54,7 @@ Route::middleware('auth')->prefix('dashboard')->group(function () {
     Route::delete('/cursos/{curso}/permanent',[CursoController::class, 'destroyPermanent'])->name('dashboard.cursos.destroyPermanent');
     Route::post('/cursos/{curso}/restore',[CursoController::class, 'restore'])->name('dashboard.cursos.restore');
     Route::get('/cursos/export-excel',[CursoController::class, 'exportExcel'])->name('dashboard.cursos.exportExcel');
+    Route::get('/cursos/list',[CursoController::class, 'cursosList'])->name('dashboard.cursos.list');
 
     Route::get('/sedes',[SedeController::class, 'index'])->name('dashboard.sedes');
     Route::post('/sedes/load-items',[SedeController::class, 'loadItems'])->name('dashboard.sedes.load-itmes');
@@ -72,6 +73,7 @@ Route::middleware('auth')->prefix('dashboard')->group(function () {
     Route::delete('/aulas/{aula}/permanent',[AulaController::class, 'destroyPermanent'])->name('dashboard.aulas.destroyPermanent');
     Route::post('/aulas/{aula}/restore',[AulaController::class, 'restore'])->name('dashboard.aulas.restore');
     Route::get('/aulas/export-excel',[AulaController::class, 'exportExcel'])->name('dashboard.aulas.exportExcel');
+    Route::get('/aulas/list',[AulaController::class, 'aulasList'])->name('dashboard.aulas.list');
 
     Route::get('/reservar',[AulaCursoController::class, 'index'])->name('dashboard.reservar');
     Route::post('/reservar/load-items',[AulaCursoController::class, 'loadItems'])->name('dashboard.reservar.load-itmes');

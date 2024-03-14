@@ -129,5 +129,13 @@ class AulaController extends Controller
  
          return  [ 'itemsExcel' => $items ];
      }
+
+     public function aulasList()
+     {
+        $items = AulasResource::collection(Aula::all());
+
+        return [ 'lists' => $items];
+     }
+     
      
 }

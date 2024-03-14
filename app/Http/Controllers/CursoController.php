@@ -129,5 +129,12 @@ class CursoController extends Controller
  
          return  [ 'itemsExcel' => $items ];
      }
+
+     public function cursosList()
+     {
+        $items = CursosResource::collection(Curso::all());
+
+        return [ 'lists' => $items];
+     }
      
 }
