@@ -139,7 +139,7 @@ const getAulasList = async () => {
                   label="Curso*"
                   :rules="[ruleRequired]"
                   :items="[...cursosList]"
-                  item-title="titulo"
+                  item-title="tituloturno"
                   item-value="id"
                   v-model="formData.curso_id"
                 ></v-autocomplete>
@@ -185,7 +185,7 @@ const getAulasList = async () => {
         <v-btn
           color="blue-darken-1"
           variant="text"
-          @click="console.log(aulasList)"
+          @click="console.log(cursosList)"
         >
           log
         </v-btn>

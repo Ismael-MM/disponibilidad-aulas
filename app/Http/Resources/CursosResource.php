@@ -20,6 +20,7 @@ class CursosResource extends JsonResource
             'turno' => $this->turno == "M" ? "Mañana" : "Tarde",
             'horas' => $this->horas,
             'horas_diarias' => $this->horas_diarias,
+            'tituloturno' => $this->titulo . " - " . ($this->turno == "M" ? "Mañana" : "Tarde"),
         ];
     }
 }
