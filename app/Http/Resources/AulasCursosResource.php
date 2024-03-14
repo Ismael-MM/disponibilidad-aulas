@@ -19,6 +19,7 @@ class AulasCursosResource extends JsonResource
             'id' => $this->id,
             'curso_id' => $this->curso->titulo,
             'aula_id' => $this->aula->nombre,
+            'sede' => $this->aula->sede->nombre,
             'fecha_fin' => Carbon::parse($this->fecha_fin)->format('Y-m-d'),
             'fecha_inicio' => Carbon::parse($this->fecha_inicio)->format('Y-m-d'),
         ];

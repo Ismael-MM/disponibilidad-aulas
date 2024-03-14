@@ -70,9 +70,9 @@ const submit = () => {
 const getCursosList = async () => {
   cursosList.value = []
      await axios
-      .get(route('dashboard.cursos.exportExcel'))
+      .get(route('dashboard.cursos.list'))
       .then((response) => {
-        const curso = response.data.itemsExcel
+        const curso = response.data.lists
         cursosList.value = curso
         loading.value = false
       })
@@ -88,9 +88,9 @@ const getCursosList = async () => {
 const getAulasList = async () => {
   aulasList.value = []
      await axios
-      .get(route('dashboard.aulas.exportExcel'))
+      .get(route('dashboard.aulas.list'))
       .then((response) => {
-        const aula = response.data.itemsExcel
+        const aula = response.data.lists
         aulasList.value = aula
         loading.value = false
       })
@@ -129,7 +129,7 @@ const getAulasList = async () => {
                   label="Aula*"
                   :rules="[ruleRequired]"
                   :items="[...aulasList]"
-                  item-title="nombre"
+                  item-title="aulasede"
                   item-value="id"
                   v-model="formData.aula_id"
                 ></v-autocomplete>
@@ -185,7 +185,7 @@ const getAulasList = async () => {
         <v-btn
           color="blue-darken-1"
           variant="text"
-          @click="console.log(formData)"
+          @click="console.log(aulasList)"
         >
           log
         </v-btn>

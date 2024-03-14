@@ -37,6 +37,9 @@ class AulaCursoController extends Controller
                     }else if ($key == 'curso_id') {
                         $query->whereHas('curso', function ($query) use ($value) {
                             return $query->where('titulo', 'LIKE', '%' . $value . '%');});
+                    }else if ($key == 'sede') {
+                        $query->whereHas('aula.sede', function ($query) use ($value) {
+                            return $query->where('nombre', 'LIKE', '%' . $value . '%');});
                     }else{
                         $query->where($key, 'LIKE', '%' . $value . '%');
                     }
