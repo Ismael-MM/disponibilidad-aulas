@@ -21,7 +21,6 @@ const dialogState = computed({
 
 const cursosList = ref([])
 const aulasList = ref([])
-const formattedDate = ref()
 const form = ref(false)
 const formData = useForm({
   aula_id: "",
@@ -52,11 +51,7 @@ watch(dialogState, (value) => {
 watch(
   () => [formData.fecha_inicio, formData.curso_id],
   ([newFechaInicio, idCurso]) => {
-    console.log("fecha_inicio changed to:", newFechaInicio)
-    console.log(cursosList.value.filter((e) => e.id == idCurso))
-    console.log(idCurso)
     const curso = cursosList.value.filter((e) => e.id == idCurso)
-    console.log(isNaN(idCurso))
 
     if (curso && isNaN(idCurso) == false && newFechaInicio) {
       totalDays(newFechaInicio, curso[0])
@@ -124,89 +119,48 @@ const totalDays = (fechainico, curso) => {
   console.log(fechainico)
   console.log(curso)
   if (fechainico != '' && (curso != '' || curso != undefined || curso != null)) {
-    console.log("Totaldays horas", curso.horas)
-    console.log("Totaldays horas diarias", curso.horas_diarias)
-    console.log("toaldays dias", curso.horas / curso.horas_diarias)
     const diasSumar = curso.horas / curso.horas_diarias
     const fechaSinFormato = new Date(fechainico);
 
-    const day = fechaSinFormato.getDate();
-    const month = fechaSinFormato.getMonth() + 1;
+    const day = fechaSinFormato.getDate() - 1 ; //  El dia actual que estamos en el mes
+    const month = fechaSinFormato.getMonth() + 1; // El mes actual
     const year = fechaSinFormato.getFullYear();
 
     const fechaConFormato = year + "-" + month + "-" + day;
 
     console.log(fechaConFormato)
 
-    calcularFechaFin(fechaConFormato, 'sumar', diasSumar, 'findes')
+    formData.fecha_fin =  getSinFestivosNiFinDeSemana(fechaConFormato, diasSumar)
   }
 }
 
-function calcularFechaFin(fecha, operacion, dias, contador) {
-  let date = fecha.split("-"),
-    hoy = new Date(date[0], date[1], date[2]),
-    diasSumar = dias,
-    calculado = new Date(),
-    dateResul = operacion == "sumar" ? hoy.getDate() + diasSumar : hoy.getDate() - diasSumar;
-  calculado.setDate(dateResul);
+const getSinFestivosNiFinDeSemana = (fechaInico, diasAdd) => {
+    let arrFecha = fechaInico.split('-');
+    let fecha = new Date(arrFecha[0], arrFecha[1] - 1, arrFecha[2]);
+    let festivos = [ // Agregamos los festivos (dia, mes)
+        [28, 3],
+        [1, 1]
+    ];
 
-  console.log(dateResul);
-
-  console.log(calculado.getFullYear() + "-" + (calculado.getMonth() + 1) + "-" + calculado.getDate())
-  const day = calculado.getDate().toString().padStart(2, '0');
-  const month = (calculado.getMonth() + 1).toString().padStart(2, '0');
-  const year = calculado.getFullYear();
-
-  console.log((year + "-" + month + "-" + day))
-  const fechaFin = (year + "-" + month + "-" + day);
-
-  if (contador == 'findes') {
-    console.log('findes entro')
-    contarFindes(date, fechaFin, dias)
-  } else if (contador == 'festivo') {
-
-  } else {
-    console.log(calculado)
-    console.log(calculado.getDay() == 0)
-    console.log(calculado.getDay() == 6)
-    if (calculado.getDay() == 0) {
-      calcularFechaFin(fecha, 'sumar', dias + 1)
-      console.log(dias);
-      console.log(calculado)
-    }else if (calculado.getDay() == 6) {
-      calcularFechaFin(fecha, 'sumar', dias + 2)
-      console.log(dias);
-      console.log(calculado)
-    }else{
-      formattedDate.value = fechaFin //muestra la fecha en el input
-      formData.fecha_fin = fechaFin //guarda la fecha que se envia al controlador
+    for (let i = 0; i < diasAdd; i++) {
+        let diaInvalido = false;
+        fecha.setDate(fecha.getDate() + 1); // Sumamos de dia en dia
+        for (let j = 0; j < festivos.length; j++) { // Verificamos si el dia + 1 es festivo
+            let mesDia = festivos[j];
+            if (fecha.getMonth() + 1 == mesDia[1] && fecha.getDate() == mesDia[0]) {
+                console.log(fecha.getDate() + ' es dia festivo (Sumamos un dia)');
+                diaInvalido = true;
+                break;
+            }
+        }
+        if (fecha.getDay() == 0 || fecha.getDay() == 6) { // Verificamos si es sábado o domingo
+            console.log(fecha.getDate() + ' es sábado o domingo (Sumamos un dia)');
+            diaInvalido = true;
+        }
+        if (diaInvalido)
+            diasAdd++; // Si es fin de semana o festivo le sumamos un dia
     }
-  }
-}
-
-function contarFindes(fechaInicio, fechaFin, diasSumados) {
-  let inicio = new Date(fechaInicio); //Fecha inicial
-  let fin = new Date(fechaFin); //Fecha final
-  let timeDiff = Math.abs(fin.getTime() - inicio.getTime());
-  let diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); //Días entre las dos fechas
-  let cuentaFinde = 0; //Número de Sábados y Domingos
-
-  console.log('inicio:', inicio)
-  console.log('fin:', fin)
-  for (let i = 0; i <= diffDays; i++) {
-    //0 => Domingo - 6 => Sábado
-    if (inicio.getDay() == 0 || inicio.getDay() == 6) {
-      cuentaFinde++;
-    }
-    inicio.setDate(inicio.getDate() + 1);
-  }
-
-  console.log('findes:', cuentaFinde);
-  console.log('dias sumados:', diasSumados);
-  const sumaDias = diasSumados + cuentaFinde;
-  console.log(sumaDias)
-  const fechaInicioConFormato = (fechaInicio[0] + '-' + fechaInicio[1] + '-' + fechaInicio[2]);
-  calcularFechaFin(fechaInicioConFormato, 'sumar', sumaDias);
+    return fecha.getFullYear() + '-' + (fecha.getMonth() + 1).toString().padStart(2, '0') + '-' + fecha.getDate().toString().padStart(2, '0');
 }
 
 </script>
@@ -243,8 +197,8 @@ function contarFindes(fechaInicio, fechaFin, diasSumados) {
                   v-model="formData.fecha_inicio"></v-text-field>
               </v-col>
               <v-col cols="12" sm="6">
-                <v-text-field label="Fecha de fin*" type="date" v-model="formData.fecha_fin"
-                  :value="formattedDate"></v-text-field>
+                <v-text-field label="Fecha de fin*" type="date" 
+                v-model="formData.fecha_fin" ></v-text-field>
               </v-col>
             </v-row>
           </v-form>
