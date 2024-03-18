@@ -88,10 +88,10 @@ Route::middleware('auth')->prefix('dashboard')->group(function () {
     Route::get('/festivo',[FestivoController::class, 'index'])->name('dashboard.festivo');
     Route::post('/festivo/load-items',[FestivoController::class, 'loadItems'])->name('dashboard.festivo.load-itmes');
     Route::post('/festivo',[FestivoController::class, 'store'])->name('dashboard.festivo.store');
-    Route::put('/festivo/{festivos}',[FestivoController::class, 'update'])->name('dashboard.festivo.update');
-    Route::delete('/festivo/{festivos}',[FestivoController::class, 'destroy'])->name('dashboard.festivo.destroy');
-    Route::delete('/festivo/{festivos}/permanent',[FestivoController::class, 'destroyPermanent'])->name('dashboard.festivo.destroyPermanent');
-    Route::post('/festivo/{festivos}/restore',[FestivoController::class, 'restore'])->name('dashboard.festivo.restore');
+    Route::put('/festivo/{festivo}',[FestivoController::class, 'update'])->name('dashboard.festivo.update');
+    Route::delete('/festivo/{festivo}',[FestivoController::class, 'destroy'])->name('dashboard.festivo.destroy');
+    Route::delete('/festivo/{festivo}/permanent',[FestivoController::class, 'destroyPermanent'])->name('dashboard.festivo.destroyPermanent');
+    Route::post('/festivo/{festivo}/restore',[FestivoController::class, 'restore'])->name('dashboard.festivo.restore');
     Route::get('/festivo/export-excel',[FestivoController::class, 'exportExcel'])->name('dashboard.festivo.exportExcel');
     Route::get('/festivo/list',[FestivoController::class, 'festivoList'])->name('dashboard.festivo.list');
 

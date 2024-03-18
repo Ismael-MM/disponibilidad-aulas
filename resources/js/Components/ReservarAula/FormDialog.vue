@@ -21,6 +21,7 @@ const dialogState = computed({
 
 const cursosList = ref([])
 const aulasList = ref([])
+const festivosList = ref([])
 const form = ref(false)
 const formData = useForm({
   aula_id: "",
@@ -54,7 +55,7 @@ watch(
     const curso = cursosList.value.filter((e) => e.id == idCurso)
 
     if (curso && isNaN(idCurso) == false && newFechaInicio) {
-      totalDays(newFechaInicio, curso[0])
+      getFestivosList(newFechaInicio, curso[0])
     }
 
   }
@@ -114,8 +115,28 @@ const getAulasList = async () => {
     })
 }
 
+const getFestivosList = async (fechainico, curso) => {
+  let festivosList = []
+  await axios
+    .get(route('dashboard.festivo.list'))
+    .then((response) => {
+      const festivo = response.data.lists
+      festivosList.value = festivo.map((festivo) => [festivo.dia, festivo.mes])
+      loading.value = false
+      totalDays(fechainico, curso, festivosList)
+    })
+    .catch(() => {
+      dialogState.value = false
+      loading.value = false
+      useToast().error(
+        "Se ha producido un error al cargar los elementos del formulario. Intentalo de nuevo. Si el error persiste contacta con el administrador."
+      )
+    })
+}
+
+
 // funcion para calcular cuantos dias son necesarios para un curso
-const totalDays = (fechainico, curso) => {
+const totalDays = (fechainico, curso, festivosList) => {
   console.log(fechainico)
   console.log(curso)
   if (fechainico != '' && (curso != '' || curso != undefined || curso != null)) {
@@ -128,19 +149,19 @@ const totalDays = (fechainico, curso) => {
 
     const fechaConFormato = year + "-" + month + "-" + day;
 
-    console.log(fechaConFormato)
-
-    formData.fecha_fin =  getSinFestivosNiFinDeSemana(fechaConFormato, diasSumar)
+    formData.fecha_fin =  getSinFestivosNiFinDeSemana(fechaConFormato, diasSumar, festivosList)
   }
 }
 
-const getSinFestivosNiFinDeSemana = (fechaInico, diasAdd) => {
+const getSinFestivosNiFinDeSemana = (fechaInico, diasAdd, festivosList) => {
+
     let arrFecha = fechaInico.split('-');
     let fecha = new Date(arrFecha[0], arrFecha[1] - 1, arrFecha[2]);
-    let festivos = [ // Agregamos los festivos (dia, mes)
-        [28, 3],
-        [1, 1]
-    ];
+    let festivos = festivosList.value;
+
+    console.log(festivos)
+
+
 
     for (let i = 0; i < diasAdd; i++) {
         let diaInvalido = false;
