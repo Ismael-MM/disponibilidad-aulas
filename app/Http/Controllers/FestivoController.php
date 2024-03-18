@@ -77,9 +77,9 @@ class FestivoController extends Controller
          return Redirect::back()->with('success', 'Festivo creado.');
      }
  
-     public function update(Festivo $Festivo)
+     public function update(Festivo $festivo)
      {
-         $Festivo->update(
+         $festivo->update(
              Request::validate([
                 'nombre' => ['required', 'max:191'],
                 'date' => ['required'],
@@ -89,25 +89,25 @@ class FestivoController extends Controller
          return Redirect::back()->with('success', 'Festivo editado.');
      }
  
-     public function destroy(Festivo $Festivo)
+     public function destroy(Festivo $festivo)
      {
-         $Festivo->delete();
+         $festivo->delete();
  
          return Redirect::back()->with('success', 'Festivo movido a la papelera.');
      }
  
      public function destroyPermanent($id)
      {
-         $Festivo = Festivo::onlyTrashed()->findOrFail($id);
-         $Festivo->forceDelete();
+         $festivo = Festivo::onlyTrashed()->findOrFail($id);
+         $festivo->forceDelete();
  
          return Redirect::back()->with('success', 'Festivo eliminado de forma permanente.');
      }
  
      public function restore($id)
      {
-         $Festivo = Festivo::onlyTrashed()->findOrFail($id);
-         $Festivo->restore();
+         $festivo = Festivo::onlyTrashed()->findOrFail($id);
+         $festivo->restore();
  
          return Redirect::back()->with('success', 'Festivo restaurado.');
      }
