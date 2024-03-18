@@ -36,6 +36,11 @@ export const routesArray = [
     icon: "mdi-school",
   },
   {
+    value: "Festivos",
+    route: "dashboard.festivo",
+    icon: "mdi-school",
+  },
+  {
     value: "Calendario",
     route: "dashboard.calendario",
     icon: "mdi-calendar-clock",
