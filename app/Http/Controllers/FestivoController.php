@@ -50,7 +50,7 @@ class FestivoController extends Controller
             $itemsPerPage = $query->count();
         }    
 
-        $items = $query->paginate($itemsPerPage);
+        $items = FestivosResource::collection($query->paginate($itemsPerPage));
 
         return [
             'tableData' => [
@@ -70,7 +70,7 @@ class FestivoController extends Controller
          Festivo::create(
              Request::validate([
                 'nombre' => ['required', 'max:191'],
-                'date' => ['required'],
+                'fecha' => ['required'],
              ])
          );
  
@@ -82,7 +82,7 @@ class FestivoController extends Controller
          $festivo->update(
              Request::validate([
                 'nombre' => ['required', 'max:191'],
-                'date' => ['required'],
+                'fecha' => ['required'],
              ])
          );
  

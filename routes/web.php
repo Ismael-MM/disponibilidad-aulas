@@ -8,6 +8,7 @@ use App\Http\Controllers\SedeController;
 use App\Http\Controllers\AulaController;
 use App\Http\Controllers\CalendarioController;
 use App\Http\Controllers\AulaCursoController;
+use App\Http\Controllers\FestivoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -83,6 +84,16 @@ Route::middleware('auth')->prefix('dashboard')->group(function () {
     Route::delete('/reservar/{reservas}/permanent',[AulaCursoController::class, 'destroyPermanent'])->name('dashboard.reservar.destroyPermanent');
     Route::post('/reservar/{reservas}/restore',[AulaCursoController::class, 'restore'])->name('dashboard.reservar.restore');
     Route::get('/reservar/export-excel',[AulaCursoController::class, 'exportExcel'])->name('dashboard.reservar.exportExcel');
+    
+    Route::get('/festivo',[FestivoController::class, 'index'])->name('dashboard.festivo');
+    Route::post('/festivo/load-items',[FestivoController::class, 'loadItems'])->name('dashboard.festivo.load-itmes');
+    Route::post('/festivo',[FestivoController::class, 'store'])->name('dashboard.festivo.store');
+    Route::put('/festivo/{festivos}',[FestivoController::class, 'update'])->name('dashboard.festivo.update');
+    Route::delete('/festivo/{festivos}',[FestivoController::class, 'destroy'])->name('dashboard.festivo.destroy');
+    Route::delete('/festivo/{festivos}/permanent',[FestivoController::class, 'destroyPermanent'])->name('dashboard.festivo.destroyPermanent');
+    Route::post('/festivo/{festivos}/restore',[FestivoController::class, 'restore'])->name('dashboard.festivo.restore');
+    Route::get('/festivo/export-excel',[FestivoController::class, 'exportExcel'])->name('dashboard.festivo.exportExcel');
+    Route::get('/festivo/list',[FestivoController::class, 'festivoList'])->name('dashboard.festivo.list');
 
     Route::get('/calendario',[CalendarioController::class, 'index'])->name('dashboard.calendario');
 });

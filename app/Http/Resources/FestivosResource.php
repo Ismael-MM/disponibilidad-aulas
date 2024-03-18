@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Carbon\Carbon;
 
 class FestivosResource extends JsonResource
 {
@@ -17,7 +18,9 @@ class FestivosResource extends JsonResource
         return [
             'id' => $this->id,
             'nombre' => $this->nombre,
-            'fecha' => $this->fecha,
+            'fecha' => Carbon::parse($this->fecha)->format('Y-m-d'),
+            'dia' => $this->fecha->day,
+            'mes' => $this->fecha->month,
         ];
     }
 }
