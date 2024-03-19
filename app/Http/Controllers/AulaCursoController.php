@@ -150,4 +150,12 @@ class AulaCursoController extends Controller
 
         return  [ 'itemsExcel' => $items ];
     }
+
+    
+    public function reservasList()
+    {
+       $items = AulasCursosResource::collection(AulaCurso::all());
+
+       return [ 'lists' => $items];
+    }
 }

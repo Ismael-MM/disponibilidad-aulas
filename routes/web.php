@@ -84,6 +84,7 @@ Route::middleware('auth')->prefix('dashboard')->group(function () {
     Route::delete('/reservar/{reservas}/permanent',[AulaCursoController::class, 'destroyPermanent'])->name('dashboard.reservar.destroyPermanent');
     Route::post('/reservar/{reservas}/restore',[AulaCursoController::class, 'restore'])->name('dashboard.reservar.restore');
     Route::get('/reservar/export-excel',[AulaCursoController::class, 'exportExcel'])->name('dashboard.reservar.exportExcel');
+    Route::get('/reservar/list',[AulaCursoController::class, 'reservaslist'])->name('dashboard.reservar.list');
     
     Route::get('/festivo',[FestivoController::class, 'index'])->name('dashboard.festivo');
     Route::post('/festivo/load-items',[FestivoController::class, 'loadItems'])->name('dashboard.festivo.load-itmes');
