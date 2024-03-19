@@ -5,12 +5,18 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import esLocale from '@fullcalendar/core/locales/es';
 
 
-const calendarOptions = ref({ 
+const calendarOptions = ref({
     plugins: [dayGridPlugin],
     locale: esLocale,
     initialView: 'dayGridMonth',
     weekends: false,
-    events:[]
+    events: [],
+    dayMaxEventRows: true,
+    views: {
+        timeGrid: {
+            dayMaxEventRows: 3 // adjust to 6 only for timeGridWeek/timeGridDay
+        }
+    }
 });
 
 watch(calendarOptions.value.events, (newVal, oldVal) => {
@@ -18,6 +24,18 @@ watch(calendarOptions.value.events, (newVal, oldVal) => {
         newEvents();
     }
 });
+
+const randomNumber = (min, max) =>{
+    return Math.floor(Math.random() * (max - min + 1) ) + min;
+}
+
+const customColors = () =>{
+    let color = `#${randomNumber(350, 400)}`;
+
+    console.log(color)
+    
+    return color;
+}
 
 const getReservasList = async () => {
     let reservasList = '';
@@ -31,15 +49,16 @@ const getReservasList = async () => {
                     title: reserva.aula_id,
                     start: reserva.fecha_inicio,
                     end: reserva.fecha_fin,
+                    color  : customColors(),
                 }
-        });
+            });
         })
         .catch(() => {
             useToast().error(
                 "Se ha producido un error al cargar los elementos del formulario. Intentalo de nuevo. Si el error persiste contacta con el administrador."
             )
         })
-        console.log(reservasList)
+    console.log(reservasList)
     return reservasList;
 }
 
