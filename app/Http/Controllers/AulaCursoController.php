@@ -6,6 +6,7 @@ use App\Models\AulaCurso;
 use App\Http\Resources\AulasCursosResource;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class AulaCursoController extends Controller
@@ -152,9 +153,24 @@ class AulaCursoController extends Controller
     }
 
     
-    public function reservasList()
+    public function reservasList(AulaCurso $reserva)
     {
-       $items = AulasCursosResource::collection(AulaCurso::all());
+        $items = '';
+
+        if (Request::get('turno') != null) {
+            $turno = Request::get('turno');
+
+            if (preg_match('/^(M|m)/i', $turno)) {
+                $turno = "M";
+            }else if (preg_match('/^(T|t)/', $turno)) {
+                $turno = "T";
+            }
+
+            $items = DB::select("SELECT * FROM cursos JOIN aula_curso ON aula_curso.curso_id = cursos.id where cursos.turno = '$turno' AND cursos.deleted_at IS NULL");
+
+        }else {
+            $items = AulasCursosResource::collection(AulaCurso::all());
+        }
 
        return [ 'lists' => $items];
     }
