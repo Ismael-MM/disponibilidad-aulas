@@ -8,29 +8,17 @@ import { useToast } from "vue-toastification"
 import { compileScript } from "vue/compiler-sfc";
 
 
-let filterSede = null;
-let filterShift = 'm';
 
-const filterPerShift = () => {
 
-    if (filterShift == 'm') {
-        filterShift = "t"
-        useToast().info(
-                "Turno cambiado a tarde"
-            )
-    } else {
-        filterShift = "m"
-        useToast().info(
-                "Turno cambiado a mañana"
-            )
-    }
-    newEvents();
+const openDialog = () => {
+    dialog.value = true;
 }
 
-const filterPerSede = () => {
 
-}
-
+const filterSede = ref(null);
+const filterShift = ref('Mañana');
+const sedeList = ref([]);
+const dialog = ref(false);
 const calendarOptions = ref({
     plugins: [dayGridPlugin, multiMonthPlugin],
     locale: esLocale,
@@ -39,18 +27,17 @@ const calendarOptions = ref({
     events: [],
     dayMaxEventRows: false,
     customButtons: {
-        filtroTurno: {
-            text: 'Turno',
-            click: filterPerShift,
+        filtros: {
+            text: 'Filtros',
+            click: openDialog,
         }
     },
     headerToolbar: {
-        left: 'dayGridMonth,multiMonthYear filtroTurno',
+        left: 'dayGridMonth,multiMonthYear filtros',
         center: 'title',
-        right: 'today prev,next'
+        right: 'prev,today,next'
     },
 });
-
 
 const randomNumber = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -64,13 +51,30 @@ const customColors = () => {
     return color;
 }
 
+const filterPerShift = () => {
+
+    if (filterShift.value == 'Mañana' || filterShift.value == 'm') {
+        filterShift.value = "m"
+        console.log(filterShift.value)
+    } else {
+        filterShift.value = "t"
+    }
+    newEvents();
+    dialog.value = false;
+    useToast().success(
+        "Filtros aplicados correctamente"
+    )
+}
+
+
+
 const getReservasList = async () => {
     let reservasList = '';
     console.log(filterShift)
     await axios
         .get(route('dashboard.reservar.list', {
-            turno: filterShift,
-            sede: filterSede
+            turno: filterShift.value,
+            sede: filterSede.value
         }))
         .then((response) => {
             const reserva = response.data.lists
@@ -93,6 +97,21 @@ const getReservasList = async () => {
     return reservasList;
 }
 
+const getSedesList = async () => {
+    sedeList.value = []
+    await axios
+        .get(route('dashboard.sedes.exportExcel'))
+        .then((response) => {
+            const sede = response.data.itemsExcel
+            sedeList.value = sede
+        })
+        .catch(() => {
+            useToast().error(
+                "Se ha producido un error al cargar los elementos del formulario. Intentalo de nuevo. Si el error persiste contacta con el administrador."
+            )
+        })
+}
+
 const newEvents = () => {
     getReservasList().then((reservasList) => {
         calendarOptions.value.events = reservasList;
@@ -102,6 +121,7 @@ const newEvents = () => {
 
 onBeforeMount(() => {
     newEvents();
+    getSedesList();
 })
 </script>
 
@@ -109,4 +129,36 @@ onBeforeMount(() => {
     <v-card elevation="6" class="ma-5" variant="outlined">
         <FullCalendar :options='calendarOptions'></FullCalendar>
     </v-card>
+    <v-dialog v-model="dialog" width="1024">
+        <v-card prepend-icon="mdi-filter-cog-outline">
+            <v-card-title>
+                <span class="text-h5">Filtros</span>
+            </v-card-title>
+            <v-card-text>
+                <v-container>
+                    <v-form>
+                        <v-row>
+                            <v-col cols="12" sm="6">
+                                <v-select label="Turno" :items="['Mañana', 'Tarde',]" v-model="filterShift"></v-select>
+                            </v-col>
+                            <v-col cols="12" sm="6">
+                                <v-autocomplete label="Sedes" :items="[...sedeList]" item-title="nombre"
+                                    item-value="nombre" v-model="filterSede">
+                                </v-autocomplete>
+                            </v-col>
+                        </v-row>
+                    </v-form>
+                </v-container>
+            </v-card-text>
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="blue-darken-1" variant="text" @click="dialog = false">
+                    Cerrar
+                </v-btn>
+                <v-btn color="blue-darken-1" variant="text" @click="filterPerShift()">
+                    Guardar
+                </v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
 </template>
