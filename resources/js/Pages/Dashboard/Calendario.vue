@@ -2,21 +2,23 @@
 import { ref, onBeforeMount, watch } from "vue"
 import FullCalendar from "@/Components/Calendario/FullCalendar.vue";
 import dayGridPlugin from '@fullcalendar/daygrid';
+import multiMonthPlugin from '@fullcalendar/multimonth';
 import esLocale from '@fullcalendar/core/locales/es';
 
+//multiMonthYear
 
 const calendarOptions = ref({
-    plugins: [dayGridPlugin],
+    plugins: [dayGridPlugin, multiMonthPlugin],
     locale: esLocale,
     initialView: 'dayGridMonth',
     weekends: false,
     events: [],
-    dayMaxEventRows: true,
-    views: {
-        timeGrid: {
-            dayMaxEventRows: 3 // adjust to 6 only for timeGridWeek/timeGridDay
-        }
-    }
+    dayMaxEventRows: false,
+    headerToolbar: {
+    left: 'dayGridMonth,multiMonthYear',
+    center: 'title',
+    right: 'today prev,next'
+  },
 });
 
 watch(calendarOptions.value.events, (newVal, oldVal) => {
@@ -24,6 +26,10 @@ watch(calendarOptions.value.events, (newVal, oldVal) => {
         newEvents();
     }
 });
+
+const filtroPorTurno = () =>{
+
+}
 
 const randomNumber = (min, max) =>{
     return Math.floor(Math.random() * (max - min + 1) ) + min;
