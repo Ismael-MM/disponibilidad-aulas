@@ -132,7 +132,7 @@ class AulaController extends Controller
  
      public function exportExcel()
      {
-         $items = Aula::all();
+         $items = AulasResource::collection(Aula::all());
  
          return  [ 'itemsExcel' => $items ];
      }

@@ -114,7 +114,7 @@ class FestivoController extends Controller
  
      public function exportExcel()
      {
-         $items = Festivo::all();
+         $items = FestivosResource::collection(Festivo::all());
  
          return  [ 'itemsExcel' => $items ];
      }
