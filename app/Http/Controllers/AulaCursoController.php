@@ -156,11 +156,11 @@ class AulaCursoController extends Controller
     public function reservasList(AulaCurso $reserva)
     {
         $items = '';
+        $turno = Request::get('turno');
+        $sede = Request::get('sede');
 
         if (Request::get('sede') != null && Request::get('turno') != null) {
 
-            $turno = Request::get('turno');
-            $sede = Request::get('sede');
 
             if (preg_match('/^(M|m)/i', $turno)) {
                 $turno = "M";
@@ -177,7 +177,6 @@ class AulaCursoController extends Controller
             );
 
         }elseif (Request::get('turno') != null){
-            $turno = Request::get('turno');
 
             if (preg_match('/^(M|m)/i', $turno)) {
                 $turno = "M";
