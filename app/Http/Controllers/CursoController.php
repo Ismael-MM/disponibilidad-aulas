@@ -88,15 +88,23 @@ class CursoController extends Controller
  
      public function update(Curso $curso)
      {
-         $curso->update(
-             Request::validate([
-                'titulo' => ['required', 'max:191'],
-                'turno' => ['required', Rule::in(['M','T'])],
-                'horas' => ['required', 'numeric', 'min:1', 'max:3000'],
-                'horas_diarias' => ['required', 'numeric', 'min:1', 'max:10'],
-             ])
-         );
- 
+        $turno = Request::get('turno');
+        if (preg_match('/^(M|m)/i', $turno)) {
+            $turno = "M";
+        }else if (preg_match('/^(T|t)/', $turno)) {
+            $turno = "T";
+        }
+
+        $validatedData = Request::validate([
+            'titulo' => ['required', 'max:191'],
+            'horas' => ['required', 'numeric', 'min:1', 'max:3000'],
+            'horas_diarias' => ['required', 'numeric', 'min:1', 'max:10'],
+        ]);
+
+        $validatedData['turno'] = $turno;
+
+        $curso->update($validatedData);
+
          return Redirect::back()->with('success', 'Curso editado.');
      }
  
