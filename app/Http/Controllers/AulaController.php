@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CursoStoreRequest;
-use App\Http\Requests\CursoUpdateRequest;
 use App\Models\Aula;
 use App\Http\Resources\AulasResource;
 use Illuminate\Support\Facades\Redirect;
@@ -53,8 +51,9 @@ class AulaController extends Controller
                     $order = $sort['order'];
 
                     if ($sort['key'] == 'sede') {
-                        $query->whereHas('sede', function ($query) use ($order) {
-                            $query->orderBy("nombre", $order);});
+                        $query->join('sedes', 'sedes.id', '=', 'aulas.sede_id')
+                        ->select('aulas.id', 'aulas.nombre', 'aulas.sede_id', 'sedes.nombre AS sede_nombre')
+                        ->orderBy('sedes.nombre', $order);
                     }else {
                         $query->orderBy($sort['key'], $sort['order']);
                     }
