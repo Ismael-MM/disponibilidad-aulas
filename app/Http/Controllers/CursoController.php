@@ -38,7 +38,16 @@ class CursoController extends Controller
          if (!empty($search)) {
              foreach ($search as $key => $value) {
                  if (!empty($value)) {
-                     $query->where($key, 'LIKE', '%' . $value . '%');
+                    if ($key == 'turno') {
+                        if (preg_match('/^(M|m)/i', $value)) {
+                            $value = "M";
+                        }else if (preg_match('/^(T|t)/', $value)) {
+                            $value = "T";
+                        }
+                        $query->where('turno', 'LIKE', '%' . $value . '%');;
+                    }else {
+                        $query->where($key, 'LIKE', '%' . $value . '%');
+                    }
                  }
              }
          }
