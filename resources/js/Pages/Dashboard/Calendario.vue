@@ -116,6 +116,9 @@ const newEvents = () => {
     getReservasList().then((reservasList) => {
         calendarOptions.value.events = reservasList;
         console.log(reservasList)
+        useToast().success(
+        `Se han cargado ${reservasList.length} reservas`
+        )
     });
 };
 
