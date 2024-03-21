@@ -56,16 +56,18 @@ class AulaCursoController extends Controller
             }
         }
 
+
         if (!empty($sortBy)) {
             foreach ($sortBy as $sort) {
                 if (isset($sort['key']) && isset($sort['order'])) {
                     $order = $sort['order'];
                     if ($sort['key'] == "sede") {
-                        $query->whereHas('aula.sede', function ($query) use ($order) {
-                            $query->orderBy("nombre", $order);});
+                        $query->join('aulas', 'aulas.id', '=', 'aula_curso.aula_id')
+                        ->join('sedes', 'sedes.id', '=', 'aulas.sede_id')
+                        ->orderBy('sedes.nombre', $order);
                     }else if ($sort['key'] == "turno") {
-                        $query->whereHas('curso', function ($query) use ($order) {
-                            $query->orderBy("turno", $order);});
+                        $query->join('cursos','cursos.id', '=', 'aula_curso.curso_id')
+                        ->orderBy('cursos.turno',$order);
                     }else{
                         $query->orderBy($sort['key'], $sort['order']);
                     }
