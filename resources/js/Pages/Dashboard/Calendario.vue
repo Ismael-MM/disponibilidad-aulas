@@ -159,7 +159,7 @@ onBeforeMount(() => {
                     Cerrar
                 </v-btn>
                 <v-btn color="blue-darken-1" variant="text" @click="filterPerShift()">
-                    Guardar
+                    Filtrar
                 </v-btn>
             </v-card-actions>
         </v-card>
