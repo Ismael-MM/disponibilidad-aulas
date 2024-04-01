@@ -7,6 +7,7 @@ use App\Http\Resources\AulasCursosResource;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 use Inertia\Inertia;
 
 class AulaCursoController extends Controller
@@ -98,6 +99,26 @@ class AulaCursoController extends Controller
 
     public function store()
     {
+        $fechaSeleccionada = Carbon::parse(Request::get('fecha_inicio'));
+
+        $query = AulaCurso::query();
+        
+        $aulas = $query->where('aula_id',Request::get('aula_id'))->get();
+
+        foreach ($aulas as $aula){
+
+            $fechaAulaInicio = $aula->fecha_inicio;
+            $fechaAulaFin = $aula->fecha_fin;
+
+            if ($fechaAulaInicio == $fechaSeleccionada) {
+                return Redirect::back()->with('warning', 'La fecha de inicio de esta reserva entra en conflicto con otro programada para el mismo período.');
+            }elseif($fechaAulaFin == $fechaSeleccionada){
+                return Redirect::back()->with('warning', 'La fecha de inicio de esta reserva entra en conflicto con otro programada para el mismo período.');
+            }elseif(($fechaSeleccionada >= $fechaAulaInicio) && ($fechaSeleccionada <= $fechaAulaFin)){
+                return Redirect::back()->with('warning', 'La fecha de inicio de esta reserva entra en conflicto con otro programada para el mismo período.');
+            }
+        }
+
         AulaCurso::create(
             Request::validate([
                 'aula_id' => ['required', 'exists:aulas,id'],
