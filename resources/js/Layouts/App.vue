@@ -6,7 +6,6 @@ import { usePage } from "@inertiajs/vue3"
 watch(
   () => usePage().props.flash,
   (flash) => {
-    console.log(flash);
     if (flash.success) {
       useToast().success(flash.success)
     }
