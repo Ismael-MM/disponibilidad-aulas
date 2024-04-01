@@ -111,7 +111,6 @@ class AulaCursoController extends Controller
                         ->where('cursos.turno', $turno)
                         ->get();
 
-        dd($aulas);
         // funcion para comprar si el dia seleccionado esta disponible.
         foreach ($aulas as $aula){
 
