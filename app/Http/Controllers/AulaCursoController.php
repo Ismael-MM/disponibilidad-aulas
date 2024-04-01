@@ -99,12 +99,19 @@ class AulaCursoController extends Controller
 
     public function store()
     {
+        $query = AulaCurso::query();
+
         $fechaSeleccionada = Carbon::parse(Request::get('fecha_inicio'));
 
-        $query = AulaCurso::query();
+        $curso = AulaCurso::with('curso')->where('curso_id', Request::get('curso_id'))->first();
+        $turno = $curso->curso->turno;
         
-        $aulas = $query->where('aula_id',Request::get('aula_id'))->get();
+        $aulas = $query->join('cursos','cursos.id', '=', 'aula_curso.curso_id')
+                        ->where('aula_id',Request::get('aula_id'))
+                        ->where('cursos.turno', $turno)
+                        ->get();
 
+        dd($aulas);
         // funcion para comprar si el dia seleccionado esta disponible.
         foreach ($aulas as $aula){
 
@@ -112,11 +119,11 @@ class AulaCursoController extends Controller
             $fechaAulaFin = $aula->fecha_fin;
 
             if ($fechaAulaInicio == $fechaSeleccionada) { // comprueba que si la fecha seleccionada es igual a la de incio de una reserva
-                return Redirect::back()->with('warning', 'La fecha de inicio de esta reserva entra en conflicto con otro programada para el mismo período.');
+                return Redirect::back()->with('warning', 'La fecha de inicio de esta reserva entra en conflicto con otra programada para el mismo período.');
             }elseif($fechaAulaFin == $fechaSeleccionada){ // comprueba que si la fecha seleccionada es igual a la de fin de una reserva
-                return Redirect::back()->with('warning', 'La fecha de inicio de esta reserva entra en conflicto con otro programada para el mismo período.');
+                return Redirect::back()->with('warning', 'La fecha de inicio de esta reserva entra en conflicto con otra programada para el mismo período.');
             }elseif(($fechaSeleccionada >= $fechaAulaInicio) && ($fechaSeleccionada <= $fechaAulaFin)){ // comprueba que si la fecha seleccionada esta entre la fecha inicio y fecha fin de reserva
-                return Redirect::back()->with('warning', 'La fecha de inicio de esta reserva entra en conflicto con otro programada para el mismo período.');
+                return Redirect::back()->with('warning', 'La fecha de inicio de esta reserva entra en conflicto con otra programada para el mismo período.');
             }
         }
 
