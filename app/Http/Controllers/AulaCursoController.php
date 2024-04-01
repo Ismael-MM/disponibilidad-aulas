@@ -105,16 +105,17 @@ class AulaCursoController extends Controller
         
         $aulas = $query->where('aula_id',Request::get('aula_id'))->get();
 
+        // funcion para comprar si el dia seleccionado esta disponible.
         foreach ($aulas as $aula){
 
             $fechaAulaInicio = $aula->fecha_inicio;
             $fechaAulaFin = $aula->fecha_fin;
 
-            if ($fechaAulaInicio == $fechaSeleccionada) {
+            if ($fechaAulaInicio == $fechaSeleccionada) { // comprueba que si la fecha seleccionada es igual a la de incio de una reserva
                 return Redirect::back()->with('warning', 'La fecha de inicio de esta reserva entra en conflicto con otro programada para el mismo período.');
-            }elseif($fechaAulaFin == $fechaSeleccionada){
+            }elseif($fechaAulaFin == $fechaSeleccionada){ // comprueba que si la fecha seleccionada es igual a la de fin de una reserva
                 return Redirect::back()->with('warning', 'La fecha de inicio de esta reserva entra en conflicto con otro programada para el mismo período.');
-            }elseif(($fechaSeleccionada >= $fechaAulaInicio) && ($fechaSeleccionada <= $fechaAulaFin)){
+            }elseif(($fechaSeleccionada >= $fechaAulaInicio) && ($fechaSeleccionada <= $fechaAulaFin)){ // comprueba que si la fecha seleccionada esta entre la fecha inicio y fecha fin de reserva
                 return Redirect::back()->with('warning', 'La fecha de inicio de esta reserva entra en conflicto con otro programada para el mismo período.');
             }
         }
