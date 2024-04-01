@@ -234,9 +234,6 @@ const getSinFestivosNiFinDeSemana = (fechaInico, diasAdd, festivosList) => {
         <v-btn color="blue-darken-1" :disabled="!form" variant="text" @click="submit">
           Guardar
         </v-btn>
-        <v-btn color="blue-darken-1" variant="text" @click="console.log(cursosList)">
-          log
-        </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>

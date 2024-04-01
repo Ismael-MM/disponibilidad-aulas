@@ -115,7 +115,6 @@ endPoint.value = "/dashboard/reservar"
           <div v-if="!tableData.deleted">
             <v-btn icon="mdi-refresh" @click="resetTable"> </v-btn>
             <v-btn icon="mdi-file-plus-outline" @click="openDialog('create')"> </v-btn>
-            <v-btn icon="mdi-math-log" @click="console.log(tableData)"> </v-btn>
             <v-btn
               icon="mdi-file-excel-outline"
               @click="exportToExcel(endPoint, headers, modifiedRows)"
