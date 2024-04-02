@@ -14,7 +14,7 @@ const openDialog = () => {
     dialog.value = true;
 }
 
-
+let rowCount = 0; //se usa para contar la line y asignar un color en customColor
 const filterSede = ref(null);
 const filterShift = ref('Mañana');
 const sedeList = ref([]);
@@ -39,15 +39,48 @@ const calendarOptions = ref({
     },
 });
 
-const randomNumber = (min, max) => {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
 const customColors = () => {
-    let color = `#${randomNumber(350, 400)}`;
+    let colorArray = ['#caf0f8','#ade8f4','#90e0ef','#48cae4','#00b4d8','#0096c7','#0077b6','#023e8a'];
+    let color = '';
 
-    console.log(color)
-
+    switch (rowCount) {
+        case 0:
+            color = colorArray[0];
+            rowCount++;
+            break;
+        case 1:
+            color = colorArray[1];
+            rowCount++;
+            break;
+        case 2:
+            color = colorArray[2];
+            rowCount++;
+            break;
+        case 3:
+            color = colorArray[3];
+            rowCount++;
+            break;
+        case 4:
+            color = colorArray[4];
+            rowCount++;
+            break;
+        case 5:
+            color = colorArray[5];
+            rowCount++;
+            break;
+        case 6:
+            color = colorArray[6];
+            rowCount++;
+            break;
+        case 7:
+            color = colorArray[7];
+            rowCount = 0;
+            break;
+    
+        default:
+            break;
+    }
+    console.log(color);
     return color;
 }
 
@@ -59,6 +92,7 @@ const filterPerShift = () => {
     } else {
         filterShift.value = "t"
     }
+    rowCount = 0;
     newEvents();
     dialog.value = false;
     useToast().success(

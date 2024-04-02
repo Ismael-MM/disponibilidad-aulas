@@ -14,7 +14,7 @@ class AulaCursoController extends Controller
 {
     public function index()
     {
-        return Inertia::render('Dashboard/ReservarAula');
+        return Inertia::render('Dashboard/Calendario/ReservarAula');
     }
 
     public function loadItems() 

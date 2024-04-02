@@ -12,7 +12,7 @@ class FestivoController extends Controller
 {
     public function index()
     {
-        return Inertia::render('Dashboard/Festivos');
+        return Inertia::render('Dashboard/Calendario/Festivos');
     }
 
     public function loadItems() 
