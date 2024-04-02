@@ -80,7 +80,6 @@ const customColors = () => {
         default:
             break;
     }
-    console.log(color);
     return color;
 }
 
@@ -112,7 +111,6 @@ const getReservasList = async () => {
         }))
         .then((response) => {
             const reserva = response.data.lists
-            console.log(reserva)
             reservasList = reserva.map((reserva) => {
                 return {
                     title: reserva.aula_id,
@@ -127,7 +125,6 @@ const getReservasList = async () => {
                 "Se ha producido un error al cargar los elementos del formulario. Intentalo de nuevo. Si el error persiste contacta con el administrador."
             )
         })
-    console.log(reservasList)
     return reservasList;
 }
 
@@ -149,7 +146,6 @@ const getSedesList = async () => {
 const newEvents = () => {
     getReservasList().then((reservasList) => {
         calendarOptions.value.events = reservasList;
-        console.log(reservasList)
         useToast().success(
         `Se han cargado ${reservasList.length} reservas`
         )
