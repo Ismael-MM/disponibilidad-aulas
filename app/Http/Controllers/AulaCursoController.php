@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AulaCurso;
+use App\Models\Curso;
 use App\Http\Resources\AulasCursosResource;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
@@ -103,8 +104,8 @@ class AulaCursoController extends Controller
 
         $fechaSeleccionada = Carbon::parse(Request::get('fecha_inicio'));
 
-        $curso = AulaCurso::with('curso')->where('curso_id', Request::get('curso_id'))->first();
-        $turno = $curso->curso->turno;
+        $curso = Curso::where('id', Request::get('curso_id'))->get();
+        $turno = $curso[0]->turno;
         
         $aulas = $query->join('cursos','cursos.id', '=', 'aula_curso.curso_id')
                         ->where('aula_id',Request::get('aula_id'))
