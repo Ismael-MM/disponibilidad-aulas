@@ -31,19 +31,26 @@ export const routesArray = [
     icon: "mdi-google-classroom",
   },
   {
-    value: "Reservar aula",
-    route: "dashboard.reservar",
-    icon: "mdi-calendar-clock",
-  },
-  {
-    value: "Festivos",
-    route: "dashboard.festivo",
-    icon: "mdi-calendar-multiselect",
-  },
-  {
-    value: "Calendario",
-    route: "dashboard.calendario",
+    value: "Gestión calendario",
     icon: "mdi-calendar-month",
+    path: "Calendario",
+    childs: [
+      {
+        value: "Calendario",
+        route: "dashboard.calendario",
+        icon: "mdi-calendar-month",
+      },
+      {
+        value: "Reservar aula",
+        route: "dashboard.reservar",
+        icon: "mdi-calendar-clock",
+      },
+      {
+        value: "Festivos",
+        route: "dashboard.festivo",
+        icon: "mdi-calendar-multiselect",
+      },
+    ],
   },
   {
     value: "Cerrar sesión",
