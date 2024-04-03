@@ -182,7 +182,6 @@ const newFestivosEvents = (date) => {
     getFestivosList().then((festivosList) => {
         calendarOptions.value.events.push(...festivosList);
     });
-    console.log(calendarOptions.value.events);
 };
 
 onBeforeMount(() => {

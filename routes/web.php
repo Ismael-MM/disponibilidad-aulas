@@ -9,6 +9,7 @@ use App\Http\Controllers\AulaController;
 use App\Http\Controllers\CalendarioController;
 use App\Http\Controllers\AulaCursoController;
 use App\Http\Controllers\FestivoController;
+use App\Http\Controllers\CursoSedeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -95,6 +96,16 @@ Route::middleware('auth')->prefix('dashboard')->group(function () {
     Route::post('/festivo/{festivo}/restore',[FestivoController::class, 'restore'])->name('dashboard.festivo.restore');
     Route::get('/festivo/export-excel',[FestivoController::class, 'exportExcel'])->name('dashboard.festivo.exportExcel');
     Route::get('/festivo/list',[FestivoController::class, 'festivoList'])->name('dashboard.festivo.list');
+
+    Route::get('/asignacion',[CursoSedeController::class, 'index'])->name('dashboard.asignacion');
+    Route::post('/asignacion/load-items',[CursoSedeController::class, 'loadItems'])->name('dashboard.asignacion.load-itmes');
+    Route::post('/asignacion',[CursoSedeController::class, 'store'])->name('dashboard.asignacion.store');
+    Route::put('/asignacion/{asignacion}',[CursoSedeController::class, 'update'])->name('dashboard.asignacion.update');
+    Route::delete('/asignacion/{asignacion}',[CursoSedeController::class, 'destroy'])->name('dashboard.asignacion.destroy');
+    Route::delete('/asignacion/{asignacion}/permanent',[CursoSedeController::class, 'destroyPermanent'])->name('dashboard.asignacion.destroyPermanent');
+    Route::post('/asignacion/{asignacion}/restore',[CursoSedeController::class, 'restore'])->name('dashboard.asignacion.restore');
+    Route::get('/asignacion/export-excel',[CursoSedeController::class, 'exportExcel'])->name('dashboard.asignacion.exportExcel');
+    Route::get('/asignacion/list',[CursoSedeController::class, 'festivoList'])->name('dashboard.asignacion.list');
 
     Route::get('/calendario',[CalendarioController::class, 'index'])->name('dashboard.calendario');
 });

@@ -26,6 +26,11 @@ export const routesArray = [
     icon: "mdi-home-group",
   },
   {
+    value: "Asignacion",
+    route: "dashboard.asignacion",
+    icon: "mdi-school-outline",
+  },
+  {
     value: "Aulas",
     route: "dashboard.aulas",
     icon: "mdi-google-classroom",
