@@ -93,6 +93,7 @@ const filterPerShift = () => {
     }
     rowCount = 0;
     newEvents();
+    newFestivosEvents();
     dialog.value = false;
     useToast().success(
         "Filtros aplicados correctamente"
@@ -143,6 +144,31 @@ const getSedesList = async () => {
         })
 }
 
+const getFestivosList = async () => {
+  let festivosList = '';
+  await axios
+    .get(route('dashboard.festivo.list'))
+    .then((response) => {
+      const festivo = response.data.lists
+            festivosList = festivo.map((festivo) => {
+                return {
+                    start: festivo.fecha,
+                    end: festivo.fecha,
+                    color: '#2E4057',
+                    display: 'background',
+                }
+            });
+    })
+    .catch(() => {
+      dialogState.value = false
+      loading.value = false
+      useToast().error(
+        "Se ha producido un error al cargar los elementos del formulario. Intentalo de nuevo. Si el error persiste contacta con el administrador."
+      )
+    })
+    return festivosList;
+}
+
 const newEvents = () => {
     getReservasList().then((reservasList) => {
         calendarOptions.value.events = reservasList;
@@ -152,9 +178,17 @@ const newEvents = () => {
     });
 };
 
+const newFestivosEvents = (date) => {
+    getFestivosList().then((festivosList) => {
+        calendarOptions.value.events.push(...festivosList);
+    });
+    console.log(calendarOptions.value.events);
+};
+
 onBeforeMount(() => {
     newEvents();
     getSedesList();
+    newFestivosEvents();
 })
 </script>
 
