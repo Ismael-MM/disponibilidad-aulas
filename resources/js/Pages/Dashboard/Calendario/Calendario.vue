@@ -40,7 +40,7 @@ const calendarOptions = ref({
 });
 
 const customColors = () => {
-    let colorArray = ['#caf0f8','#ade8f4','#90e0ef','#48cae4','#00b4d8','#0096c7','#0077b6','#023e8a'];
+    let colorArray = ['#ade8f4','#90e0ef','#48cae4','#00b4d8','#0096c7','#0077b6','#023e8a','#03045E'];
     let color = '';
 
     switch (rowCount) {
