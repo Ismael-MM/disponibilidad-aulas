@@ -137,8 +137,6 @@ const getFestivosList = async (fechainico, curso) => {
 
 // funcion para calcular cuantos dias son necesarios para un curso
 const totalDays = (fechainico, curso, festivosList) => {
-  console.log(fechainico)
-  console.log(curso)
   if (fechainico != '' && (curso != '' || curso != undefined || curso != null)) {
     const diasSumar = curso.horas / curso.horas_diarias
     const fechaSinFormato = new Date(fechainico);
@@ -159,23 +157,17 @@ const getSinFestivosNiFinDeSemana = (fechaInico, diasAdd, festivosList) => {
     let fecha = new Date(arrFecha[0], arrFecha[1] - 1, arrFecha[2]);
     let festivos = festivosList.value;
 
-    console.log(festivos)
-
-
-
     for (let i = 0; i < diasAdd; i++) {
         let diaInvalido = false;
         fecha.setDate(fecha.getDate() + 1); // Sumamos de dia en dia
         for (let j = 0; j < festivos.length; j++) { // Verificamos si el dia + 1 es festivo
             let mesDia = festivos[j];
             if (fecha.getMonth() + 1 == mesDia[1] && fecha.getDate() == mesDia[0]) {
-                console.log(fecha.getDate() + ' es dia festivo (Sumamos un dia)');
                 diaInvalido = true;
                 break;
             }
         }
         if (fecha.getDay() == 0 || fecha.getDay() == 6) { // Verificamos si es sábado o domingo
-            console.log(fecha.getDate() + ' es sábado o domingo (Sumamos un dia)');
             diaInvalido = true;
         }
         if (diaInvalido)
