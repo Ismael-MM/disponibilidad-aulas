@@ -93,6 +93,7 @@ const filterPerShift = () => {
     rowCount = 0;
     newEvents();
     newFestivosEvents();
+    calendarOptions.value.events = [];
     dialog.value = false;
     useToast().success(
         "Filtros aplicados correctamente"
@@ -179,7 +180,10 @@ const newEvents = () => {
 const newFestivosEvents = (date) => {
     getFestivosList().then((festivosList) => {
         calendarOptions.value.events.push(...festivosList);
+        console.log(festivosList)
+        console.log(calendarOptions.value.events)
     });
+    console.log("me ejecuto")
 };
 
 onBeforeMount(() => {
