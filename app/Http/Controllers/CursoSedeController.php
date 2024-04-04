@@ -151,7 +151,7 @@ class CursoSedeController extends Controller
 
         $aula = Request::get('aula');
         if (!is_null($aula)) {
-            $sede = Aula::find($aula)->id;
+            $sede = Aula::where('id',$aula)->get();
         }
 
         $query = CursoSede::query();
