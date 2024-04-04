@@ -33,7 +33,6 @@ const formData = useForm({
 watch(dialogState, (value) => {
   if (value) {
     loading.value = true
-    getCursosList()
     getAulasList()
 
     if (props.type === "edit") {
@@ -61,6 +60,15 @@ watch(
   }
 )
 
+watch(
+  () => [formData.aula_id],
+    ([nuevoIdAula]) => {
+      if (Number.isInteger(nuevoIdAula)) {
+        getCursosList();
+      }
+    }
+)
+
 const submit = () => {
   if (props.type === "edit") {
     formData.put(`${props.endPoint}/${props.item.id}`, {
@@ -82,7 +90,9 @@ const submit = () => {
 const getCursosList = async () => {
   cursosList.value = []
   await axios
-    .get(route('dashboard.cursos.list'))
+  .get(route('dashboard.asignacion.list', {
+            aula: formData.aula_id
+        }))
     .then((response) => {
       const curso = response.data.lists
       cursosList.value = curso
@@ -95,6 +105,7 @@ const getCursosList = async () => {
         "Se ha producido un error al cargar los elementos del formulario. Intentalo de nuevo. Si el error persiste contacta con el administrador."
       )
     })
+
 }
 
 const getAulasList = async () => {

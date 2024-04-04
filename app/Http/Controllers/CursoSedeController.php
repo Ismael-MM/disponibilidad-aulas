@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\CursoSede;
+use App\Models\Aula;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
 use App\Http\Resources\CursosSedesResource;
+use App\Http\Resources\CursosResource;
 use Inertia\Inertia;
 
 class CursoSedeController extends Controller
@@ -146,8 +148,22 @@ class CursoSedeController extends Controller
 
      public function asignacionList()
      {
-        $items = CursosSedesResource::collection(CursoSede::all());
 
+        $aula = Request::get('aula');
+        if (!is_null($aula)) {
+            $sede = Aula::find($aula)->id;
+        }
+
+        $query = CursoSede::query();
+
+        if (!is_null($sede)) {
+            $items = CursosResource::collection($query->where('sede_id', $sede)
+            ->with('curso')
+            ->get()
+            ->pluck('curso'));
+        }else {
+            $items = CursosSedesResource::collection(CursoSede::all());
+        }
         return [ 'lists' => $items];
      }
      
