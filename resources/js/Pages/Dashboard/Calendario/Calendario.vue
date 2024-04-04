@@ -91,9 +91,9 @@ const filterPerShift = () => {
         filterShift.value = "t"
     }
     rowCount = 0;
+    calendarOptions.value.events = [];
     newEvents();
     newFestivosEvents();
-    calendarOptions.value.events = [];
     dialog.value = false;
     useToast().success(
         "Filtros aplicados correctamente"
