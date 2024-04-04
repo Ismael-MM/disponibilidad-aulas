@@ -144,7 +144,7 @@ class CursoSedeController extends Controller
          return  [ 'itemsExcel' => $items ];
      }
 
-     public function cursosList()
+     public function asignacionList()
      {
         $items = CursosSedesResource::collection(CursoSede::all());
 

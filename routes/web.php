@@ -105,7 +105,7 @@ Route::middleware('auth')->prefix('dashboard')->group(function () {
     Route::delete('/asignacion/{asignacion}/permanent',[CursoSedeController::class, 'destroyPermanent'])->name('dashboard.asignacion.destroyPermanent');
     Route::post('/asignacion/{asignacion}/restore',[CursoSedeController::class, 'restore'])->name('dashboard.asignacion.restore');
     Route::get('/asignacion/export-excel',[CursoSedeController::class, 'exportExcel'])->name('dashboard.asignacion.exportExcel');
-    Route::get('/asignacion/list',[CursoSedeController::class, 'festivoList'])->name('dashboard.asignacion.list');
+    Route::get('/asignacion/list',[CursoSedeController::class, 'asignacionList'])->name('dashboard.asignacion.list');
 
     Route::get('/calendario',[CalendarioController::class, 'index'])->name('dashboard.calendario');
 });

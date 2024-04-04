@@ -87,7 +87,6 @@ const filterPerShift = () => {
 
     if (filterShift.value == 'Mañana' || filterShift.value == 'm') {
         filterShift.value = "m"
-        console.log(filterShift.value)
     } else {
         filterShift.value = "t"
     }
@@ -104,7 +103,6 @@ const filterPerShift = () => {
 
 const getReservasList = async () => {
     let reservasList = '';
-    console.log(filterShift)
     await axios
         .get(route('dashboard.reservar.list', {
             turno: filterShift.value,
