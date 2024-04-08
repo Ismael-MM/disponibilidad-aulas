@@ -105,7 +105,7 @@ const getCursosList = async () => {
         "Se ha producido un error al cargar los elementos del formulario. Intentalo de nuevo. Si el error persiste contacta con el administrador."
       )
     })
-
+    console.log(cursosList.value)
 }
 
 const getAulasList = async () => {
@@ -124,6 +124,7 @@ const getAulasList = async () => {
         "Se ha producido un error al cargar los elementos del formulario. Intentalo de nuevo. Si el error persiste contacta con el administrador."
       )
     })
+    console.log(aulasList.value);
 }
 
 const getFestivosList = async (fechainico, curso) => {

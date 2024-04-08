@@ -17,8 +17,10 @@ class AulasCursosResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'curso_id' => $this->curso->titulo,
-            'aula_id' => $this->aula->nombre,
+            'curso_id' => $this->curso->id,
+            'aula_id' => $this->aula->id,
+            'aula' => $this->aula->nombre,
+            'curso' => $this->curso->titulo,
             'sede' => $this->aula->sede->nombre,
             'turno' => $this->curso->turno == "M" ? "Mañana" : "Tarde",
             'fecha_fin' => Carbon::parse($this->fecha_fin)->format('Y-m-d'),
