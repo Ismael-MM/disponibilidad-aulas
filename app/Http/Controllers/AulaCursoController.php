@@ -34,10 +34,10 @@ class AulaCursoController extends Controller
         if (!empty($search)) {
             foreach ($search as $key => $value) {
                 if (!empty($value)) {
-                    if ($key == 'aula_id') {
+                    if ($key == 'aula') {
                         $query->whereHas('aula', function ($query) use ($value) {
                             return $query->where('nombre', 'LIKE', '%' . $value . '%');});
-                    }else if ($key == 'curso_id') {
+                    }else if ($key == 'curso') {
                         $query->whereHas('curso', function ($query) use ($value) {
                             return $query->where('titulo', 'LIKE', '%' . $value . '%');});
                     }else if ($key == 'sede') {
@@ -70,6 +70,12 @@ class AulaCursoController extends Controller
                     }else if ($sort['key'] == "turno") {
                         $query->join('cursos','cursos.id', '=', 'aula_curso.curso_id')
                         ->orderBy('cursos.turno',$order);
+                    }elseif ($sort['key'] == "curso") {
+                        $query->join('cursos','cursos.id', '=', 'aula_curso.curso_id')
+                        ->orderBy('cursos.titulo',$order);
+                    }elseif ($sort['key'] == "aula") {
+                        $query->join('aulas','aulas.id', '=', 'aula_curso.aula_id')
+                        ->orderBy('aulas.nombre',$order);
                     }else{
                         $query->orderBy($sort['key'], $sort['order']);
                     }
