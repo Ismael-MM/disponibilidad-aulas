@@ -150,6 +150,10 @@ const totalDays = (fechainico, curso, festivosList) => {
     const diasSumar = curso.horas / curso.horas_diarias
     const fechaSinFormato = new Date(fechainico);
 
+   if (!Number.isInteger(diasSumar)) {
+      (Number.parseInt(diasSumar) + 1)
+   }
+
     const day = fechaSinFormato.getDate() - 1 ; //  El dia actual que estamos en el mes
     const month = fechaSinFormato.getMonth() + 1; // El mes actual
     const year = fechaSinFormato.getFullYear();
