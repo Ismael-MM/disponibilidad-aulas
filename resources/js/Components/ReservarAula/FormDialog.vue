@@ -53,10 +53,9 @@ watch(
   ([newFechaInicio, idCurso]) => {
     const curso = cursosList.value.filter((e) => e.id == idCurso)
 
-    if (curso && isNaN(idCurso) == false && newFechaInicio) {
+    if (curso && isNaN(idCurso) == false && newFechaInicio && curso.length > 0) {
       getFestivosList(newFechaInicio, curso[0])
     }
-
   }
 )
 
@@ -105,7 +104,6 @@ const getCursosList = async () => {
         "Se ha producido un error al cargar los elementos del formulario. Intentalo de nuevo. Si el error persiste contacta con el administrador."
       )
     })
-    console.log(cursosList.value)
 }
 
 const getAulasList = async () => {
@@ -124,7 +122,6 @@ const getAulasList = async () => {
         "Se ha producido un error al cargar los elementos del formulario. Intentalo de nuevo. Si el error persiste contacta con el administrador."
       )
     })
-    console.log(aulasList.value);
 }
 
 const getFestivosList = async (fechainico, curso) => {
