@@ -112,8 +112,9 @@ const getReservasList = async () => {
         .then((response) => {
             const reserva = response.data.lists
             reservasList = reserva.map((reserva) => {
+                console.log(reserva)
                 return {
-                    title: reserva.aula_id,
+                    title: reserva.infoReserva,
                     start: reserva.fecha_inicio,
                     end: reserva.fecha_fin,
                     color: customColors(),
@@ -174,6 +175,7 @@ const newEvents = () => {
         useToast().success(
         `Se han cargado ${reservasList.length} reservas`
         )
+        console.log(reservasList)
     });
 };
 

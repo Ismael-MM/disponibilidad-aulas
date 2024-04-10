@@ -195,6 +195,7 @@ class AulaCursoController extends Controller
         $items = '';
         $turno = Request::get('turno');
         $sede = Request::get('sede');
+        $query = AulaCurso::query();
 
         if (Request::get('sede') != null && Request::get('turno') != null) {
 
@@ -205,13 +206,21 @@ class AulaCursoController extends Controller
                 $turno = "T";
             }
 
-            $items = DB::select(
-                "SELECT aula_curso.id,aula_curso.fecha_inicio,aula_curso.fecha_fin,aula_curso.deleted_at,cursos.titulo,cursos.turno,
-                aulas.nombre AS aula_id,sedes.nombre AS sede_id
-                FROM aula_curso
-                JOIN cursos JOIN aulas JOIN sedes ON aula_curso.curso_id = cursos.id AND aula_curso.aula_id = aulas.id AND aulas.sede_id = sedes.id
-                where cursos.turno = '$turno' AND sedes.nombre = '$sede' AND aula_curso.deleted_at IS NULL;"
-            );
+            // $items = DB::select(
+            //     "SELECT aula_curso.id,aula_curso.fecha_inicio,aula_curso.fecha_fin,aula_curso.deleted_at,cursos.titulo,cursos.turno,
+            //     aulas.nombre AS aula_id,sedes.nombre AS sede_id
+            //     FROM aula_curso
+            //     JOIN cursos JOIN aulas JOIN sedes ON aula_curso.curso_id = cursos.id AND aula_curso.aula_id = aulas.id AND aulas.sede_id = sedes.id
+            //     where cursos.turno = '$turno' AND sedes.nombre = '$sede' AND aula_curso.deleted_at IS NULL;"
+            // );
+
+            $items = AulasCursosResource::collection($query->join('cursos','cursos.id', '=', 'aula_curso.curso_id')
+                    ->join('aulas','aulas.id','=','aula_curso.aula_id')
+                    ->join('sedes','sedes.id','=','aulas.sede_id')
+                    ->where('cursos.turno',$turno)
+                    ->where('sedes.nombre',$sede)
+                    ->get()
+                );
 
         }elseif (Request::get('turno') != null){
 
@@ -221,10 +230,15 @@ class AulaCursoController extends Controller
                 $turno = "T";
             }
 
-            $items = DB::select("SELECT aula_curso.id,aula_curso.fecha_inicio,aula_curso.fecha_fin,aula_curso.deleted_at,cursos.titulo,cursos.turno,aulas.nombre
-                AS aula_id,sedes.nombre AS sede_id FROM aula_curso JOIN cursos JOIN aulas JOIN sedes
-                ON aula_curso.curso_id = cursos.id AND aula_curso.aula_id = aulas.id AND aulas.sede_id = sedes.id
-                where cursos.turno = '$turno' AND aula_curso.deleted_at IS NULL;");
+            // $items = DB::select("SELECT aula_curso.id,aula_curso.fecha_inicio,aula_curso.fecha_fin,aula_curso.deleted_at,cursos.titulo,cursos.turno,aulas.nombre
+            //     AS aula_id,sedes.nombre AS sede_id FROM aula_curso JOIN cursos JOIN aulas JOIN sedes
+            //     ON aula_curso.curso_id = cursos.id AND aula_curso.aula_id = aulas.id AND aulas.sede_id = sedes.id
+            //     where cursos.turno = '$turno' AND aula_curso.deleted_at IS NULL;");
+            $items = AulasCursosResource::collection($query->join('cursos','cursos.id', '=', 'aula_curso.curso_id')
+                    ->where('cursos.turno',$turno)
+                    ->get()
+                );
+
         }else {
             $items = AulasCursosResource::collection(AulaCurso::all());
         }
