@@ -106,12 +106,11 @@ class CursoSedeController extends Controller
  
      public function update(CursoSede $asignacion)
      {
-        $validatedData = Request::validate([
-            'curso_id' => ['required'],
-            'sede_id' => ['required'],
-        ]);
 
-        $asignacion->update($validatedData);
+        $asignacion->update(Request::validate([
+            'curso_id' => ['required', 'int'],
+            'sede_id' => ['required', 'int'],
+        ]));
 
          return Redirect::back()->with('success', 'Curso editado.');
      }

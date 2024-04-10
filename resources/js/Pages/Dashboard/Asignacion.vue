@@ -36,8 +36,10 @@ const {
 
 const headers = [
   { title: "Id", key: "id", align: "center" },
-  { title: "Curso", key: "curso_id", align: "center" },
-  { title: "Sede", key: "sede_id", align: "center" },
+  { title: "CursoId", key: "curso_id", align: "center" },
+  { title: "SedeId", key: "sede_id", align: "center" },
+  { title: "Curso", key: "curso", align: "center" },
+  { title: "Sede", key: "sede", align: "center" },
   { title: "Turno", key: "turno", align: "center" },
   {
     title: "Acciones",
@@ -51,6 +53,8 @@ const headers = [
 onBeforeMount(() => {
   itemHeaders.value = headers
   selectedHeaders.value = headers.map((h) => h.key)
+  selectedHeaders.value = selectedHeaders.value.filter((header) => header!== 'sede_id');
+  selectedHeaders.value = selectedHeaders.value.filter((header) => header!== 'curso_id');
 })
 
 const modifiedRows = {}

@@ -16,8 +16,10 @@ class CursosSedesResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'curso_id' => $this->curso->titulo,
-            'sede_id' => $this->sede->nombre,
+            'sede_id' => $this->sede_id,
+            'curso_id' => $this->curso_id,
+            'curso' => $this->curso->titulo,
+            'sede' => $this->sede->nombre,
             'turno' => $this->curso->turno == "M" ? "Mañana" : "Tarde",
         ];
     }
