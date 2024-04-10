@@ -15,12 +15,14 @@ class AulasResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $sedeNombre = $this->sede->nombre?? 'Sede en la papelera';
+
         return [
             'id' => $this->id,
             'nombre' => $this->nombre,
             'sede_id' => $this->sede_id,
-            'aulasede' => $this->nombre . " - " . $this->sede->nombre,
-            'sede' => $this->sede->nombre,
+            'aulasede' => $this->nombre . " - " . $sedeNombre,
+            'sede' => $sedeNombre,
    
         ];
     }
