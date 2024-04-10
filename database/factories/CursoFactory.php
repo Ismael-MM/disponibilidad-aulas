@@ -23,7 +23,7 @@ class CursoFactory extends Factory
         return [
             'titulo' => $this->faker->word(),
             'turno' => $this->faker->randomElement(["M","T"]),
-            'horas' => $this->faker->randomNumber(),
+            'horas' => $this->faker->numberBetween(1,2000),
             'horas_diarias' => $this->faker->randomDigitNotNull(),
         ];
     }
