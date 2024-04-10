@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('aulas', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
-            $table->foreignId('sede_id');
+            $table->foreignId('sede_id')->references('id')->on('sedes')->cascadeOnDelete();
             $table->timestamps();
             $table->softDeletes();
         });
