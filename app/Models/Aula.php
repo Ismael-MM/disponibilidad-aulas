@@ -7,11 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Dyrynda\Database\Support\CascadeSoftDeletes;
 
 class Aula extends Model
 {
     use HasFactory;
-    use SoftDeletes;
+    use SoftDeletes, CascadeSoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -19,6 +20,8 @@ class Aula extends Model
      * @var array
      */
     protected $table = 'aulas';
+
+    protected $cascadeDeletes = ['cursos'];
 
     protected $fillable = [
         'nombre',

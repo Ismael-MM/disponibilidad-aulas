@@ -7,13 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Dyrynda\Database\Support\CascadeSoftDeletes;
 
 class Sede extends Model
 {
     use HasFactory;
-    use SoftDeletes;
+    use SoftDeletes, CascadeSoftDeletes;
 
     protected $table = 'sedes';
+
+    protected $cascadeDeletes = ['aulas', 'cursos'];
 
     /**
      * The attributes that are mass assignable.

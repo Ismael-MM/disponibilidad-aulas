@@ -180,10 +180,7 @@ const newEvents = () => {
 const newFestivosEvents = (date) => {
     getFestivosList().then((festivosList) => {
         calendarOptions.value.events.push(...festivosList);
-        console.log(festivosList)
-        console.log(calendarOptions.value.events)
     });
-    console.log("me ejecuto")
 };
 
 onBeforeMount(() => {

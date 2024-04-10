@@ -6,11 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Dyrynda\Database\Support\CascadeSoftDeletes;
 
 class Curso extends Model
 {
     use HasFactory;
-    use SoftDeletes;
+    use SoftDeletes, CascadeSoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -18,6 +19,8 @@ class Curso extends Model
      * @var array
      */
     protected $table = 'cursos';
+    
+    protected $cascadeDeletes = ['sedes','aulas'];
 
     protected $fillable = [
         'titulo',
