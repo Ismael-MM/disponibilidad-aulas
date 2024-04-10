@@ -19,7 +19,7 @@ class CursoController extends Controller
     
      public function index()
      {
-         return Inertia::render('Dashboard/Cursos');
+         return Inertia::render('Dashboard/Gestion/Cursos');
      }
  
      public function loadItems() 

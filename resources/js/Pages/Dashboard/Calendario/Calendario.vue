@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onBeforeMount, watch } from "vue"
-import FullCalendar from "@/Components/Calendario/FullCalendar.vue";
+import FullCalendar from "@/Components/Gestion-Calendario/Calendario/FullCalendar.vue";
 import dayGridPlugin from '@fullcalendar/daygrid';
 import multiMonthPlugin from '@fullcalendar/multimonth';
 import esLocale from '@fullcalendar/core/locales/es';

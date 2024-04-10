@@ -16,7 +16,7 @@ class AulaController extends Controller
     
      public function index()
      {
-         return Inertia::render('Dashboard/Aulas');
+         return Inertia::render('Dashboard/Gestion/Aulas');
      }
  
      public function loadItems() 

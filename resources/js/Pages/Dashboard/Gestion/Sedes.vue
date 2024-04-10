@@ -1,6 +1,6 @@
 <script setup>
 import { onBeforeMount } from "vue"
-import FormDialog from "@/Components/Sede/FormDialog.vue"
+import FormDialog from "@/Components/Gestion/Sede/FormDialog.vue"
 import DestroyDialog from "@/Components/DestroyDialog.vue"
 import RestoreDialog from "@/Components/RestoreDialog.vue"
 import DestroyPermanentDialog from "@/Components/DestroyPermanentDialog.vue"

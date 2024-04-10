@@ -18,7 +18,7 @@ class CursoSedeController extends Controller
     
      public function index()
      {
-         return Inertia::render('Dashboard/Asignacion');
+         return Inertia::render('Dashboard/Gestion/Asignacion');
      }
  
      public function loadItems() 

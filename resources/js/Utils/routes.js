@@ -16,24 +16,31 @@ export const routesArray = [
     icon: "mdi-account-group",
   },
   {
-    value: "Cursos",
-    route: "dashboard.cursos",
-    icon: "mdi-school",
-  },
-  {
-    value: "Sedes",
-    route: "dashboard.sedes",
-    icon: "mdi-home-group",
-  },
-  {
-    value: "Asignacion",
-    route: "dashboard.asignacion",
-    icon: "mdi-school-outline",
-  },
-  {
-    value: "Aulas",
-    route: "dashboard.aulas",
-    icon: "mdi-google-classroom",
+    value: "Gestión",
+    icon: "mdi-animation",
+    path: "Gestion",
+    childs: [
+      {
+        value: "Cursos",
+        route: "dashboard.cursos",
+        icon: "mdi-school",
+      },
+      {
+        value: "Sedes",
+        route: "dashboard.sedes",
+        icon: "mdi-home-group",
+      },
+      {
+        value: "Aulas",
+        route: "dashboard.aulas",
+        icon: "mdi-google-classroom",
+      },
+      {
+        value: "Asignacion",
+        route: "dashboard.asignacion",
+        icon: "mdi-school-outline",
+      },
+    ],
   },
   {
     value: "Gestión calendario",

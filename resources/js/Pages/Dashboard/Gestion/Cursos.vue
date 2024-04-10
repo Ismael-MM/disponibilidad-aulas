@@ -1,6 +1,6 @@
 <script setup>
 import { onBeforeMount } from "vue"
-import FormDialog from "@/Components/CursoSede/FormDialog.vue"
+import FormDialog from "@/Components/Gestion/Cursos/FormDialog.vue"
 import DestroyDialog from "@/Components/DestroyDialog.vue"
 import RestoreDialog from "@/Components/RestoreDialog.vue"
 import DestroyPermanentDialog from "@/Components/DestroyPermanentDialog.vue"
@@ -36,11 +36,10 @@ const {
 
 const headers = [
   { title: "Id", key: "id", align: "center" },
-  { title: "CursoId", key: "curso_id", align: "center" },
-  { title: "SedeId", key: "sede_id", align: "center" },
-  { title: "Curso", key: "curso", align: "center" },
-  { title: "Sede", key: "sede", align: "center" },
+  { title: "Titulo", key: "titulo", align: "center" },
   { title: "Turno", key: "turno", align: "center" },
+  { title: "Horas Totales", key: "horas", align: "center" },
+  { title: "Horas Diarias", key: "horas_diarias", align: "center" },
   {
     title: "Acciones",
     key: "actions",
@@ -53,13 +52,11 @@ const headers = [
 onBeforeMount(() => {
   itemHeaders.value = headers
   selectedHeaders.value = headers.map((h) => h.key)
-  selectedHeaders.value = selectedHeaders.value.filter((header) => header!== 'sede_id');
-  selectedHeaders.value = selectedHeaders.value.filter((header) => header!== 'curso_id');
 })
 
 const modifiedRows = {}
 
-endPoint.value = "/dashboard/asignacion"
+endPoint.value = "/dashboard/cursos"
 </script>
 
 <template>
@@ -109,8 +106,8 @@ endPoint.value = "/dashboard/asignacion"
       <template v-slot:top>
         <v-toolbar :class="{ 'bg-red-lighten-2': tableData.deleted }" flat>
           <v-toolbar-title>
-            Sedes
-            <span v-if="tableData.deleted"> - ELIMINADAS</span>
+            Cursos
+            <span v-if="tableData.deleted"> - ELIMINADOS</span>
           </v-toolbar-title>
           <v-divider class="mx-4" inset vertical></v-divider>
           <div v-if="!tableData.deleted">

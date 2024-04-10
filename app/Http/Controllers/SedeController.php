@@ -18,7 +18,7 @@ class SedeController extends Controller
     
      public function index()
      {
-         return Inertia::render('Dashboard/Sedes');
+         return Inertia::render('Dashboard/Gestion/Sedes');
      }
  
      public function loadItems() 
