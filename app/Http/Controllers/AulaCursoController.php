@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\AulaCurso;
 use App\Models\Curso;
 use App\Http\Resources\AulasCursosResource;
+use App\Http\Requests\AulaCursoRequest;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
-use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Inertia\Inertia;
 
@@ -100,13 +100,13 @@ class AulaCursoController extends Controller
         ];
     }
 
-    public function store()
+    public function store(AulaCursoRequest $request)
     {
         $query = AulaCurso::query();
 
-        $fechaSeleccionada = Carbon::parse(Request::get('fecha_inicio'));
+        $fechaSeleccionada = Carbon::parse( $request->fecha_inicio);
 
-        $curso = Curso::where('id', Request::get('curso_id'))->get();
+        $curso = Curso::where('id',  $request->curso_id)->get();
         $turno = $curso[0]->turno;
         
         $aulas = $query->join('cursos','cursos.id', '=', 'aula_curso.curso_id')
@@ -130,26 +130,16 @@ class AulaCursoController extends Controller
         }
 
         AulaCurso::create(
-            Request::validate([
-                'aula_id' => ['required', 'exists:aulas,id'],
-                'curso_id' => ['required', 'exists:cursos,id'],
-                'fecha_inicio' => ['required', 'date'],
-                'fecha_fin' => ['required', 'date'],
-            ])
+            $request->validated()
         );
 
         return Redirect::back()->with('success', 'Aula reservada.');
     }
 
-    public function update(AulaCurso $reservas)
+    public function update(AulaCursoRequest $request,AulaCurso $reservas)
     {
         $reservas->update(
-            Request::validate([
-                'aula_id' => ['required', 'exists:aulas,id'],
-                'curso_id' => ['required', 'exists:cursos,id'],
-                'fecha_inicio' => ['required', 'date'],
-                'fecha_fin' => ['required', 'date'],
-            ])
+            $request->validated()
         );
 
         return Redirect::back()->with('success', 'Reserva editada.');
