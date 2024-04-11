@@ -77,30 +77,21 @@ class CursoController extends Controller
          ];
      }
  
-     public function store()
+     public function store(CursoStoreRequest $request)
      {
          Curso::create(
-             Request::validate([
-                'titulo' => ['required', 'max:191'],
-                'turno' => ['required', Rule::in(['M','T'])],
-                'horas' => ['required', 'numeric', 'min:1', 'max:3000'],
-                'horas_diarias' => ['required', 'numeric', 'min:1', 'max:10'],
-             ])
+             $request->validated()
          );
  
          return Redirect::back()->with('success', 'Curso creado.');
      }
  
-     public function update(Curso $curso)
+     public function update(CursoUpdateRequest $request,Curso $curso)
      {
-        $valueTurno = Request::get('turno');
+        $valueTurno = $request->turno;
         $turno = Curso::Turno($valueTurno);
 
-        $validatedData = Request::validate([
-            'titulo' => ['required', 'max:191'],
-            'horas' => ['required', 'numeric', 'min:1', 'max:3000'],
-            'horas_diarias' => ['required', 'numeric', 'min:1', 'max:10'],
-        ]);
+        $validatedData = $request->validated();
 
         $validatedData['turno'] = $turno;
 
