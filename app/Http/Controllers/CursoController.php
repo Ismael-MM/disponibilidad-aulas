@@ -39,12 +39,8 @@ class CursoController extends Controller
              foreach ($search as $key => $value) {
                  if (!empty($value)) {
                     if ($key == 'turno') {
-                        if (preg_match('/^(M|m)/i', $value)) {
-                            $value = "M";
-                        }else if (preg_match('/^(T|t)/', $value)) {
-                            $value = "T";
-                        }
-                        $query->where('turno', 'LIKE', '%' . $value . '%');;
+                        $turno = Curso::Turno($value);
+                        $query->where('turno', 'LIKE', '%' . $turno . '%');;
                     }else {
                         $query->where($key, 'LIKE', '%' . $value . '%');
                     }
@@ -97,12 +93,8 @@ class CursoController extends Controller
  
      public function update(Curso $curso)
      {
-        $turno = Request::get('turno');
-        if (preg_match('/^(M|m)/i', $turno)) {
-            $turno = "M";
-        }else if (preg_match('/^(T|t)/', $turno)) {
-            $turno = "T";
-        }
+        $valueTurno = Request::get('turno');
+        $turno = Curso::Turno($valueTurno);
 
         $validatedData = Request::validate([
             'titulo' => ['required', 'max:191'],

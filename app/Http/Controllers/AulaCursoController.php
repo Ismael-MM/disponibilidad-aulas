@@ -45,12 +45,8 @@ class AulaCursoController extends Controller
                             return $query->where('nombre', 'LIKE', '%' . $value . '%');});
                     }else if ($key == 'turno') {
                         $query->whereHas('curso', function ($query) use ($value) {
-                            if (preg_match('/^(M|m)/i', $value)) {
-                                $value = "M";
-                            }else if (preg_match('/^(T|t)/', $value)) {
-                                $value = "T";
-                            }
-                            return $query->where('turno', 'LIKE', '%' . $value . '%');});
+                            $turno = Curso::Turno($value);
+                            return $query->where('turno', 'LIKE', '%' . $turno . '%');});
                     }else{
                         $query->where($key, 'LIKE', '%' . $value . '%');
                     }
@@ -193,18 +189,14 @@ class AulaCursoController extends Controller
     public function reservasList(AulaCurso $reserva)
     {
         $items = '';
-        $turno = Request::get('turno');
+        $valueTurno = Request::get('turno');
         $sede = Request::get('sede');
         $query = AulaCurso::query();
 
         if (Request::get('sede') != null && Request::get('turno') != null) {
 
 
-            if (preg_match('/^(M|m)/i', $turno)) {
-                $turno = "M";
-            }else if (preg_match('/^(T|t)/', $turno)) {
-                $turno = "T";
-            }
+            $turno = Curso::Turno($valueTurno);
 
             $items = AulasCursosResource::collection($query->join('cursos','cursos.id', '=', 'aula_curso.curso_id')
                     ->join('aulas','aulas.id','=','aula_curso.aula_id')
@@ -216,11 +208,7 @@ class AulaCursoController extends Controller
 
         }elseif (Request::get('turno') != null){
 
-            if (preg_match('/^(M|m)/i', $turno)) {
-                $turno = "M";
-            }else if (preg_match('/^(T|t)/', $turno)) {
-                $turno = "T";
-            }
+            $turno = Curso::Turno($valueTurno);
 
             $items = AulasCursosResource::collection($query->join('cursos','cursos.id', '=', 'aula_curso.curso_id')
                     ->where('cursos.turno',$turno)

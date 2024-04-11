@@ -49,4 +49,13 @@ class Curso extends Model
     {
         return $this->belongsToMany(Sede::class);
     }
+
+    public static function Turno($turno){
+        if (preg_match('/^(M|m)/i', $turno)) {
+            $turno = "M";
+        }else if (preg_match('/^(T|t)/', $turno)) {
+            $turno = "T";
+        }
+        return $turno;
+    }
 }

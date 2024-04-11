@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CursoSede;
+use App\Models\Curso;
 use App\Models\Aula;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
@@ -39,12 +40,8 @@ class CursoSedeController extends Controller
                  if (!empty($value)) {
                     if ($key == 'turno') {
                         $query->whereHas('curso', function ($query) use ($value) {
-                            if (preg_match('/^(M|m)/i', $value)) {
-                                $value = "M";
-                            }else if (preg_match('/^(T|t)/', $value)) {
-                                $value = "T";
-                            }
-                            return $query->where('turno', 'LIKE', '%' . $value . '%');});
+                           $turno = Curso::Turno($value);
+                            return $query->where('turno', 'LIKE', '%' . $turno . '%');});
                     }else {
                         $query->where($key, 'LIKE', '%' . $value . '%');
                     }
