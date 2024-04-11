@@ -37,4 +37,5 @@ Este proyecto tiene como objetivo gestionar la disponibilidad de aulas en una in
 3. Inicia el servidor de desarrollo tanto para Laravel como para Vue.
 > [!NOTE]
 > Para generar la clave usa php artisan key:generate.
+>
 > Usa npm run dev para iniciar el servidor de desarrollo.
