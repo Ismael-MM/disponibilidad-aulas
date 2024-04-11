@@ -6,6 +6,7 @@ use App\Models\Aula;
 use App\Http\Resources\AulasResource;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
+use App\Http\Requests\AulaRequest;
 use Inertia\Inertia;
 
 class AulaController extends Controller
@@ -82,35 +83,29 @@ class AulaController extends Controller
          ];
      }
  
-     public function store()
+     public function store(AulaRequest $request)
      {
          Aula::create(
-             Request::validate([
-                'nombre' => ['required', 'max:191'],
-                'sede_id' => ['required', 'max:191'],
-             ])
+            $request->validated()
          );
  
-         return Redirect::back()->with('success', 'Aula creado.');
+         return Redirect::back()->with('success', 'Aula creada.');
      }
  
-     public function update(Aula $aula)
+     public function update(AulaRequest $request,Aula $aula)
      {
          $aula->update(
-             Request::validate([
-                'nombre' => ['required', 'max:191'],
-                'sede_id' => ['required', 'max:191'],
-             ])
+             $request->validated()
          );
  
-         return Redirect::back()->with('success', 'Aula editado.');
+         return Redirect::back()->with('success', 'Aula editada.');
      }
  
      public function destroy(Aula $aula)
      {
          $aula->delete();
  
-         return Redirect::back()->with('success', 'Aula movido a la papelera.');
+         return Redirect::back()->with('success', 'Aula movida a la papelera.');
      }
  
      public function destroyPermanent($id)
@@ -118,7 +113,7 @@ class AulaController extends Controller
          $aula = Aula::onlyTrashed()->findOrFail($id);
          $aula->forceDelete();
  
-         return Redirect::back()->with('success', 'Aula eliminado de forma permanente.');
+         return Redirect::back()->with('success', 'Aula eliminada de forma permanente.');
      }
  
      public function restore($id)
@@ -126,7 +121,7 @@ class AulaController extends Controller
          $aula = Aula::onlyTrashed()->findOrFail($id);
          $aula->restore();
  
-         return Redirect::back()->with('success', 'Aula restaurado.');
+         return Redirect::back()->with('success', 'Aula restaurada.');
      }
  
      public function exportExcel()
