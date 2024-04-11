@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Festivo;
 use App\Http\Resources\FestivosResource;
+use App\Http\Requests\FestivoRequest;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
 use Inertia\Inertia;
@@ -65,26 +66,16 @@ class FestivoController extends Controller
         ];
     }
 
-    public function store()
+    public function store(FestivoRequest $request)
      {
-         Festivo::create(
-             Request::validate([
-                'nombre' => ['required', 'max:191'],
-                'fecha' => ['required'],
-             ])
-         );
+         Festivo::create($request->validated());
  
          return Redirect::back()->with('success', 'Festivo creado.');
      }
  
-     public function update(Festivo $festivo)
+     public function update(FestivoRequest $request ,Festivo $festivo)
      {
-         $festivo->update(
-             Request::validate([
-                'nombre' => ['required', 'max:191'],
-                'fecha' => ['required'],
-             ])
-         );
+         $festivo->update($request->validated());
  
          return Redirect::back()->with('success', 'Festivo editado.');
      }
