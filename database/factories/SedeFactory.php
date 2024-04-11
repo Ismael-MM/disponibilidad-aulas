@@ -20,8 +20,10 @@ class SedeFactory extends Factory
      */
     public function definition(): array
     {
+        static $sedeNumber = 1;
+
         return [
-            'nombre' => $this->faker->word(),
+            'nombre' => 'sede '. $sedeNumber++,
         ];
     }
 }

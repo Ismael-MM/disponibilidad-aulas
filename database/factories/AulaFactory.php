@@ -21,8 +21,10 @@ class AulaFactory extends Factory
      */
     public function definition(): array
     {
+        static $aulaNumber = 1;
+
         return [
-            'nombre' => $this->faker->word(),
+            'nombre' => 'aula '. $aulaNumber++,
             'sede_id' => Sede::factory(),
         ];
     }
