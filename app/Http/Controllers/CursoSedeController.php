@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
 use App\Http\Resources\CursosSedesResource;
 use App\Http\Resources\CursosResource;
+use App\Http\Requests\CursoSedeRequest;
 use Inertia\Inertia;
 
 class CursoSedeController extends Controller
@@ -78,10 +79,10 @@ class CursoSedeController extends Controller
          ];
      }
  
-     public function store()
+     public function store(CursoSedeRequest $request)
      {
-        $curso = Request::get('curso_id');
-        $sede = Request::get('sede_id');
+        $curso = $request->curso_id;
+        $sede = $request->sede_id;
 
         $query = CursoSede::query();
 
@@ -91,23 +92,15 @@ class CursoSedeController extends Controller
             return Redirect::back()->with('warning', 'Esta sede ya tiene vinculado este curso.');
         }
 
-        CursoSede::create(
-             Request::validate([
-                'curso_id' => ['required'],
-                'sede_id' => ['required'],
-             ])
-         );
+        CursoSede::create($request->validated());
  
          return Redirect::back()->with('success', 'Curso creado.');
      }
  
-     public function update(CursoSede $asignacion)
+     public function update(CursoSedeRequest $request,CursoSede $asignacion)
      {
 
-        $asignacion->update(Request::validate([
-            'curso_id' => ['required', 'int'],
-            'sede_id' => ['required', 'int'],
-        ]));
+        $asignacion->update($request->validated());
 
          return Redirect::back()->with('success', 'Curso editado.');
      }
