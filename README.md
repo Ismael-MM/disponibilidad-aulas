@@ -35,6 +35,6 @@ Este proyecto tiene como objetivo gestionar la disponibilidad de aulas en una in
 2. Configura el .env y genera una clave de aplicación
 2. Ejecuta las migraciones y los seeders para crear la base de datos con datos de ejemplo.
 3. Inicia el servidor de desarrollo tanto para Laravel como para Vue.
-[!NOTE]
+**Note**
 Para generar la clave usa php artisan key:generate.
 Usa npm run dev para iniciar el servidor de desarrollo.
