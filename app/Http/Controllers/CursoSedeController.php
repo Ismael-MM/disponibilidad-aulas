@@ -53,7 +53,19 @@ class CursoSedeController extends Controller
          if (!empty($sortBy)) {
              foreach ($sortBy as $sort) {
                  if (isset($sort['key']) && isset($sort['order'])) {
-                     $query->orderBy($sort['key'], $sort['order']);
+                    $order = $sort['order'];
+                    if ($sort['key'] == "turno") {
+                        $query->join('cursos', 'cursos.id', '=', 'curso_sede.curso_id')
+                        ->orderBy('cursos.turno', $order);
+                    }elseif ($sort['key'] == "sede") {
+                        $query->join('sedes', 'sedes.id', '=', 'curso_sede.sede_id')
+                        ->orderBy('sedes.nombre', $order);
+                    }elseif ($sort['key'] == "curso") {
+                        $query->join('cursos', 'cursos.id', '=', 'curso_sede.curso_id')
+                        ->orderBy('cursos.titulo', $order);
+                    }else{
+                        $query->orderBy($sort['key'], $sort['order']);
+                    }
                  }
              }
          } else {
