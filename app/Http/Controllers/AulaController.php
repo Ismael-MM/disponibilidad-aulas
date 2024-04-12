@@ -7,6 +7,7 @@ use App\Http\Resources\AulasResource;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
 use App\Http\Requests\AulaRequest;
+use App\Queries\AulaQuery;
 use Inertia\Inertia;
 
 class AulaController extends Controller
@@ -26,47 +27,17 @@ class AulaController extends Controller
          $sortBy = json_decode(Request::get('sortBy', '[]'), true);
          $search = json_decode(Request::get('search', '[]'), true);
          $deleted = filter_var(Request::get('deleted', 'false'), FILTER_VALIDATE_BOOLEAN);
- 
+        
+         $consultas = new AulaQuery();
          $query = Aula::query();
  
-         if ($deleted) {
-             $query->onlyTrashed();
-         }
+         $consultas->deleted($deleted, $query);
  
-         if (!empty($search)) {
-             foreach ($search as $key => $value) {
-                 if (!empty($value)) {
-                    if ($key == 'sede') {
-                        $query->whereHas('sede', function ($query) use ($value) {
-                            return $query->where('nombre', 'LIKE', '%' . $value . '%');});
-                    }else{
-                        $query->where($key, 'LIKE', '%' . $value . '%');
-                    }
-                 }
-             }
-         }
+         $consultas->search($search, $query);
  
-         if (!empty($sortBy)) {
-             foreach ($sortBy as $sort) {
-                 if (isset($sort['key']) && isset($sort['order'])) {
-                    $order = $sort['order'];
+         $consultas->sortBy($sortBy, $query);
 
-                    if ($sort['key'] == 'sede') {
-                        $query->join('sedes', 'sedes.id', '=', 'aulas.sede_id')
-                        ->select('aulas.id', 'aulas.nombre', 'aulas.sede_id', 'sedes.nombre AS sede_nombre')
-                        ->orderBy('sedes.nombre', $order);
-                    }else {
-                        $query->orderBy($sort['key'], $sort['order']);
-                    }
-                 }
-             }
-         } else {
-             $query->orderBy("id", "desc");
-         }
- 
-         if ($itemsPerPage == -1) {
-             $itemsPerPage = $query->count();
-         }    
+         $consultas->paginacion($itemsPerPage, $query);   
  
          $items = AulasResource::collection($query->paginate($itemsPerPage));
  
