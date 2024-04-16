@@ -7,6 +7,7 @@ use App\Http\Resources\FestivosResource;
 use App\Http\Requests\FestivoRequest;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
+use App\Queries\DefaultQuery;
 use Inertia\Inertia;
 
 class FestivoController extends Controller
@@ -23,33 +24,13 @@ class FestivoController extends Controller
         $search = json_decode(Request::get('search', '[]'), true);
         $deleted = filter_var(Request::get('deleted', 'false'), FILTER_VALIDATE_BOOLEAN);
 
+        $consultas = new DefaultQuery();
         $query = Festivo::query();
 
-        if ($deleted) {
-            $query->onlyTrashed();
-        }
-
-        if (!empty($search)) {
-            foreach ($search as $key => $value) {
-                if (!empty($value)) {
-                    $query->where($key, 'LIKE', '%' . $value . '%');
-                }
-            }
-        }
-
-        if (!empty($sortBy)) {
-            foreach ($sortBy as $sort) {
-                if (isset($sort['key']) && isset($sort['order'])) {
-                    $query->orderBy($sort['key'], $sort['order']);
-                }
-            }
-        } else {
-            $query->orderBy("id", "desc");
-        }
-
-        if ($itemsPerPage == -1) {
-            $itemsPerPage = $query->count();
-        }    
+        $consultas->deleted($deleted, $query);
+        $consultas->search($search, $query);
+        $consultas->sort($sortBy, $query);
+        $consultas->paginacion($itemsPerPage, $query);
 
         $items = FestivosResource::collection($query->paginate($itemsPerPage));
 

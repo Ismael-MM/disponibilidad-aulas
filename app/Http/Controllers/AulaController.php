@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
 use App\Http\Requests\AulaRequest;
 use App\Queries\AulaQuery;
+use App\Queries\DefaultQuery;
 use Inertia\Inertia;
 
 class AulaController extends Controller
@@ -29,15 +30,14 @@ class AulaController extends Controller
          $deleted = filter_var(Request::get('deleted', 'false'), FILTER_VALIDATE_BOOLEAN);
         
          $consultas = new AulaQuery();
+         $consultasDefault = new DefaultQuery();
          $query = Aula::query();
  
-         $consultas->deleted($deleted, $query);
- 
          $consultas->search($search, $query);
- 
          $consultas->sortBy($sortBy, $query);
 
-         $consultas->paginacion($itemsPerPage, $query);   
+         $consultasDefault->deleted($deleted, $query);
+         $consultasDefault->paginacion($itemsPerPage, $query); 
  
          $items = AulasResource::collection($query->paginate($itemsPerPage));
  

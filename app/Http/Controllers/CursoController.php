@@ -8,7 +8,8 @@ use App\Models\Curso;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Resources\CursosResource;
 use Illuminate\Support\Facades\Request;
-use Illuminate\Validation\Rule;
+use App\Queries\CursoQuery;
+use App\Queries\DefaultQuery;
 use Inertia\Inertia;
 
 class CursoController extends Controller
@@ -29,38 +30,15 @@ class CursoController extends Controller
          $search = json_decode(Request::get('search', '[]'), true);
          $deleted = filter_var(Request::get('deleted', 'false'), FILTER_VALIDATE_BOOLEAN);
  
+         $consultas = new CursoQuery();
+         $consultasDefault = new DefaultQuery();
          $query = Curso::query();
  
-         if ($deleted) {
-             $query->onlyTrashed();
-         }
- 
-         if (!empty($search)) {
-             foreach ($search as $key => $value) {
-                 if (!empty($value)) {
-                    if ($key == 'turno') {
-                        $turno = Curso::Turno($value);
-                        $query->where('turno', 'LIKE', '%' . $turno . '%');;
-                    }else {
-                        $query->where($key, 'LIKE', '%' . $value . '%');
-                    }
-                 }
-             }
-         }
- 
-         if (!empty($sortBy)) {
-             foreach ($sortBy as $sort) {
-                 if (isset($sort['key']) && isset($sort['order'])) {
-                     $query->orderBy($sort['key'], $sort['order']);
-                 }
-             }
-         } else {
-             $query->orderBy("id", "desc");
-         }
- 
-         if ($itemsPerPage == -1) {
-             $itemsPerPage = $query->count();
-         }    
+         $consultasDefault->deleted($deleted, $query);
+         $consultasDefault->paginacion($itemsPerPage, $query);
+
+         $consultas->search($search, $query);
+         $consultas->sort($sortBy, $query);
  
          $items = CursosResource::collection($query->paginate($itemsPerPage));
  

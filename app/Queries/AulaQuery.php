@@ -4,11 +4,6 @@ namespace App\Queries;
 
 class AulaQuery
 {
-    public function deleted($deleted, $query){
-        if ($deleted) {
-            return  $query->onlyTrashed();
-        }
-    }
 
     public function search($search, $query){
         foreach ($search as $key => $value) {
@@ -46,9 +41,4 @@ class AulaQuery
         return $query;
     }
 
-    public function paginacion($itemsPerPage, $query) {
-        if ($itemsPerPage == -1) {
-            return $itemsPerPage = $query->count();
-        } 
-    }
 }
