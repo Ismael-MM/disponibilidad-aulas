@@ -58,7 +58,8 @@ class AulaCursoController extends Controller
     {
         $query = AulaCurso::query();
 
-        $fechaSeleccionada = Carbon::parse( $request->fecha_inicio);
+        $fechaSeleccionadaInicio = Carbon::parse( $request->fecha_inicio);
+        $fechaSeleccionadaFin = Carbon::parse( $request->fecha_fin);
 
         $curso = Curso::where('id',  $request->curso_id)->get();
         $turno = $curso[0]->turno;
@@ -73,14 +74,14 @@ class AulaCursoController extends Controller
 
             $fechaAulaInicio = $aula->fecha_inicio;
             $fechaAulaFin = $aula->fecha_fin;
+            $validacionFechas = 0;
 
-            if ($fechaAulaInicio == $fechaSeleccionada) { // comprueba que si la fecha seleccionada es igual a la de incio de una reserva
-                return Redirect::back()->with('warning', 'La fecha de inicio de esta reserva entra en conflicto con otra programada para el mismo período.');
-            }elseif($fechaAulaFin == $fechaSeleccionada){ // comprueba que si la fecha seleccionada es igual a la de fin de una reserva
-                return Redirect::back()->with('warning', 'La fecha de inicio de esta reserva entra en conflicto con otra programada para el mismo período.');
-            }elseif(($fechaSeleccionada >= $fechaAulaInicio) && ($fechaSeleccionada <= $fechaAulaFin)){ // comprueba que si la fecha seleccionada esta entre la fecha inicio y fecha fin de reserva
+            $validacionFechas = AulaCurso::ValidarFecha($fechaSeleccionadaInicio, $fechaSeleccionadaFin, $fechaAulaFin, $fechaAulaInicio);
+
+            if ($validacionFechas == 1) {
                 return Redirect::back()->with('warning', 'La fecha de inicio de esta reserva entra en conflicto con otra programada para el mismo período.');
             }
+
         }
 
         AulaCurso::create(

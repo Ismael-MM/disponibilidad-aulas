@@ -41,4 +41,22 @@ class AulaCurso extends Pivot
     {
         return $this->belongsTo(Curso::class);
     }
+
+    public static function ValidarFecha($fechaSeleccionadaInicio,$fechaSeleccionadaFin ,$fechaAulaFin, $fechaAulaInicio) {
+        if ($fechaAulaInicio == $fechaSeleccionadaInicio) { // comprueba que si la fecha seleccionadaInicios es igual a la de incio de una reserva
+            return 1;
+        }elseif($fechaAulaFin == $fechaSeleccionadaInicio){ // comprueba que si la fecha seleccionadaInicio es igual a la de fin de una reserva
+            return 1;
+        }elseif(($fechaSeleccionadaInicio >= $fechaAulaInicio) && ($fechaSeleccionadaInicio <= $fechaAulaFin)){ // comprueba que si la fecha seleccionadaInicio esta entre la fecha inicio y fecha fin de reserva
+            return 1;
+        }elseif ($fechaAulaInicio == $fechaSeleccionadaFin) { // comprueba que si la fecha seleccionadaFIn es igual a la de incio de una reserva
+            return 1;
+        }elseif($fechaAulaFin == $fechaSeleccionadaFin){ // comprueba que si la fecha seleccionadaFin es igual a la de fin de una reserva
+            return 1;
+        }elseif(($fechaSeleccionadaFin >= $fechaAulaInicio) && ($fechaSeleccionadaFin <= $fechaAulaFin)){ // comprueba que si la fecha seleccionadaFin esta entre la fecha inicio y fecha fin de reserva
+            return 1;
+        }
+    }
+
+
 }
