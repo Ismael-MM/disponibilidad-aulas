@@ -2,16 +2,21 @@
 import { useForm } from "@inertiajs/vue3"
 import { computed, watch, ref } from "vue"
 import { useToast } from "vue-toastification"
+import useAutocompleteServer from "@/Composables/useAutocompleteServer"
 import {
   ruleRequired,
   ruleMaxLength,
 } from "@/Utils/rules"
 
+const { loadAutocompleteItems, loading, items, endPoint, selectedItem } =
+  useAutocompleteServer()
+
+endPoint.value = "/dashboard/cursos"
+
 const props = defineProps(["show", "item", "type", "endPoint"])
 const emit = defineEmits(["closeDialog", "reloadItems"])
 
 
-const loading = ref(false)
 const dialogState = computed({
   get: () => props.show,
   set: (value) => {
@@ -19,7 +24,7 @@ const dialogState = computed({
   },
 })
 
-const cursosList = ref([])
+const cursosList = computed(() => items.value)
 const aulasList = ref([])
 const festivosList = ref([])
 const form = ref(false)
@@ -48,25 +53,14 @@ watch(dialogState, (value) => {
   }
 })
 
-watch(
-  () => [formData.fecha_inicio, formData.curso_id],
-  ([newFechaInicio, idCurso]) => {
-    const curso = cursosList.value.filter((e) => e.id == idCurso)
-
-    if (curso && isNaN(idCurso) == false && newFechaInicio && curso.length > 0) {
-      getFestivosList(newFechaInicio, curso[0])
-    }
-  }
-)
-
-watch(
-  () => [formData.aula_id],
-    ([nuevoIdAula]) => {
-      if (Number.isInteger(nuevoIdAula)) {
-        getCursosList();
-      }
-    }
-)
+// watch(
+//   () => [formData.aula_id],
+//     ([nuevoIdAula]) => {
+//       if (Number.isInteger(nuevoIdAula)) {
+//         getCursosList();
+//       }
+//     }
+// )
 
 const submit = () => {
   if (props.type === "edit") {
@@ -86,25 +80,25 @@ const submit = () => {
   }
 }
 
-const getCursosList = async () => {
-  cursosList.value = []
-  await axios
-  .get(route('dashboard.asignacion.list', {
-            aula: formData.aula_id
-        }))
-    .then((response) => {
-      const curso = response.data.lists
-      cursosList.value = curso
-      loading.value = false
-    })
-    .catch(() => {
-      dialogState.value = false
-      loading.value = false
-      useToast().error(
-        "Se ha producido un error al cargar los elementos del formulario. Intentalo de nuevo. Si el error persiste contacta con el administrador."
-      )
-    })
-}
+// const getCursosList = async () => {
+//   cursosList.value = []
+//   await axios
+//   .get(route('dashboard.asignacion.list', {
+//             aula: formData.aula_id
+//         }))
+//     .then((response) => {
+//       const curso = response.data.lists
+//       cursosList.value = curso
+//       loading.value = false
+//     })
+//     .catch(() => {
+//       dialogState.value = false
+//       loading.value = false
+//       useToast().error(
+//         "Se ha producido un error al cargar los elementos del formulario. Intentalo de nuevo. Si el error persiste contacta con el administrador."
+//       )
+//     })
+// }
 
 const getAulasList = async () => {
   aulasList.value = []
@@ -150,43 +144,52 @@ const totalDays = (fechainico, curso, festivosList) => {
     const diasSumar = curso.horas / curso.horas_diarias
     const fechaSinFormato = new Date(fechainico);
 
-   if (!Number.isInteger(diasSumar)) {
+    if (!Number.isInteger(diasSumar)) {
       (Number.parseInt(diasSumar) + 1)
-   }
+    }
 
-    const day = fechaSinFormato.getDate() - 1 ; //  El dia actual que estamos en el mes
+    const day = fechaSinFormato.getDate() - 1; //  El dia actual que estamos en el mes
     const month = fechaSinFormato.getMonth() + 1; // El mes actual
     const year = fechaSinFormato.getFullYear();
 
     const fechaConFormato = year + "-" + month + "-" + day;
 
-    formData.fecha_fin =  getSinFestivosNiFinDeSemana(fechaConFormato, diasSumar, festivosList)
+    formData.fecha_fin = getSinFestivosNiFinDeSemana(fechaConFormato, diasSumar, festivosList)
   }
 }
 
 const getSinFestivosNiFinDeSemana = (fechaInico, diasAdd, festivosList) => {
 
-    let arrFecha = fechaInico.split('-');
-    let fecha = new Date(arrFecha[0], arrFecha[1] - 1, arrFecha[2]);
-    let festivos = festivosList.value;
+  let arrFecha = fechaInico.split('-');
+  let fecha = new Date(arrFecha[0], arrFecha[1] - 1, arrFecha[2]);
+  let festivos = festivosList.value;
 
-    for (let i = 0; i < diasAdd; i++) {
-        let diaInvalido = false;
-        fecha.setDate(fecha.getDate() + 1); // Sumamos de dia en dia
-        for (let j = 0; j < festivos.length; j++) { // Verificamos si el dia + 1 es festivo
-            let mesDia = festivos[j];
-            if (fecha.getMonth() + 1 == mesDia[1] && fecha.getDate() == mesDia[0]) {
-                diaInvalido = true;
-                break;
-            }
-        }
-        if (fecha.getDay() == 0 || fecha.getDay() == 6) { // Verificamos si es sábado o domingo
-            diaInvalido = true;
-        }
-        if (diaInvalido)
-            diasAdd++; // Si es fin de semana o festivo le sumamos un dia
+  for (let i = 0; i < diasAdd; i++) {
+    let diaInvalido = false;
+    fecha.setDate(fecha.getDate() + 1); // Sumamos de dia en dia
+    for (let j = 0; j < festivos.length; j++) { // Verificamos si el dia + 1 es festivo
+      let mesDia = festivos[j];
+      if (fecha.getMonth() + 1 == mesDia[1] && fecha.getDate() == mesDia[0]) {
+        diaInvalido = true;
+        break;
+      }
     }
-    return fecha.getFullYear() + '-' + (fecha.getMonth() + 1).toString().padStart(2, '0') + '-' + fecha.getDate().toString().padStart(2, '0');
+    if (fecha.getDay() == 0 || fecha.getDay() == 6) { // Verificamos si es sábado o domingo
+      diaInvalido = true;
+    }
+    if (diaInvalido)
+      diasAdd++; // Si es fin de semana o festivo le sumamos un dia
+  }
+  return fecha.getFullYear() + '-' + (fecha.getMonth() + 1).toString().padStart(2, '0') + '-' + fecha.getDate().toString().padStart(2, '0');
+}
+
+const UpdateFechaFinal = (curso) => {
+  curso = cursosList.value[0]
+  let newFechaInicio = formData.fecha_inicio
+  if (curso && isNaN(curso.id) == false && newFechaInicio) {
+    formData.curso_id = curso.id
+    getFestivosList(newFechaInicio, curso)
+  }
 }
 
 </script>
@@ -211,20 +214,39 @@ const getSinFestivosNiFinDeSemana = (fechaInico, diasAdd, festivosList) => {
           <v-form v-model="form" @submit.prevent="submit">
             <v-row>
               <v-col cols="12" sm="6">
-                <v-autocomplete label="Aula*" :rules="[ruleRequired]" :items="[...aulasList]" item-title="aulasede"
-                  item-value="id" v-model="formData.aula_id"></v-autocomplete>
+                <v-autocomplete label="Aula*"
+                  :rules="[ruleRequired]"
+                  :items="[...aulasList]"
+                  item-title="aulasede"
+                  item-value="id"
+                  v-model="formData.aula_id"
+                ></v-autocomplete>
               </v-col>
               <v-col cols="12" sm="6">
-                <v-autocomplete label="Curso*" :rules="[ruleRequired]" :items="[...cursosList]" item-title="tituloturno"
-                  item-value="id" v-model="formData.curso_id"></v-autocomplete>
+                <v-autocomplete
+                  clearable
+                  label="Curso*"
+                  :rules="[ruleRequired]"
+                  :items="cursosList"
+                  item-title="tituloturno" 
+                  item-value="id"
+                  return-object
+                  @update:search="loadAutocompleteItems"
+                  :loading="loading"
+                   v-model="selectedItem"
+                ></v-autocomplete>
               </v-col>
               <v-col cols="12" sm="6">
-                <v-text-field label="Fecha de inicio*" :rules="[ruleRequired]" type="date"
-                  v-model="formData.fecha_inicio"></v-text-field>
+                <v-text-field
+                  label="Fecha de inicio*"
+                  :rules="[ruleRequired]"
+                  @change="UpdateFechaFinal"
+                  type="date"
+                  v-model="formData.fecha_inicio"
+                ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6">
-                <v-text-field label="Fecha de fin*" type="date" 
-                v-model="formData.fecha_fin" ></v-text-field>
+                <v-text-field label="Fecha de fin*" type="date" v-model="formData.fecha_fin"></v-text-field>
               </v-col>
             </v-row>
           </v-form>
