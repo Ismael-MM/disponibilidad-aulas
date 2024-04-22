@@ -104,7 +104,16 @@ class AulaController extends Controller
 
      public function aulasList()
      {
-        $items = AulasResource::collection(Aula::all());
+
+        $sede = Request::get('sede');
+        $query = Aula::query();
+
+        if (!is_null($sede)) {
+            $items = AulasResource::collection($query->where('sede_id', $sede)
+            ->get());
+        }else {
+            $items = AulasResource::collection(Aula::all());
+        }
 
         return [ 'lists' => $items];
      }

@@ -57,7 +57,7 @@ Route::middleware('auth')->prefix('dashboard')->group(function () {
     Route::post('/cursos/{curso}/restore',[CursoController::class, 'restore'])->name('dashboard.cursos.restore');
     Route::get('/cursos/export-excel',[CursoController::class, 'exportExcel'])->name('dashboard.cursos.exportExcel');
     Route::get('/cursos/list',[CursoController::class, 'cursosList'])->name('dashboard.cursos.list');
-    Route::post('/cursos/load-autocomplete-items',[CursoController::class, 'loadAutocompleteItems'])->name('dashboard.cursos.list');
+    Route::post('/cursos/load-autocomplete-items',[CursoController::class, 'loadAutocompleteItems'])->name('dashboard.cursos.autocomplete');
 
     Route::get('/sedes',[SedeController::class, 'index'])->name('dashboard.sedes');
     Route::post('/sedes/load-items',[SedeController::class, 'loadItems'])->name('dashboard.sedes.load-itmes');
