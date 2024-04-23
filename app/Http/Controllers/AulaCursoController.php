@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\AulaCurso;
 use App\Models\Curso;
+use App\Models\Aula;
+use DB;
 use App\Http\Resources\AulasCursosResource;
 use App\Http\Requests\AulaCursoRequest;
 use Illuminate\Support\Facades\Redirect;
@@ -20,7 +22,7 @@ class AulaCursoController extends Controller
         return Inertia::render('Dashboard/Calendario/ReservarAula');
     }
 
-    public function loadItems() 
+    public function loadItems()
     {
         $itemsPerPage = Request::get('itemsPerPage', 10);
         $sortBy = json_decode(Request::get('sortBy', '[]'), true);
@@ -48,7 +50,7 @@ class AulaCursoController extends Controller
                 'itemsPerPage' => $items->perPage(),
                 'page' => $items->currentPage(),
                 'sortBy' => $sortBy,
-                'search' => $search, 
+                'search' => $search,
                 'deleted' => $deleted,
             ]
         ];
@@ -58,19 +60,19 @@ class AulaCursoController extends Controller
     {
         $query = AulaCurso::query();
 
-        $fechaSeleccionadaInicio = Carbon::parse( $request->fecha_inicio);
-        $fechaSeleccionadaFin = Carbon::parse( $request->fecha_fin);
+        $fechaSeleccionadaInicio = Carbon::parse($request->fecha_inicio);
+        $fechaSeleccionadaFin = Carbon::parse($request->fecha_fin);
 
         $curso = Curso::where('id',  $request->curso_id)->get();
         $turno = $curso[0]->turno;
-        
-        $aulas = $query->join('cursos','cursos.id', '=', 'aula_curso.curso_id')
-                        ->where('aula_id',Request::get('aula_id'))
-                        ->where('cursos.turno', $turno)
-                        ->get();
+
+        $aulas = $query->join('cursos', 'cursos.id', '=', 'aula_curso.curso_id')
+            ->where('aula_id', Request::get('aula_id'))
+            ->where('cursos.turno', $turno)
+            ->get();
 
         // funcion para comprar si el dia seleccionado esta disponible.
-        foreach ($aulas as $aula){
+        foreach ($aulas as $aula) {
 
             $fechaAulaInicio = $aula->fecha_inicio;
             $fechaAulaFin = $aula->fecha_fin;
@@ -81,7 +83,6 @@ class AulaCursoController extends Controller
             if ($validacionFechas == 1) {
                 return Redirect::back()->with('warning', 'La fecha de inicio de esta reserva entra en conflicto con otra programada para el mismo período.');
             }
-
         }
 
         AulaCurso::create(
@@ -91,7 +92,7 @@ class AulaCursoController extends Controller
         return Redirect::back()->with('success', 'Aula reservada.');
     }
 
-    public function update(AulaCursoRequest $request,AulaCurso $reservas)
+    public function update(AulaCursoRequest $request, AulaCurso $reservas)
     {
         $reservas->update(
             $request->validated()
@@ -127,10 +128,10 @@ class AulaCursoController extends Controller
     {
         $items = AulasCursosResource::collection(AulaCurso::all());
 
-        return  [ 'itemsExcel' => $items ];
+        return  ['itemsExcel' => $items];
     }
 
-    
+
     public function reservasList(AulaCurso $reserva)
     {
         $items = '';
@@ -143,27 +144,68 @@ class AulaCursoController extends Controller
 
             $turno = Curso::Turno($valueTurno);
 
-            $items = AulasCursosResource::collection($query->join('cursos','cursos.id', '=', 'aula_curso.curso_id')
-                    ->join('aulas','aulas.id','=','aula_curso.aula_id')
-                    ->join('sedes','sedes.id','=','aulas.sede_id')
-                    ->where('cursos.turno',$turno)
-                    ->where('sedes.nombre',$sede)
+            $items = AulasCursosResource::collection(
+                $query->join('cursos', 'cursos.id', '=', 'aula_curso.curso_id')
+                    ->join('aulas', 'aulas.id', '=', 'aula_curso.aula_id')
+                    ->join('sedes', 'sedes.id', '=', 'aulas.sede_id')
+                    ->where('cursos.turno', $turno)
+                    ->where('sedes.nombre', $sede)
                     ->get()
-                );
-
-        }elseif (Request::get('turno') != null){
+            );
+        } elseif (Request::get('turno') != null) {
 
             $turno = Curso::Turno($valueTurno);
 
-            $items = AulasCursosResource::collection($query->join('cursos','cursos.id', '=', 'aula_curso.curso_id')
-                    ->where('cursos.turno',$turno)
+            $items = AulasCursosResource::collection(
+                $query->join('cursos', 'cursos.id', '=', 'aula_curso.curso_id')
+                    ->where('cursos.turno', $turno)
                     ->get()
-                );
-                
-        }else {
+            );
+        } else {
             $items = AulasCursosResource::collection(AulaCurso::all());
         }
 
-       return [ 'lists' => $items];
+        return ['lists' => $items];
+    }
+
+    public function freeAulas()
+    {
+        DB::enableQueryLog();
+        $query = AulaCurso::query();
+
+        $sede = Request::get('sede');
+        $fechaInicio = Carbon::parse(Request::get('inicio'));
+        $fechaFin = Carbon::parse(Request::get('fin'));
+
+        $aulas = Aula::where('sede_id', $sede)->get();
+
+        $freeAulas = [];
+
+        foreach ($aulas as $aula) {
+            $overlap = $query->where('aula_id', $aula->id)
+                ->where(function ($query) use ($fechaInicio, $fechaFin) {
+                    $query->where(function ($query) use ($fechaInicio, $fechaFin) {
+                        $query->where('fecha_inicio', '<=', $fechaFin)
+                            ->where('fecha_fin', '>=', $fechaInicio);
+                    })
+                    ->orWhere(function ($query) use ($fechaInicio, $fechaFin) {
+                        $query->where('fecha_inicio', '>=', $fechaInicio)
+                            ->where('fecha_inicio', '<=', $fechaFin);
+                    })
+                    ->orWhere(function ($query) use ($fechaInicio, $fechaFin) {
+                        $query->where('fecha_fin', '>=', $fechaInicio)
+                            ->where('fecha_fin', '<=', $fechaFin);
+                    });
+                })
+                ->Exists();
+        
+            if (!$overlap) {
+                $freeAulas[] = $aula;
+            }
+        }
+
+        dd(DB::getQueryLog());
+
+        return ['lists' => $freeAulas];
     }
 }

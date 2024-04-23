@@ -27,7 +27,7 @@ const dialogState = computed({
 const cursosList = computed(() => items.value)
 const aulasList = ref([])
 const sedesList = ref([])
-const sedeSelected = ref(null)
+const sedeSelected = ref()
 const festivosList = ref([])
 const form = ref(false)
 const formData = useForm({
@@ -39,7 +39,6 @@ const formData = useForm({
 
 watch(dialogState, (value) => {
   if (value) {
-    loading.value = true
     getSedesList()
 
     if (props.type === "edit") {
@@ -63,6 +62,12 @@ watch(dialogState, (value) => {
 //       }
 //     }
 // )
+
+watch(sedeSelected, (newValue) => {
+  if (newValue) {
+    getAulasList();
+  }
+});
 
 const submit = () => {
   if (props.type === "edit") {
@@ -109,11 +114,9 @@ const getSedesList = async () => {
     .then((response) => {
       const sede = response.data.itemsExcel
       sedesList.value = sede
-      loading.value = false
     })
     .catch(() => {
       dialogState.value = false
-      loading.value = false
       useToast().error(
         "Se ha producido un error al cargar los elementos del formulario. Intentalo de nuevo. Si el error persiste contacta con el administrador."
       )
@@ -122,19 +125,18 @@ const getSedesList = async () => {
 
 const getAulasList = async () => {
   aulasList.value = []
-  console.log('entro')
   await axios
-    .get(route('dashboard.aulas.list',{
-           sede: sedeSelected
+    .get(route('dashboard.reservar.freeAulas',{
+           sede: sedeSelected.value,
+           fechaInicio: formData.fecha_fin,
+           fechaFin: formData.fecha_inicio,
        }))
     .then((response) => {
       const aula = response.data.lists
       aulasList.value = aula
-      loading.value = false
     })
     .catch(() => {
       dialogState.value = false
-      loading.value = false
       useToast().error(
         "Se ha producido un error al cargar los elementos del formulario. Intentalo de nuevo. Si el error persiste contacta con el administrador."
       )
@@ -148,12 +150,10 @@ const getFestivosList = async (fechainico, curso) => {
     .then((response) => {
       const festivo = response.data.lists
       festivosList.value = festivo.map((festivo) => [festivo.dia, festivo.mes])
-      loading.value = false
       totalDays(fechainico, curso, festivosList)
     })
     .catch(() => {
       dialogState.value = false
-      loading.value = false
       useToast().error(
         "Se ha producido un error al cargar los elementos del formulario. Intentalo de nuevo. Si el error persiste contacta con el administrador."
       )
@@ -266,7 +266,6 @@ const UpdateFechaFinal = (curso) => {
                 <v-autocomplete label="Sede*"
                   :rules="[ruleRequired]"
                   :items="[...sedesList]"
-                  @change="getAulasList"
                   item-title="nombre"
                   item-value="id"
                   v-model="sedeSelected"
@@ -276,7 +275,7 @@ const UpdateFechaFinal = (curso) => {
                 <v-autocomplete label="Aula*"
                   :rules="[ruleRequired]"
                   :items="[...aulasList]"
-                  item-title="aulasede"
+                  item-title="nombre"
                   item-value="id"
                   v-model="formData.aula_id"
                 ></v-autocomplete>
@@ -293,9 +292,6 @@ const UpdateFechaFinal = (curso) => {
         </v-btn>
         <v-btn color="blue-darken-1" :disabled="!form" variant="text" @click="submit">
           Guardar
-        </v-btn>
-        <v-btn color="blue-darken-1" variant="text" @click="console.log(sede)">
-          log
         </v-btn>
       </v-card-actions>
     </v-card>
