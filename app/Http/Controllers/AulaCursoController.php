@@ -170,7 +170,6 @@ class AulaCursoController extends Controller
 
     public function freeAulas()
     {
-        DB::enableQueryLog();
         $query = AulaCurso::query();
 
         $sede = Request::get('sede');
@@ -182,7 +181,9 @@ class AulaCursoController extends Controller
         $freeAulas = [];
 
         foreach ($aulas as $aula) {
-            $overlap = $query->where('aula_id', $aula->id)
+            // Consultamos si existe algún registro en la tabla 'aula_curso' que se superponga con el período dado.
+            $overlap = DB::table('aula_curso')
+                ->where('aula_id', $aula->id)
                 ->where(function ($query) use ($fechaInicio, $fechaFin) {
                     $query->where(function ($query) use ($fechaInicio, $fechaFin) {
                         $query->where('fecha_inicio', '<=', $fechaFin)
@@ -197,14 +198,13 @@ class AulaCursoController extends Controller
                             ->where('fecha_fin', '<=', $fechaFin);
                     });
                 })
-                ->Exists();
+                ->exists();
         
             if (!$overlap) {
+                // Si no hay superposición, el aula está libre.
                 $freeAulas[] = $aula;
             }
         }
-
-        dd(DB::getQueryLog());
 
         return ['lists' => $freeAulas];
     }
