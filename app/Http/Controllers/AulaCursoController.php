@@ -170,8 +170,6 @@ class AulaCursoController extends Controller
 
     public function freeAulas()
     {
-        $query = AulaCurso::query();
-
         $sede = Request::get('sede');
         $fechaInicio = Carbon::parse(Request::get('inicio'));
         $fechaFin = Carbon::parse(Request::get('fin'));
