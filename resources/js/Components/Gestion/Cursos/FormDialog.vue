@@ -5,9 +5,7 @@ import {
   ruleRequired,
   ruleMaxLength,
   ruleLessThan,
-  ruleGreaterThan,
 } from "@/Utils/rules"
-import { sexoItems } from "@/Utils/arrays"
 
 const props = defineProps(["show", "item", "type", "endPoint"])
 const emit = defineEmits(["closeDialog", "reloadItems"])
@@ -21,6 +19,28 @@ const turnos = [
     id:"T",
     texto:"Tarde"
   }
+]
+const calidad = [
+  {
+  id:"1",
+  texto: "1 ⭐"
+  },
+  {
+    id:"2",
+    texto:"2 ⭐"
+  },
+  {
+    id:"3",
+    texto:"3 ⭐"
+  },
+  {
+    id:"4",
+    texto:"4 ⭐"
+  },
+  {
+    id:"5",
+    texto:"5 ⭐"
+  },
 ]
 
 const dialogState = computed({
@@ -37,6 +57,7 @@ const formData = useForm({
   turno: "",
   horas: "",
   horas_diarias: "",
+  calidad: "",
 })
 
 watch(dialogState, (value) => {
@@ -48,6 +69,7 @@ watch(dialogState, (value) => {
       formData.turno = ""
       formData.horas = ""
       formData.horas_diarias = ""
+      formData.calidad = ""
     }
   } else {
     emit("reloadItems")
@@ -93,12 +115,22 @@ const submit = () => {
         <v-container>
           <v-form v-model="form" @submit.prevent="submit">
             <v-row>
-              <v-col cols="12" sm="6">
+              <v-col cols="12">
                 <v-text-field
                   label="Titulo*"
                   :rules="[ruleRequired, (v) => ruleMaxLength(v, 191)]"
                   v-model="formData.titulo"
                 ></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6">
+                <v-select
+                  label="Calidad*"
+                  :rules="[ruleRequired]"
+                  :items="[...calidad]"
+                  item-title="texto"
+                  item-value="id"
+                  v-model="formData.calidad"
+                ></v-select>
               </v-col>
               <v-col cols="12" sm="6">
                 <v-autocomplete

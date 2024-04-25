@@ -27,6 +27,7 @@ class Curso extends Model
         'turno',
         'horas',
         'horas_diarias',
+        'calidad',
     ];
 
     /**

@@ -24,6 +24,7 @@ class AulaRequest extends FormRequest
         return [
             'nombre' => ['required', 'max:191'],
             'sede_id' => ['required', 'max:191'],
+            'calidad' => ['required', 'numeric', 'min:1', 'max:5'],
         ];
     }
 }

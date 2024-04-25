@@ -20,11 +20,35 @@ const dialogState = computed({
   },
 })
 
+const calidad = [
+  {
+  id:"1",
+  texto: "1 ⭐"
+  },
+  {
+    id:"2",
+    texto:"2 ⭐"
+  },
+  {
+    id:"3",
+    texto:"3 ⭐"
+  },
+  {
+    id:"4",
+    texto:"4 ⭐"
+  },
+  {
+    id:"5",
+    texto:"5 ⭐"
+  },
+]
+
 const sedeList = ref([])
 const form = ref(false)
 const formData = useForm({
   nombre: "",
   sede_id: "",
+  calidad: "",
 })
 
 watch(dialogState, (value) => {
@@ -37,6 +61,7 @@ watch(dialogState, (value) => {
     } else if (props.type === "create") {
       formData.nombre = ""
       formData.sede_id = ""
+      formData.calidad = ""
     }
   } else {
     emit("reloadItems")
@@ -100,12 +125,22 @@ const getSedesList = async () => {
         <v-container>
           <v-form v-model="form" @submit.prevent="submit">
             <v-row>
-              <v-col cols="12" sm="6">
+              <v-col cols="12">
                 <v-text-field
                   label="Nombre*"
                   :rules="[ruleRequired, (v) => ruleMaxLength(v, 191)]"
                   v-model="formData.nombre"
                 ></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6">
+                <v-select
+                  label="Calidad*"
+                  :rules="[ruleRequired]"
+                  :items="[...calidad]"
+                  item-title="texto"
+                  item-value="id"
+                  v-model="formData.calidad"
+                ></v-select>
               </v-col>
               <v-col cols="12" sm="6">
                 <v-autocomplete
