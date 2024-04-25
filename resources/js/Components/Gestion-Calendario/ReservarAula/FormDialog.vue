@@ -130,6 +130,7 @@ const getAulasList = async () => {
            sede: sedeSelected.value,
            fechaInicio: formData.fecha_fin,
            fechaFin: formData.fecha_inicio,
+           curso: formData.curso_id,
        }))
     .then((response) => {
       const aula = response.data.lists

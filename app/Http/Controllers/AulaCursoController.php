@@ -170,39 +170,28 @@ class AulaCursoController extends Controller
 
     public function freeAulas()
     {
+        // Obtener los parámetros de la solicitud
         $sede = Request::get('sede');
         $fechaInicio = Carbon::parse(Request::get('inicio'));
         $fechaFin = Carbon::parse(Request::get('fin'));
+        $turno = Request::get('turno'); // Turno de mañana o tarde
 
-        $aulas = Aula::where('sede_id', $sede)->get();
-
-        $freeAulas = [];
-
-        foreach ($aulas as $aula) {
-            // Consultamos si existe algún registro en la tabla 'aula_curso' que se superponga con el período dado.
-            $overlap = DB::table('aula_curso')
-                ->where('aula_id', $aula->id)
-                ->where(function ($query) use ($fechaInicio, $fechaFin) {
-                    $query->where(function ($query) use ($fechaInicio, $fechaFin) {
-                        $query->where('fecha_inicio', '<=', $fechaFin)
-                            ->where('fecha_fin', '>=', $fechaInicio);
-                    })
-                    ->orWhere(function ($query) use ($fechaInicio, $fechaFin) {
-                        $query->where('fecha_inicio', '>=', $fechaInicio)
-                            ->where('fecha_inicio', '<=', $fechaFin);
-                    })
-                    ->orWhere(function ($query) use ($fechaInicio, $fechaFin) {
-                        $query->where('fecha_fin', '>=', $fechaInicio)
-                            ->where('fecha_fin', '<=', $fechaFin);
-                    });
+        // Consultar las aulas de la sede que están libres durante el período de tiempo especificado
+        $freeAulas = Aula::where('sede_id', 1)
+            ->whereDoesntHave('cursos', function ($query) use ($fechaInicio, $fechaFin, $turno) {
+                $query->where(function ($query) use ($fechaInicio, $fechaFin) {
+                    $query->whereBetween('fecha_inicio', [$fechaInicio, $fechaFin])
+                        ->orWhereBetween('fecha_fin', [$fechaInicio, $fechaFin]);
                 })
-                ->exists();
-        
-            if (!$overlap) {
-                // Si no hay superposición, el aula está libre.
-                $freeAulas[] = $aula;
-            }
-        }
+                    ->orWhereNull('turno');
+            })
+            ->where(function ($query) use ($fechaInicio, $fechaFin) {
+                $query->where('fecha_inicio', '!=', $fechaInicio)
+                    ->orWhere('fecha_fin', '!=', $fechaFin);
+            })
+            ->get();
+
+
 
         return ['lists' => $freeAulas];
     }
