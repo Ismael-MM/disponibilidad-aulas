@@ -1,0 +1,17 @@
+name: deploy production
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Deploy to VPS in production
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Deploy
+        uses: appleboy/ssh-action@v0.1.8
+        with:
+          host: 103.23.60.90
+          port: 2222
+          username: ismael
+          key: ${{secrets.PRIVATE_KEY}}
+          script: "cd /var/www/html/Trade-tap-back; git pull origin main;composer install;php artisan route:cache;sudo service php8.2-fpm reload"
