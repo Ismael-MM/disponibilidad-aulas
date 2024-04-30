@@ -167,32 +167,4 @@ class AulaCursoController extends Controller
 
         return ['lists' => $items];
     }
-
-    public function freeAulas()
-    {
-        // Obtener los parámetros de la solicitud
-        $sede = Request::get('sede');
-        $fechaInicio = Carbon::parse(Request::get('inicio'));
-        $fechaFin = Carbon::parse(Request::get('fin'));
-        $turno = Request::get('turno'); // Turno de mañana o tarde
-
-        // Consultar las aulas de la sede que están libres durante el período de tiempo especificado
-        $freeAulas = Aula::where('sede_id', 1)
-            ->whereDoesntHave('cursos', function ($query) use ($fechaInicio, $fechaFin, $turno) {
-                $query->where(function ($query) use ($fechaInicio, $fechaFin) {
-                    $query->whereBetween('fecha_inicio', [$fechaInicio, $fechaFin])
-                        ->orWhereBetween('fecha_fin', [$fechaInicio, $fechaFin]);
-                })
-                    ->orWhereNull('turno');
-            })
-            ->where(function ($query) use ($fechaInicio, $fechaFin) {
-                $query->where('fecha_inicio', '!=', $fechaInicio)
-                    ->orWhere('fecha_fin', '!=', $fechaFin);
-            })
-            ->get();
-
-
-
-        return ['lists' => $freeAulas];
-    }
 }

@@ -75,13 +75,12 @@ class CursoController extends Controller
  
      public function update(CursoUpdateRequest $request,Curso $curso)
      {
-        dd($request);
         $valueTurno = $request->turno;
         $turno = Curso::Turno($valueTurno);
 
-        $validatedData['turno'] = $turno;
-
         $validatedData = $request->validated();
+
+        $validatedData['turno'] = $turno;
 
 
         $curso->update($validatedData);
