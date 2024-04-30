@@ -131,10 +131,10 @@ const getAulasList = async () => {
   aulasList.value = []
   await axios
     .get(route('dashboard.aulas.aulasLibres',{
-           sede: sedeSelected.value,
-           fechaInicio: formData.fecha_fin,
-           fechaFin: formData.fecha_inicio,
-           curso: formData.curso_id,
+        sedeId: sedeSelected.value,
+        fecha_inicio: formData.fecha_fin, 
+        fecha_fin: formData.fecha_inicio,
+        cursoId: formData.curso_id,
        }))
     .then((response) => {
       const aula = response.data.lists

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Aula;
-use App\Models\Curso;
 use App\Http\Resources\AulasResource;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
@@ -127,29 +126,29 @@ class AulaController extends Controller
         $sedeId = Request::get('sedeId');
         $cursoId = Request::get('cursoId');
 
-        $curso = Curso::find($cursoId);
-        $turnoCurso = $curso->turno;
+        $aulas = Aula::where('sede_id', $sedeId)->get();
 
-        // Ahora puedes usar $turnoCurso para filtrar las aulas por turno
-        $items = Aula::whereDoesntHave('cursos', function ($query) use ($fechaInicio, $fechaFin) {
-            $query->where(function ($q) use ($fechaInicio, $fechaFin) {
-                $q->where('fecha_inicio', '>=', $fechaInicio)
-                    ->where('fecha_fin', '<=', $fechaFin);
-            })->orWhere(function ($q) use ($fechaInicio, $fechaFin) {
-                $q->where('fecha_inicio', '<=', $fechaInicio)
-                    ->where('fecha_fin', '>=', $fechaInicio);
-            })->orWhere(function ($q) use ($fechaInicio, $fechaFin) {
-                $q->where('fecha_inicio', '<=', $fechaFin)
-                    ->where('fecha_fin', '>=', $fechaFin);
-            });
-        })
-            ->where('sede_id', $sedeId) // Filtrar por sede
-            ->whereHas('cursos', function ($query) use ($turnoCurso) {
-                $query->where('turno', $turnoCurso);
-            })
-            ->get();
+        $aulasDisponibles = $aulas->filter(function ($aula) use ($fechaInicio, $fechaFin, $cursoId) {
+            // Verificar si hay alguna reserva en el aula que coincida con las fechas seleccionadas
+            $reservas = $aula->cursos()->wherePivot('curso_id', $cursoId)
+                ->where(function ($query) use ($fechaInicio, $fechaFin) {
+                    $query->where(function ($query) use ($fechaInicio, $fechaFin) {
+                        $query->where('fecha_inicio', '>=', $fechaInicio)
+                            ->where('fecha_inicio', '<=', $fechaFin);
+                    })->orWhere(function ($query) use ($fechaInicio, $fechaFin) {
+                        $query->where('fecha_fin', '>=', $fechaInicio)
+                            ->where('fecha_fin', '<=', $fechaFin);
+                    })->orWhere(function ($query) use ($fechaInicio, $fechaFin) {
+                        $query->where('fecha_inicio', '<=', $fechaInicio)
+                            ->where('fecha_fin', '>=', $fechaFin);
+                    });
+                })->exists();
+    
+            // Si no hay reservas en el aula para las fechas seleccionadas, considerar el aula como disponible
+            return !$reservas;
+        });
 
-        // Devolver las aulas libres como respuesta JSON
-        return ['lists' => $items];
+
+        return ['lists' => AulasResource::collection($aulasDisponibles)];
     }
 }
