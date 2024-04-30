@@ -2,6 +2,7 @@
 import { useForm } from "@inertiajs/vue3"
 import { computed, watch, ref } from "vue"
 import { useToast } from "vue-toastification"
+import CursoFormDialog from "@/Components/Gestion/Cursos/FormDialog.vue"
 import useAutocompleteServer from "@/Composables/useAutocompleteServer"
 import {
   ruleRequired,
@@ -25,10 +26,13 @@ const dialogState = computed({
 })
 
 const cursosList = computed(() => items.value)
+const showCursoFormDialog = ref(false);
+
 const aulasList = ref([])
+
 const sedesList = ref([])
 const sedeSelected = ref()
-const festivosList = ref([])
+
 const form = ref(false)
 const formData = useForm({
   aula_id: "",
@@ -126,7 +130,7 @@ const getSedesList = async () => {
 const getAulasList = async () => {
   aulasList.value = []
   await axios
-    .get(route('dashboard.reservar.freeAulas',{
+    .get(route('dashboard.aulas.aulasLibres',{
            sede: sedeSelected.value,
            fechaInicio: formData.fecha_fin,
            fechaFin: formData.fecha_inicio,
@@ -221,6 +225,12 @@ const UpdateFechaFinal = (curso) => {
 
 <template>
   <v-dialog v-model="dialogState" width="1024">
+    <curso-form-dialog
+      :show="showCursoFormDialog"
+      @closeDialog="showCursoFormDialog = false"
+      type="create"
+      endPoint="/dashboard/cursos"
+    />
     <v-card>
       <v-card-title>
         <span class="text-h5">{{
@@ -249,7 +259,14 @@ const UpdateFechaFinal = (curso) => {
                   @update:search="loadAutocompleteItems"
                   :loading="loading"
                    v-model="selectedItem"
-                ></v-autocomplete>
+                >
+                <template v-slot:prepend>
+                    <v-btn
+                      icon="mdi-plus-circle"
+                      @click="showCursoFormDialog = true"
+                    ></v-btn>
+                  </template>
+              </v-autocomplete>
               </v-col>
               <v-col cols="12" sm="6">
                 <v-text-field

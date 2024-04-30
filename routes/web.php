@@ -77,6 +77,7 @@ Route::middleware('auth')->prefix('dashboard')->group(function () {
     Route::post('/aulas/{aula}/restore',[AulaController::class, 'restore'])->name('dashboard.aulas.restore');
     Route::get('/aulas/export-excel',[AulaController::class, 'exportExcel'])->name('dashboard.aulas.exportExcel');
     Route::get('/aulas/list',[AulaController::class, 'aulasList'])->name('dashboard.aulas.list');
+    Route::get('/aulas/free-aulas', [AulaController::class, 'aulasLibres'])->name('dashboard.aulas.aulasLibres');
 
     Route::get('/reservar',[AulaCursoController::class, 'index'])->name('dashboard.reservar');
     Route::post('/reservar/load-items',[AulaCursoController::class, 'loadItems'])->name('dashboard.reservar.load-itmes');
@@ -87,7 +88,6 @@ Route::middleware('auth')->prefix('dashboard')->group(function () {
     Route::post('/reservar/{reservas}/restore',[AulaCursoController::class, 'restore'])->name('dashboard.reservar.restore');
     Route::get('/reservar/export-excel',[AulaCursoController::class, 'exportExcel'])->name('dashboard.reservar.exportExcel');
     Route::get('/reservar/list',[AulaCursoController::class, 'reservaslist'])->name('dashboard.reservar.list');
-    Route::get('/reservar/free-aulas',[AulaCursoController::class, 'freeAulas'])->name('dashboard.reservar.freeAulas');
     
     Route::get('/festivo',[FestivoController::class, 'index'])->name('dashboard.festivo');
     Route::post('/festivo/load-items',[FestivoController::class, 'loadItems'])->name('dashboard.festivo.load-itmes');
