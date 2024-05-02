@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Aula;
+use App\Models\Curso;
+use DB;
+use Carbon\Carbon;
 use App\Http\Resources\AulasResource;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
@@ -121,33 +124,38 @@ class AulaController extends Controller
     public function aulasLibres()
     {
         // Obtener las fechas de inicio y fin del cuerpo de la solicitud
-        $fechaInicio = Request::get('fecha_inicio');
-        $fechaFin = Request::get('fecha_fin');
+        $fechaInicio = str_replace("'", "", Request::get('fecha_inicio'));
+        $fechaFin = str_replace("'", "", Request::get('fecha_fin'));
         $sedeId = Request::get('sedeId');
         $cursoId = Request::get('cursoId');
 
-        $aulas = Aula::where('sede_id', $sedeId)->get();
+        // Obtener el turno del curso
+        $turnoCurso = Curso::findOrFail($cursoId)->turno;
 
-        $aulasDisponibles = $aulas->filter(function ($aula) use ($fechaInicio, $fechaFin, $cursoId) {
-            // Verificar si hay alguna reserva en el aula que coincida con las fechas seleccionadas
-            $reservas = $aula->cursos()->wherePivot('curso_id', $cursoId)
-                ->where(function ($query) use ($fechaInicio, $fechaFin) {
-                    $query->where(function ($query) use ($fechaInicio, $fechaFin) {
-                        $query->where('fecha_inicio', '>=', $fechaInicio)
-                            ->where('fecha_inicio', '<=', $fechaFin);
-                    })->orWhere(function ($query) use ($fechaInicio, $fechaFin) {
-                        $query->where('fecha_fin', '>=', $fechaInicio)
-                            ->where('fecha_fin', '<=', $fechaFin);
-                    })->orWhere(function ($query) use ($fechaInicio, $fechaFin) {
-                        $query->where('fecha_inicio', '<=', $fechaInicio)
-                            ->where('fecha_fin', '>=', $fechaFin);
-                    });
-                })->exists();
-    
-            // Si no hay reservas en el aula para las fechas seleccionadas, considerar el aula como disponible
-            return !$reservas;
-        });
-
+        // Filtrar las aulas disponibles para el curso, las fechas seleccionadas y el turno del curso
+        $aulasDisponibles = DB::select('
+        SELECT *
+        FROM aulas
+        WHERE aulas.sede_id = :sedeId
+        AND `aulas`.`deleted_at` is null
+        AND NOT EXISTS (
+            SELECT 1
+            FROM aula_curso
+            INNER JOIN cursos ON aula_curso.curso_id = cursos.id
+            WHERE aula_curso.aula_id = aulas.id
+            AND cursos.turno = :turnoCurso
+            AND (
+                (aula_curso.fecha_inicio BETWEEN :fechaInicio AND :fechaFin)
+                OR (aula_curso.fecha_fin BETWEEN :fechaInicio AND :fechaFin)
+                OR (:fechaInicio BETWEEN aula_curso.fecha_inicio AND aula_curso.fecha_fin)
+            )
+        )
+    ', [
+        'sedeId' => $sedeId,
+        'turnoCurso' => $turnoCurso,
+        'fechaInicio' => $fechaInicio,
+        'fechaFin' => $fechaFin
+    ]);
 
         return ['lists' => AulasResource::collection($aulasDisponibles)];
     }
