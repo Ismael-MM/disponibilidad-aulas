@@ -14,4 +14,4 @@ jobs:
           port: 2222
           username: ismael
           key: ${{secrets.PRIVATE_KEY}}
-          script: "cd /var/www/html/disponibilidad-aulas; git pull origin main;composer install;npm i;npm build; php artisan route:cache;sudo service php8.2-fpm reload"
+          script: "cd /var/www/html/disponibilidad-aulas; git pull origin main;composer install;npm i;npm run build; php artisan route:cache;sudo service php8.2-fpm reload"
