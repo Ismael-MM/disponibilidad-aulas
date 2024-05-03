@@ -132,6 +132,8 @@ class AulaController extends Controller
         // Obtener el turno del curso
         $turnoCurso = Curso::findOrFail($cursoId)->turno;
 
+        // dd($fechaFin, $fechaInicio, $sedeId, $turnoCurso);
+
         // Filtrar las aulas disponibles para el curso, las fechas seleccionadas y el turno del curso
         $aulasDisponibles = DB::select('
         SELECT *
@@ -146,16 +148,19 @@ class AulaController extends Controller
             AND cursos.turno = :turnoCurso
             AND (
                 (aula_curso.fecha_inicio BETWEEN :fechaInicio AND :fechaFin)
-                OR (aula_curso.fecha_fin BETWEEN :fechaInicio AND :fechaFin)
-                OR (:fechaInicio BETWEEN aula_curso.fecha_inicio AND aula_curso.fecha_fin)
+                OR (aula_curso.fecha_fin BETWEEN :fechaInicio1 AND :fechaFin1)
+                OR (:fechaInicio2 BETWEEN aula_curso.fecha_inicio AND aula_curso.fecha_fin)
             )
         )
     ', [
-        'sedeId' => $sedeId,
-        'turnoCurso' => $turnoCurso,
-        'fechaInicio' => $fechaInicio,
-        'fechaFin' => $fechaFin
-    ]);
+            'sedeId' => $sedeId,
+            'turnoCurso' => $turnoCurso,
+            'fechaInicio' => $fechaInicio,
+            'fechaInicio1' => $fechaInicio,
+            'fechaInicio2' => $fechaInicio,
+            'fechaFin1' => $fechaFin,
+            'fechaFin' => $fechaFin
+        ]);
 
         return ['lists' => AulasResource::collection($aulasDisponibles)];
     }
