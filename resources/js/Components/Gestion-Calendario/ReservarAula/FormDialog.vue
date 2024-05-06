@@ -199,6 +199,22 @@ const UpdateFechaFinal = (curso) => {
   }
 }
 
+const CompararCalidad = () => {
+  let cursoCalidad = selectedItem.value.calidad.split(" ")[0];
+  let aulaCalidad = aulasList.value.find((e) => e.id == formData.aula_id).calidad.split(" ")[0];
+
+  if (cursoCalidad > aulaCalidad) {
+    useToast().warning(
+        "Esta aula es de menor calidad que el curso"
+      )
+  }else if (cursoCalidad < aulaCalidad) {
+    useToast().warning(
+        "Esta aula es de mayor calidad que el curso"
+      )
+  }
+
+}
+
 </script>
 
 
@@ -277,6 +293,7 @@ const UpdateFechaFinal = (curso) => {
                   item-value="id"
                   :loading="loadingAula"
                   v-model="formData.aula_id"
+                  @update:model-value="CompararCalidad"
                 ></v-autocomplete>
               </v-col>
             </v-row>
