@@ -1,12 +1,11 @@
 <script setup>
 import { useForm } from "@inertiajs/vue3"
-import { computed, watch, ref } from "vue"
+import { computed, watch, ref, watchEffect } from "vue"
 import { useToast } from "vue-toastification"
 import CursoFormDialog from "@/Components/Gestion/Cursos/FormDialog.vue"
 import useAutocompleteServer from "@/Composables/useAutocompleteServer"
 import {
   ruleRequired,
-  ruleMaxLength,
 } from "@/Utils/rules"
 
 const { loadAutocompleteItems, loading, items, endPoint, selectedItem } =
@@ -29,8 +28,10 @@ const cursosList = computed(() => items.value)
 const showCursoFormDialog = ref(false);
 
 const aulasList = ref([])
+const loadingAula = ref(false)
 
 const sedesList = ref([])
+const loadingSede = ref(false)
 const sedeSelected = ref()
 
 const form = ref(false)
@@ -43,6 +44,7 @@ const formData = useForm({
 
 watch(dialogState, (value) => {
   if (value) {
+    loadingSede.value = true
     getSedesList()
 
     if (props.type === "edit") {
@@ -58,20 +60,13 @@ watch(dialogState, (value) => {
   }
 })
 
-// watch(
-//   () => [formData.aula_id],
-//     ([nuevoIdAula]) => {
-//       if (Number.isInteger(nuevoIdAula)) {
-//         getCursosList();
-//       }
-//     }
-// )
-
-watch(sedeSelected, (newValue) => {
-  if (newValue) {
+watchEffect(() => {
+  if (formData.fecha_fin && sedeSelected.value) {
+    loadingAula.value = true;
     getAulasList();
   }
 });
+
 
 const submit = () => {
   if (props.type === "edit") {
@@ -91,26 +86,6 @@ const submit = () => {
   }
 }
 
-// const getCursosList = async () => {
-//   cursosList.value = []
-//   await axios
-//   .get(route('dashboard.asignacion.list', {
-//             aula: formData.aula_id
-//         }))
-//     .then((response) => {
-//       const curso = response.data.lists
-//       cursosList.value = curso
-//       loading.value = false
-//     })
-//     .catch(() => {
-//       dialogState.value = false
-//       loading.value = false
-//       useToast().error(
-//         "Se ha producido un error al cargar los elementos del formulario. Intentalo de nuevo. Si el error persiste contacta con el administrador."
-//       )
-//     })
-// }
-
 const getSedesList = async () => {
   sedesList.value = []
   await axios
@@ -118,8 +93,10 @@ const getSedesList = async () => {
     .then((response) => {
       const sede = response.data.itemsExcel
       sedesList.value = sede
+      loadingSede.value = false
     })
     .catch(() => {
+      loadingSede.value = false
       dialogState.value = false
       useToast().error(
         "Se ha producido un error al cargar los elementos del formulario. Intentalo de nuevo. Si el error persiste contacta con el administrador."
@@ -139,9 +116,11 @@ const getAulasList = async () => {
     .then((response) => {
       const aula = response.data.lists
       aulasList.value = aula
+      loadingAula.value = false
     })
     .catch(() => {
       dialogState.value = false
+      loadingAula.value = false
       useToast().error(
         "Se ha producido un error al cargar los elementos del formulario. Intentalo de nuevo. Si el error persiste contacta con el administrador."
       )
@@ -286,6 +265,7 @@ const UpdateFechaFinal = (curso) => {
                   :items="[...sedesList]"
                   item-title="nombre"
                   item-value="id"
+                  :loading="loadingSede"
                   v-model="sedeSelected"
                 ></v-autocomplete>
               </v-col>
@@ -295,6 +275,7 @@ const UpdateFechaFinal = (curso) => {
                   :items="[...aulasList]"
                   item-title="nombre"
                   item-value="id"
+                  :loading="loadingAula"
                   v-model="formData.aula_id"
                 ></v-autocomplete>
               </v-col>
