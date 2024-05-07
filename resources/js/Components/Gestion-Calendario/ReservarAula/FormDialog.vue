@@ -200,8 +200,8 @@ const UpdateFechaFinal = (curso) => {
 }
 
 const CompararCalidad = () => {
-  let cursoCalidad = selectedItem.value.calidad.split(" ")[0];
-  let aulaCalidad = aulasList.value.find((e) => e.id == formData.aula_id).calidad.split(" ")[0];
+  let cursoCalidad = selectedItem.value.calidad;
+  let aulaCalidad = aulasList.value.find((e) => e.id == formData.aula_id).calidad;
 
   if (cursoCalidad > aulaCalidad) {
     useToast().warning(

@@ -181,6 +181,14 @@ endPoint.value = "/dashboard/cursos"
       <template v-for="(modifier, key) in modifiedRows" v-slot:[`item.${key}`]="{ item }">
         {{ modifier(item.raw[key]) }}
       </template>
+      
+      <template v-slot:item.calidad="{ item }">
+          <div>
+            <span>{{item.raw.calidad}}</span>
+            <v-icon icon="mdi-star"></v-icon>
+          </div>
+      </template>
+      
 
       <template v-slot:item.actions="{ item }">
         <div v-if="!tableData.deleted">

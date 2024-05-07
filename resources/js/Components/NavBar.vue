@@ -38,7 +38,7 @@ const openDrawer = () => {
 <template>
   <v-navigation-drawer theme="customDark" elevation="6" :rail="rail" permanent>
     <v-list>
-      <v-list-item title="Sucriptores"> </v-list-item>
+      <v-list-item title="DILAS"> </v-list-item>
     </v-list>
     <template v-for="pageRoute in routes">
       <v-divider></v-divider>
@@ -92,6 +92,6 @@ const openDrawer = () => {
   </v-navigation-drawer>
   <v-app-bar elevation="1">
     <v-app-bar-nav-icon @click="closeAll"></v-app-bar-nav-icon>
-    <v-toolbar-title>Suscriptores</v-toolbar-title>
+    <v-toolbar-title>DILAS</v-toolbar-title>
   </v-app-bar>
 </template>

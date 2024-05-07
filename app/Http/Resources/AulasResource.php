@@ -20,7 +20,7 @@ class AulasResource extends JsonResource
         return [
             'id' => $this->id,
             'nombre' => $this->nombre,
-            'calidad' => $this->calidad." ⭐",
+            'calidad' => $this->calidad,
             'sede_id' => $this->sede_id,
             'aulasede' => $this->nombre . " - " . $sedeNombre,
             'sede' => $sedeNombre,

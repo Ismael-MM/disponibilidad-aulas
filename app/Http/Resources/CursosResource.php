@@ -18,7 +18,7 @@ class CursosResource extends JsonResource
             'id' => $this->id,
             'titulo' => $this->titulo,
             'turno' => $this->turno == "M" ? "Mañana" : "Tarde",
-            'calidad' => $this->calidad." ⭐",
+            'calidad' => $this->calidad,
             'horas' => $this->horas,
             'horas_diarias' => $this->horas_diarias,
             'tituloturno' => $this->titulo . " - " . ($this->turno == "M" ? "Mañana" : "Tarde"),

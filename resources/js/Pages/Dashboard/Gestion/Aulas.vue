@@ -180,6 +180,13 @@ endPoint.value = "/dashboard/aulas"
         {{ modifier(item.raw[key]) }}
       </template>
 
+      <template v-slot:item.calidad="{ item }">
+          <div>
+            <span>{{item.raw.calidad}}</span>
+            <v-icon icon="mdi-star"></v-icon>
+          </div>
+      </template>
+
       <template v-slot:item.actions="{ item }">
         <div v-if="!tableData.deleted">
           <v-btn
