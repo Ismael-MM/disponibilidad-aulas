@@ -24,7 +24,6 @@ class CursoUpdateRequest extends FormRequest
     {
         return [
                 'titulo' => ['required', 'max:191'],
-                'turno' => ['required', Rule::in(['M','T'])],
                 'horas' => ['required', 'numeric', 'min:1', 'max:3000'],
                 'horas_diarias' => ['required', 'numeric', 'min:1', 'max:10'],
                 'calidad' => ['required', 'numeric', 'min:1', 'max:5'],
