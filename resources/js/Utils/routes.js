@@ -11,9 +11,9 @@ export const routesArray = [
     icon: "mdi-account-circle",
   },
   {
-    value: "Suscriptores",
-    route: "dashboard.suscriptores",
-    icon: "mdi-account-group",
+    value: "Calendario",
+    route: "dashboard.calendario",
+    icon: "mdi-calendar-month",
   },
   {
     value: "Gestión",
@@ -35,11 +35,6 @@ export const routesArray = [
         route: "dashboard.aulas",
         icon: "mdi-google-classroom",
       },
-      {
-        value: "Asignacion",
-        route: "dashboard.asignacion",
-        icon: "mdi-school-outline",
-      },
     ],
   },
   {
@@ -47,11 +42,6 @@ export const routesArray = [
     icon: "mdi-calendar-month",
     path: "Calendario",
     childs: [
-      {
-        value: "Calendario",
-        route: "dashboard.calendario",
-        icon: "mdi-calendar-month",
-      },
       {
         value: "Reservar aula",
         route: "dashboard.reservar",

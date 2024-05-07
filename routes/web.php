@@ -37,17 +37,6 @@ Route::middleware('auth')->prefix('dashboard')->group(function () {
     // restore: /item/{id}/restore
     // exportExcel: /item/export-excel
 
-
-    //Suscriptor
-    Route::get('/suscriptores', [SuscriptorController::class, 'index'])->name('dashboard.suscriptores');
-    Route::post('/suscriptores/load-items', [SuscriptorController::class, 'loadItems'])->name('dashboard.suscriptores.load-items');
-    Route::post('/suscriptores', [SuscriptorController::class, 'store'])->name('dashboard.suscriptores.store');
-    Route::put('/suscriptores/{subscriber}', [SuscriptorController::class, 'update'])->name('dashboard.suscriptores.update');
-    Route::delete('/suscriptores/{subscriber}', [SuscriptorController::class, 'destroy'])->name('dashboard.suscriptores.destroy');
-    Route::delete('/suscriptores/{subscriber}/permanent', [SuscriptorController::class, 'destroyPermanent'])->name('dashboard.suscriptores.destroyPermanent');
-    Route::post('/suscriptores/{id}/restore', [SuscriptorController::class, 'restore'])->name('dashboard.suscriptores.restore');
-    Route::get('/suscriptores/export-excel', [SuscriptorController::class, 'exportExcel'])->name('dashboard.suscriptores.exportExcel');
-
     Route::get('/cursos',[CursoController::class, 'index'])->name('dashboard.cursos');
     Route::post('/cursos/load-items',[CursoController::class, 'loadItems'])->name('dashboard.cursos.load-itmes');
     Route::post('/cursos',[CursoController::class, 'store'])->name('dashboard.cursos.store');
@@ -98,16 +87,6 @@ Route::middleware('auth')->prefix('dashboard')->group(function () {
     Route::post('/festivo/{festivo}/restore',[FestivoController::class, 'restore'])->name('dashboard.festivo.restore');
     Route::get('/festivo/export-excel',[FestivoController::class, 'exportExcel'])->name('dashboard.festivo.exportExcel');
     Route::get('/festivo/list',[FestivoController::class, 'festivoList'])->name('dashboard.festivo.list');
-
-    Route::get('/asignacion',[CursoSedeController::class, 'index'])->name('dashboard.asignacion');
-    Route::post('/asignacion/load-items',[CursoSedeController::class, 'loadItems'])->name('dashboard.asignacion.load-itmes');
-    Route::post('/asignacion',[CursoSedeController::class, 'store'])->name('dashboard.asignacion.store');
-    Route::put('/asignacion/{asignacion}',[CursoSedeController::class, 'update'])->name('dashboard.asignacion.update');
-    Route::delete('/asignacion/{asignacion}',[CursoSedeController::class, 'destroy'])->name('dashboard.asignacion.destroy');
-    Route::delete('/asignacion/{asignacion}/permanent',[CursoSedeController::class, 'destroyPermanent'])->name('dashboard.asignacion.destroyPermanent');
-    Route::post('/asignacion/{asignacion}/restore',[CursoSedeController::class, 'restore'])->name('dashboard.asignacion.restore');
-    Route::get('/asignacion/export-excel',[CursoSedeController::class, 'exportExcel'])->name('dashboard.asignacion.exportExcel');
-    Route::get('/asignacion/list',[CursoSedeController::class, 'asignacionList'])->name('dashboard.asignacion.list');
 
     Route::get('/calendario',[CalendarioController::class, 'index'])->name('dashboard.calendario');
 });

@@ -293,6 +293,7 @@ const CompararCalidad = () => {
                   item-value="id"
                   :loading="loadingAula"
                   v-model="formData.aula_id"
+                  :disabled="!sedeSelected"
                   @update:model-value="CompararCalidad"
                 ></v-autocomplete>
               </v-col>
