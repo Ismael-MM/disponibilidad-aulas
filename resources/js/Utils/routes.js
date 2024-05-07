@@ -26,14 +26,14 @@ export const routesArray = [
         icon: "mdi-school",
       },
       {
-        value: "Sedes",
-        route: "dashboard.sedes",
-        icon: "mdi-home-group",
-      },
-      {
         value: "Aulas",
         route: "dashboard.aulas",
         icon: "mdi-google-classroom",
+      },
+      {
+        value: "Sedes",
+        route: "dashboard.sedes",
+        icon: "mdi-home-group",
       },
     ],
   },

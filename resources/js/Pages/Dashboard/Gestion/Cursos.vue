@@ -185,7 +185,7 @@ endPoint.value = "/dashboard/cursos"
       <template v-slot:item.calidad="{ item }">
           <div>
             <span>{{item.raw.calidad}}</span>
-            <v-icon icon="mdi-star"></v-icon>
+            <v-icon icon="mdi-star-outline"></v-icon>
           </div>
       </template>
       
