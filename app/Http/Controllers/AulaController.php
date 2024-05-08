@@ -150,6 +150,7 @@ class AulaController extends Controller
                 (aula_curso.fecha_inicio BETWEEN :fechaInicio AND :fechaFin)
                 OR (aula_curso.fecha_fin BETWEEN :fechaInicio1 AND :fechaFin1)
                 OR (:fechaInicio2 BETWEEN aula_curso.fecha_inicio AND aula_curso.fecha_fin)
+                OR (:fechaFin2 BETWEEN aula_curso.fecha_inicio AND aula_curso.fecha_fin)
             )
         )
     ', [
@@ -158,8 +159,9 @@ class AulaController extends Controller
             'fechaInicio' => $fechaInicio,
             'fechaInicio1' => $fechaInicio,
             'fechaInicio2' => $fechaInicio,
+            'fechaFin' => $fechaFin,
             'fechaFin1' => $fechaFin,
-            'fechaFin' => $fechaFin
+            'fechaFin2' => $fechaFin
         ]);
 
         return ['lists' => AulasResource::collection($aulasDisponibles)];
