@@ -58,7 +58,7 @@ class CursoController extends Controller
      public function loadAutocompleteItems() {
         $search = Request::get('search', '');
 
-        $items = CursosResource::collection(Curso::whereRaw("CONCAT(titulo, ' (', id, ')') LIKE '%$search%'")->limit(6)->get());
+        $items = CursosResource::collection(Curso::whereRaw("CONCAT(titulo, ' (', codigo, ')') LIKE '%$search%'")->limit(6)->get());
 
         return ['autocompleteItems' => $items];
 

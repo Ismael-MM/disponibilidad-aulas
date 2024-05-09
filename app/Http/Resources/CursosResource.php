@@ -22,7 +22,7 @@ class CursosResource extends JsonResource
             'calidad' => $this->calidad,
             'horas' => $this->horas,
             'horas_diarias' => $this->horas_diarias,
-            'tituloturno' => $this->titulo . " - " . ($this->turno == "M" ? "Mañana" : "Tarde"),
+            'tituloturno' => "[$this->codigo] ".$this->titulo . " - " . ($this->turno == "M" ? "Mañana" : "Tarde"),
         ];
     }
 }

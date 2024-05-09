@@ -2,6 +2,7 @@
 import { useForm } from "@inertiajs/vue3"
 import { computed, watch, ref } from "vue"
 import { useToast } from "vue-toastification"
+import SedeFormDialog from "@/Components/Gestion/Sede/FormDialog.vue"
 import {
   ruleRequired,
   ruleMaxLength,
@@ -42,6 +43,7 @@ const calidad = [
   },
 ]
 
+const showSedeFormDialog = ref(false);
 const sedeList = ref([])
 const form = ref(false)
 const formData = useForm({
@@ -106,6 +108,13 @@ const getSedesList = async () => {
 
 <template>
   <v-dialog v-model="dialogState" width="1024">
+    <sede-form-dialog
+      :show="showSedeFormDialog"
+      @closeDialog="showSedeFormDialog = false"
+      type="create"
+      @reloadItems="getSedesList"
+      endPoint="/dashboard/sedes"
+    />
     <v-card>
       <v-card-title>
         <span class="text-h5"
@@ -148,7 +157,14 @@ const getSedesList = async () => {
                   item-title="nombre"
                   item-value="id"
                   v-model="formData.sede_id"
-                ></v-autocomplete>
+                >
+                <template v-slot:prepend>
+                    <v-btn
+                      icon="mdi-plus-circle"
+                      @click="showSedeFormDialog = true"
+                    ></v-btn>
+                  </template>
+                </v-autocomplete>
               </v-col>
             </v-row>
           </v-form>
