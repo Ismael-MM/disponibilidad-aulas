@@ -20,7 +20,7 @@ class Curso extends Model
      */
     protected $table = 'cursos';
     
-    protected $cascadeDeletes = ['sedes','aulas'];
+    protected $cascadeDeletes = ['aulas'];
 
     protected $fillable = [
         'titulo',
@@ -45,11 +45,6 @@ class Curso extends Model
     public function aulas(): BelongsToMany
     {
         return $this->belongsToMany(Aula::class)->using(AulaCurso::class);
-    }
-
-    public function sedes(): BelongsToMany
-    {
-        return $this->belongsToMany(Sede::class);
     }
 
     public static function Turno($turno){

@@ -65,7 +65,7 @@ const submit = () => {
               ? "Editar"
               : ""
           }}
-          Cursos</span
+          Sedes</span
         >
       </v-card-title>
 

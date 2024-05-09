@@ -125,7 +125,7 @@ const getSedesList = async () => {
               ? "Editar"
               : ""
           }}
-          Cursos</span
+          Aulas</span
         >
       </v-card-title>
 

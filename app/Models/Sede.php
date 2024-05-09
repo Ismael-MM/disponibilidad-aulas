@@ -16,7 +16,7 @@ class Sede extends Model
 
     protected $table = 'sedes';
 
-    protected $cascadeDeletes = ['aulas', 'cursos'];
+    protected $cascadeDeletes = ['aulas'];
 
     /**
      * The attributes that are mass assignable.
@@ -35,11 +35,6 @@ class Sede extends Model
     protected $casts = [
         'id' => 'integer',
     ];
-
-    public function cursos(): BelongsToMany
-    {
-        return $this->belongsToMany(Curso::class);
-    }
 
     public function aulas(): HasMany
     {
