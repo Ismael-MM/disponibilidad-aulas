@@ -13,8 +13,10 @@ return new class extends Migration
     {
         Schema::create('cursos', function (Blueprint $table) {
             $table->id();
+            $table->string('codigo');
             $table->string('titulo');
             $table->enum('turno', ["M","T"]);
+            $table->unsignedInteger('calidad')->nullable();
             $table->unsignedSmallInteger('horas');
             $table->unsignedTinyInteger('horas_diarias');
             $table->timestamps();

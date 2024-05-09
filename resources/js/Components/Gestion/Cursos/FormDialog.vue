@@ -53,6 +53,7 @@ const dialogState = computed({
 const form = ref(false)
 
 const formData = useForm({
+  codigo: "",
   titulo: "",
   turno: "",
   horas: "",
@@ -65,6 +66,7 @@ watch(dialogState, (value) => {
     if (props.type === "edit") {
       Object.assign(formData, props.item)
     } else if (props.type === "create") {
+      formData.codigo = ""
       formData.titulo = ""
       formData.turno = ""
       formData.horas = ""
@@ -115,7 +117,14 @@ const submit = () => {
         <v-container>
           <v-form v-model="form" @submit.prevent="submit">
             <v-row>
-              <v-col cols="12">
+              <v-col cols="12" sm="6">
+                <v-text-field
+                  label="Codigo*"
+                  :rules="[ruleRequired, (v) => ruleMaxLength(v, 191)]"
+                  v-model="formData.codigo"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6">
                 <v-text-field
                   label="Titulo*"
                   :rules="[ruleRequired, (v) => ruleMaxLength(v, 191)]"

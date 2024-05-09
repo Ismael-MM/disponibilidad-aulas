@@ -24,6 +24,7 @@ class Curso extends Model
 
     protected $fillable = [
         'titulo',
+        'codigo',
         'turno',
         'horas',
         'horas_diarias',

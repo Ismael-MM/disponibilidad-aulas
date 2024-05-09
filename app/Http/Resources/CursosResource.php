@@ -16,6 +16,7 @@ class CursosResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'codigo' => $this->codigo,
             'titulo' => $this->titulo,
             'turno' => $this->turno == "M" ? "Mañana" : "Tarde",
             'calidad' => $this->calidad,
