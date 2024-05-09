@@ -6,7 +6,6 @@ import {
   ruleRequired,
   ruleMaxLength,
 } from "@/Utils/rules"
-import { sexoItems } from "@/Utils/arrays"
 
 const props = defineProps(["show", "item", "type", "endPoint"])
 const emit = defineEmits(["closeDialog", "reloadItems"])

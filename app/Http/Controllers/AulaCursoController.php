@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\AulaCurso;
 use App\Models\Curso;
-use App\Models\Aula;
-use DB;
 use App\Http\Resources\AulasCursosResource;
 use App\Http\Requests\AulaCursoRequest;
 use Illuminate\Support\Facades\Redirect;

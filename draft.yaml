@@ -5,7 +5,7 @@ models:
     horas: unsignedSmallInteger
     horas_diarias: unsignedTinyInteger
     relationships:
-      belongsToMany: Aula,Sede
+      belongsToMany: Aula
 
   Aula:
     nombre: string
@@ -16,7 +16,6 @@ models:
   Sede:
     nombre: string
     relationships:
-      belongsToMany: Curso
       hasMany: Aula
 
 controllers:

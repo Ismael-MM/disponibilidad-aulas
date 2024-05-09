@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Aula;
 use App\Models\Curso;
 use DB;
-use Carbon\Carbon;
 use App\Http\Resources\AulasResource;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
