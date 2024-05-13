@@ -23,7 +23,7 @@ class AulasCursosResource extends JsonResource
             'curso' => $this->curso->titulo,
             'sede' => $this->aula->sede->nombre,
             'turno' => $this->curso->turno == "M" ? "Mañana" : "Tarde",
-            'fecha_fin' => Carbon::parse($this->fecha_fin)->format('Y-m-d'),
+            'fecha_fin' => Carbon::parse($this->fecha_fin)->addDay()->format('Y-m-d'),
             'fecha_inicio' => Carbon::parse($this->fecha_inicio)->format('Y-m-d'),
             'infoReserva' => $this->aula->nombre . ' - ' . $this->curso->titulo . ' - ' . Carbon::parse($this->fecha_fin)->format('d/m/Y'),
 
