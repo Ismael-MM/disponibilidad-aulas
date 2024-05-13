@@ -25,6 +25,8 @@ class CursoFactory extends Factory
             'turno' => $this->faker->randomElement(["M","T"]),
             'horas' => $this->faker->numberBetween(1,2000),
             'horas_diarias' => $this->faker->randomDigitNotNull(),
+            'calidad' => rand(1, 5),
+            'codigo' => 'C'. rand(1, 1000),
         ];
     }
 }

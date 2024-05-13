@@ -26,6 +26,7 @@ class AulaFactory extends Factory
         return [
             'nombre' => 'aula '. $aulaNumber++,
             'sede_id' => Sede::factory(),
+            'calidad' => rand(1, 5),
         ];
     }
 }
