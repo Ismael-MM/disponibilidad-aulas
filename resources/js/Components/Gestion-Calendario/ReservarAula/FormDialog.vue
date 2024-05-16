@@ -33,6 +33,7 @@ const loadingAula = ref(false)
 const sedesList = ref([])
 const loadingSede = ref(false)
 const sedeSelected = ref()
+const ValidationFailed = ref(false)
 
 const form = ref(false)
 const formData = useForm({
@@ -215,6 +216,17 @@ const CompararCalidad = () => {
 
 }
 
+const ValidarFechaFin = () =>{
+  if (formData.fecha_fin < formData.fecha_inicio) {
+    useToast().warning(
+        "La fecha de fin es menor que la fecha de inicio"
+      )
+    ValidationFailed.value = true;
+  }else {
+    ValidationFailed.value = false; // set validationFailed state to false if validation passes
+  }
+}
+
 </script>
 
 
@@ -273,7 +285,12 @@ const CompararCalidad = () => {
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6">
-                <v-text-field label="Fecha de fin*" type="date" v-model="formData.fecha_fin"></v-text-field>
+                <v-text-field
+                  label="Fecha de fin*"
+                  type="date"
+                  @change="ValidarFechaFin"
+                  v-model="formData.fecha_fin">
+                </v-text-field>
               </v-col>
               <v-col cols="12" sm="6">
                 <v-autocomplete label="Sede*"
@@ -307,7 +324,7 @@ const CompararCalidad = () => {
         <v-btn color="blue-darken-1" variant="text" @click="dialogState = false">
           Cerrar
         </v-btn>
-        <v-btn color="blue-darken-1" :disabled="!form" variant="text" @click="submit">
+        <v-btn color="blue-darken-1" :disabled="ValidationFailed || !form" variant="text" @click="submit">
           Guardar
         </v-btn>
       </v-card-actions>
