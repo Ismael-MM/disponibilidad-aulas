@@ -60,6 +60,7 @@ class AulaCursoController extends Controller
 
         $fechaSeleccionadaInicio = Carbon::parse($request->fecha_inicio);
         $fechaSeleccionadaFin = Carbon::parse($request->fecha_fin);
+        $validacionFechaFin = 0;
 
         $curso = Curso::where('id',  $request->curso_id)->get();
         $turno = $curso[0]->turno;
@@ -81,6 +82,12 @@ class AulaCursoController extends Controller
             if ($validacionFechas == 1) {
                 return Redirect::back()->with('warning', 'La fecha de inicio de esta reserva entra en conflicto con otra programada para el mismo período.');
             }
+        }
+
+        $validacionFechasFin = AulaCurso::ValidarFechaFin($fechaSeleccionadaInicio, $fechaSeleccionadaFin);
+
+        if ($validacionFechasFin == 1) {
+            return Redirect::back()->with('Error', 'La fecha de fin no puede ser menor que la fecha de inicio');
         }
 
         AulaCurso::create(

@@ -58,5 +58,13 @@ class AulaCurso extends Pivot
         }
     }
 
+    public static function ValidarFechaFin($fechaSeleccionadaInicio, $fechaSeleccionadaFin) {
+        if ($fechaSeleccionadaFin < $fechaSeleccionadaInicio) {
+            return 1;
+        }else {
+            return 0;
+        }
+    }
+
 
 }
