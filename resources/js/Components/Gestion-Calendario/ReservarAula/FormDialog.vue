@@ -49,6 +49,8 @@ watch(dialogState, (value) => {
     getSedesList()
 
     if (props.type === "edit") {
+      selectedItem.value = props.item.curso;
+      sedeSelected.value = props.item.sede;
       Object.assign(formData, props.item)
     } else if (props.type === "create") {
       formData.aula_id = ""
