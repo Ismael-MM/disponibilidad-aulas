@@ -33,6 +33,7 @@ const loadingAula = ref(false)
 const sedesList = ref([])
 const loadingSede = ref(false)
 const sedeSelected = ref()
+const selectedAula = ref()
 const ValidationFailed = ref(false)
 
 const form = ref(false)
@@ -267,7 +268,7 @@ const ValidarFechaFin = () =>{
                   return-object
                   @update:search="loadAutocompleteItems"
                   :loading="loading"
-                   v-model="selectedItem"
+                  v-model="selectedItem"
                 >
                 <template v-slot:prepend>
                     <v-btn
@@ -298,7 +299,7 @@ const ValidarFechaFin = () =>{
                 <v-autocomplete label="Sede*"
                   :rules="[ruleRequired]"
                   :items="[...sedesList]"
-                  item-title="nombre"
+                  item-text="nombre"
                   item-value="id"
                   :loading="loadingSede"
                   v-model="sedeSelected"
@@ -314,7 +315,11 @@ const ValidarFechaFin = () =>{
                   v-model="formData.aula_id"
                   :disabled="!sedeSelected"
                   @update:model-value="CompararCalidad"
-                ></v-autocomplete>
+              >
+                <template #selection="{ item }">
+                  {{ props.item.aula || 'Seleccione un aula' }} <!-- Muestra el nombre del aula si está disponible, de lo contrario muestra un texto predeterminado -->
+                </template>
+              </v-autocomplete>
               </v-col>
             </v-row>
           </v-form>
