@@ -116,7 +116,7 @@ const getReservasList = async () => {
                 return {
                     title: reserva.infoReserva,
                     start: reserva.fecha_inicio,
-                    end: reserva.fecha_fin,
+                    end: reserva.fecha_fin_dia_mas,
                     color: customColors(),
                 }
             });
